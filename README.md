@@ -3,6 +3,8 @@ Gran and Schwartz methods for titration processing, analysis, visualization and 
 
 Fusion: Py (Python) + Gran + Tit (Titration) + EQP (Equivalence Point).
 
+![Logo](/unnamed.png)
+
 ---
 
 **Meaning:** Sounds like “pigment,” evoking the idea of “coloring” titration data with clear endpoints, like a vivid lab result. The fusion of Gran and Titration highlights the core methods and context, while EQP emphasizes the endpoint goal.
