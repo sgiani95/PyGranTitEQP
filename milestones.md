@@ -1,6 +1,6 @@
 # Project Milestones for PyGranTitEQP
 
-This document outlines the verbose milestones for developing **PyGranTitEQP**, a Python module for processing potentiometric titration data to detect equivalence points using Gran and Schwartz methods. The module supports a command-line interface (CLI) for routine batch analysis and a graphical user interface (GUI) for method development, aligning with requirements for usability, performance, and chemometric precision. Milestones are structured to deliver a minimum viable product (MVP) early, followed by advanced features, testing, and deployment. Estimated timelines assume a single developer working part-time (~20 hours/week), adjustable based on resources.
+This document outlines the milestones for developing **PyGranTitEQP**, a Python module for processing potentiometric titration data to detect equivalence points using Gran and Schwartz methods. The module supports a command-line interface (CLI) for routine batch analysis and a graphical user interface (GUI) for method development, aligning with requirements for usability, performance, and chemometric precision. Milestones are structured to deliver a minimum viable product (MVP) early, followed by advanced features, testing, and deployment. Estimated timelines assume a single developer working part-time (~20 hours/week), adjustable based on resources.
 
 ## Milestone 1: Project Setup and Planning
 - **Goal**: Establish the project foundation, finalize the module name and requirements, and set up the development environment to ensure a smooth start.
