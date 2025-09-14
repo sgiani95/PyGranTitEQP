@@ -3,7 +3,7 @@ Gran and Schwartz methods for titration processing, analysis, visualization and 
 
 Fusion: Py (Python) + Gran + Tit (Titration) + EQP (Equivalence Point).
 
-![Logo](/unnamed.png)
+![Logo](/logo.png)
 
 ---
 
