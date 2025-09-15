@@ -1,0 +1,102 @@
+V_added_mL,pH,total_volume_mL,note
+0.0,1.7468,25.0,initial diprotic acid
+0.5,0.6198,25.5,between 0 and first eq (buffer of H2A/HA-)
+1.0,0.9393,26.0,between 0 and first eq (buffer of H2A/HA-)
+1.5,1.1347,26.5,between 0 and first eq (buffer of H2A/HA-)
+2.0,1.2798,27.0,between 0 and first eq (buffer of H2A/HA-)
+2.5,1.3979,27.5,between 0 and first eq (buffer of H2A/HA-)
+3.0,1.4994,28.0,between 0 and first eq (buffer of H2A/HA-)
+3.5,1.5898,28.5,between 0 and first eq (buffer of H2A/HA-)
+4.0,1.6726,29.0,between 0 and first eq (buffer of H2A/HA-)
+4.5,1.7501,29.5,between 0 and first eq (buffer of H2A/HA-)
+5.0,1.8239,30.0,between 0 and first eq (buffer of H2A/HA-)
+5.5,1.8953,30.5,between 0 and first eq (buffer of H2A/HA-)
+6.0,1.9652,31.0,between 0 and first eq (buffer of H2A/HA-)
+6.5,2.0348,31.5,between 0 and first eq (buffer of H2A/HA-)
+7.0,2.1047,32.0,between 0 and first eq (buffer of H2A/HA-)
+7.5,2.1761,32.5,between 0 and first eq (buffer of H2A/HA-)
+8.0,2.2499,33.0,between 0 and first eq (buffer of H2A/HA-)
+8.5,2.3274,33.5,between 0 and first eq (buffer of H2A/HA-)
+9.0,2.4102,34.0,between 0 and first eq (buffer of H2A/HA-)
+9.5,2.5006,34.5,between 0 and first eq (buffer of H2A/HA-)
+10.0,2.6021,35.0,between 0 and first eq (buffer of H2A/HA-)
+10.5,2.7202,35.5,between 0 and first eq (buffer of H2A/HA-)
+11.0,2.8653,36.0,between 0 and first eq (buffer of H2A/HA-)
+11.5,3.0607,36.5,between 0 and first eq (buffer of H2A/HA-)
+12.0,3.3802,37.0,between 0 and first eq (buffer of H2A/HA-)
+12.5,4.5,37.5,first equivalence (amphiprotic HA-)
+13.0,5.6198,38.0,between first and second eq (buffer of HA-/A2-)
+13.5,5.9393,38.5,between first and second eq (buffer of HA-/A2-)
+14.0,6.1347,39.0,between first and second eq (buffer of HA-/A2-)
+14.5,6.2798,39.5,between first and second eq (buffer of HA-/A2-)
+15.0,6.3979,40.0,between first and second eq (buffer of HA-/A2-)
+15.5,6.4994,40.5,between first and second eq (buffer of HA-/A2-)
+16.0,6.5898,41.0,between first and second eq (buffer of HA-/A2-)
+16.5,6.6726,41.5,between first and second eq (buffer of HA-/A2-)
+17.0,6.7501,42.0,between first and second eq (buffer of HA-/A2-)
+17.5,6.8239,42.5,between first and second eq (buffer of HA-/A2-)
+18.0,6.8953,43.0,between first and second eq (buffer of HA-/A2-)
+18.5,6.9652,43.5,between first and second eq (buffer of HA-/A2-)
+19.0,7.0348,44.0,between first and second eq (buffer of HA-/A2-)
+19.5,7.1047,44.5,between first and second eq (buffer of HA-/A2-)
+20.0,7.1761,45.0,between first and second eq (buffer of HA-/A2-)
+20.5,7.2499,45.5,between first and second eq (buffer of HA-/A2-)
+21.0,7.3274,46.0,between first and second eq (buffer of HA-/A2-)
+21.5,7.4102,46.5,between first and second eq (buffer of HA-/A2-)
+22.0,7.5006,47.0,between first and second eq (buffer of HA-/A2-)
+22.5,7.6021,47.5,between first and second eq (buffer of HA-/A2-)
+23.0,7.7202,48.0,between first and second eq (buffer of HA-/A2-)
+23.5,7.8653,48.5,between first and second eq (buffer of HA-/A2-)
+24.0,8.0607,49.0,between first and second eq (buffer of HA-/A2-)
+24.5,8.3802,49.5,between first and second eq (buffer of HA-/A2-)
+25.0,9.8495,50.0,second equivalence (A2- solution)
+25.5,10.9957,50.5,excess OH- after second eq
+26.0,11.2924,51.0,excess OH- after second eq
+26.5,11.4643,51.5,excess OH- after second eq
+27.0,11.585,52.0,excess OH- after second eq
+27.5,11.6778,52.5,excess OH- after second eq
+28.0,11.7528,53.0,excess OH- after second eq
+28.5,11.8157,53.5,excess OH- after second eq
+29.0,11.8697,54.0,excess OH- after second eq
+29.5,11.9168,54.5,excess OH- after second eq
+30.0,11.9586,55.0,excess OH- after second eq
+30.5,11.9961,55.5,excess OH- after second eq
+31.0,12.03,56.0,excess OH- after second eq
+31.5,12.0609,56.5,excess OH- after second eq
+32.0,12.0892,57.0,excess OH- after second eq
+32.5,12.1154,57.5,excess OH- after second eq
+33.0,12.1397,58.0,excess OH- after second eq
+33.5,12.1623,58.5,excess OH- after second eq
+34.0,12.1834,59.0,excess OH- after second eq
+34.5,12.2032,59.5,excess OH- after second eq
+35.0,12.2218,60.0,excess OH- after second eq
+35.5,12.2394,60.5,excess OH- after second eq
+36.0,12.2561,61.0,excess OH- after second eq
+36.5,12.2718,61.5,excess OH- after second eq
+37.0,12.2868,62.0,excess OH- after second eq
+37.5,12.301,62.5,excess OH- after second eq
+38.0,12.3146,63.0,excess OH- after second eq
+38.5,12.3276,63.5,excess OH- after second eq
+39.0,12.3399,64.0,excess OH- after second eq
+39.5,12.3518,64.5,excess OH- after second eq
+40.0,12.3632,65.0,excess OH- after second eq
+40.5,12.3741,65.5,excess OH- after second eq
+41.0,12.3846,66.0,excess OH- after second eq
+41.5,12.3947,66.5,excess OH- after second eq
+42.0,12.4044,67.0,excess OH- after second eq
+42.5,12.4137,67.5,excess OH- after second eq
+43.0,12.4228,68.0,excess OH- after second eq
+43.5,12.4315,68.5,excess OH- after second eq
+44.0,12.4399,69.0,excess OH- after second eq
+44.5,12.448,69.5,excess OH- after second eq
+45.0,12.4559,70.0,excess OH- after second eq
+45.5,12.4636,70.5,excess OH- after second eq
+46.0,12.471,71.0,excess OH- after second eq
+46.5,12.4781,71.5,excess OH- after second eq
+47.0,12.4851,72.0,excess OH- after second eq
+47.5,12.4918,72.5,excess OH- after second eq
+48.0,12.4984,73.0,excess OH- after second eq
+48.5,12.5048,73.5,excess OH- after second eq
+49.0,12.511,74.0,excess OH- after second eq
+49.5,12.517,74.5,excess OH- after second eq
+50.0,12.5229,75.0,excess OH- after second eq
