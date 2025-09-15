@@ -53,7 +53,7 @@ def plot_titration_and_gran(df, output_file='titration_and_gran.png'):
     ax1.legend()
 
     # Plot 2: Gran G1 = (v + V) * 10^E vs. volume
-    V = 50  # Initial volume to be titrated (mL)
+    V = 5  # Initial volume to be titrated (mL)
     gran_g1 = (df['volume'] + V) * np.power(10, df['potential'])
     ax2.plot(df['volume'], gran_g1, marker='o', linestyle='-', color='green', label='G1 = (v + V) * 10^E')
     ax2.set_ylabel('Gran G1')
