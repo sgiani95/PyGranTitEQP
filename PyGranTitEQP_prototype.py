@@ -48,7 +48,7 @@ def plot_titration_and_gran(df, output_file='titration_and_gran.png'):
     # Convert to NumPy arrays for plotting
     volume = df['volume'].to_numpy()
     pH = df['pH'].to_numpy()
-    V = 5.0  # Initial volume to be titrated (mL)
+    V = 25.0  # Initial volume to be titrated (mL)
 
     # Row 1: Titration curve in both columns
     axes[0, 0].plot(volume, pH, marker='o', linestyle='-', color='blue', label='Titration Data')
@@ -64,9 +64,9 @@ def plot_titration_and_gran(df, output_file='titration_and_gran.png'):
     axes[0, 1].legend()
 
     # Row 2: G1.1 (left), G2.1 (right)
-    g1_1 = (volume + V) * np.power(10, pH)  # G1.1 = (v + V) * 10^(pH)
-    g2_1 = (volume + V) * np.power(10, -pH)  # G2.1 = (v + V) * 10^(-pH)
-    axes[1, 0].plot(volume, g1_1, marker='o', linestyle='-', color='green', label='G1.1 = (v + V) * 10^(pH)')
+    g1_1 = (volume + V) * np.power(10, -pH)  # G1.1 = (v + V) * 10^(-pH)
+    g2_1 = (volume + V) * np.power(10,  pH)  # G2.1 = (v + V) * 10^(pH)
+    axes[1, 0].plot(volume, g1_1, marker='o', linestyle='-', color='green', label='G1.1 = (v + V) * 10^(-pH)')
     axes[1, 0].set_ylabel('Gran G1.1')
     axes[1, 0].set_title('Gran G1.1 Plot')
     axes[1, 0].grid(True)
@@ -74,7 +74,7 @@ def plot_titration_and_gran(df, output_file='titration_and_gran.png'):
     # Optional: Uncomment for log-scaling if values are too large/small
     # axes[1, 0].set_yscale('log')
 
-    axes[1, 1].plot(volume, g2_1, marker='o', linestyle='-', color='red', label='G2.1 = (v + V) * 10^(-pH)')
+    axes[1, 1].plot(volume, g2_1, marker='o', linestyle='-', color='red', label='G2.1 = (v + V) * 10^(pH)')
     axes[1, 1].set_ylabel('Gran G2.1')
     axes[1, 1].set_title('Gran G2.1 Plot')
     axes[1, 1].grid(True)
@@ -82,8 +82,8 @@ def plot_titration_and_gran(df, output_file='titration_and_gran.png'):
     # axes[1, 1].set_yscale('log')
 
     # Row 3: G1.2 (left), G2.2 (right)
-    g1_2 = volume * np.power(10, -pH)  # G1.2 = v * 10^(-pH)
-    g2_2 = (volume + V) * np.power(10, pH)  # G2.2 = (v + V) * 10^(pH)
+    g1_2 = (volume    ) * np.power(10, -pH)  # G1.2 = v * 10^(-pH)
+    g2_2 = (volume + V) * np.power(10,  pH)  # G2.2 = (v + V) * 10^(pH)
     axes[2, 0].plot(volume, g1_2, marker='s', linestyle='--', color='orange', label='G1.2 = v * 10^(-pH)')
     axes[2, 0].set_ylabel('Gran G1.2')
     axes[2, 0].set_title('Gran G1.2 Plot')
@@ -99,7 +99,7 @@ def plot_titration_and_gran(df, output_file='titration_and_gran.png'):
     # axes[2, 1].set_yscale('log')
 
     # Row 4: G1.3 (left), G2.3 (right)
-    g1_3 = volume * np.power(10, pH)  # G1.3 = v * 10^(pH)
+    g1_3 = (volume    ) * np.power(10,  pH)  # G1.3 = v * 10^(pH)
     g2_3 = (volume + V) * np.power(10, -pH)  # G2.3 = (v + V) * 10^(-pH)
     axes[3, 0].plot(volume, g1_3, marker='^', linestyle=':', color='purple', label='G1.3 = v * 10^(pH)')
     axes[3, 0].set_xlabel('Volume Added (mL)')
