@@ -50,7 +50,7 @@ def plot_titration_and_g1_v_vary(df, output_file='titration_and_g1_v_vary.png'):
 
     # V values
     V_values = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
-
+    
     # Define G1 functions
     def strongacid_g1(volume, pH, V):
         return (volume + V) * np.power(10, -pH)

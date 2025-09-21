@@ -55,10 +55,20 @@ def plot_titration_and_gran(df, output_file='titration_and_gran.png'):
     strongacid_g2 = (volume + V) * np.power(10, pH)   # StrongAcid_G2 = (v + V) * 10^(pH)
     strongbase_g1 = (volume + V) * np.power(10, pH)   # StrongBase_G1 = (v + V) * 10^(pH)
     strongbase_g2 = (volume + V) * np.power(10, -pH)  # StrongBase_G2 = (v + V) * 10^(-pH)
-    weakacid_g1 = volume * np.power(10, -pH)          # WeakAcid_G1 = v * 10^(-pH)
-    weakacid_g2 = (volume + V) * np.power(10, pH)     # WeakAcid_G2 = (v + V) * 10^(pH)
-    weakbase_g1 = volume * np.power(10, pH)           # WeakBase_G1 = v * 10^(pH)
-    weakbase_g2 = (volume + V) * np.power(10, -pH)    # WeakBase_G2 = (v + V) * 10^(-pH)
+    weakacid_g1   =  volume * np.power(10, -pH)       # WeakAcid_G1   =  v * 10^(-pH)
+    weakacid_g2   = (volume + V) * np.power(10, pH)   # WeakAcid_G2   = (v + V) * 10^(pH)
+    weakbase_g1   =  volume * np.power(10, pH)        # WeakBase_G1   =  v * 10^(pH)
+    weakbase_g2   = (volume + V) * np.power(10, -pH)  # WeakBase_G2   = (v + V) * 10^(-pH)
+    
+    # Define Schwarz functions
+    #schwarz_strongacid_g1 = (volume + V) *  np.power(10, -pH)  # Schwarz_StrongAcid_G1 = (v + V) * 10^(-pH)
+    #schwarz_strongacid_g2 = (volume + V) *  np.power(10, pH - pKw)  # Schwarz_StrongAcid_G2 = (v + V) * 10^(pH - pKw)
+    #schwarz_strongbase_g1 = (volume + V) *  np.power(10, pH - pKw)  # Schwarz_StrongBase_G1 = (v + V) * 10^(pH - pKw)
+    #schwarz_strongbase_g2 = (volume + V) *  np.power(10, -pH)  # Schwarz_StrongBase_G2 = (v + V) * 10^(-pH)
+    #schwarz_weakacid_g1   = (volume + V) * (np.power(10, -pH) / (np.power(10, -pH) + Ka)) * np.power(10, -pH)  # Schwarz_WeakAcid_G1 = (v + V) * ([H^+]/([H^+] + Ka_c)) * [H^+]
+    #schwarz_weakacid_g2   = (volume + V) *  np.power(10, pH - pKw)  # Schwarz_WeakAcid_G2 = (v + V) * 10^(pH - pKw)
+    #schwarz_weakbase_g1   = (volume + V) * (np.power(10, 14 - pH) / (np.power(10, 14 - pH) + Kb)) * np.power(10, 14 - pH)  # Schwarz_WeakBase_G1 = (v + V) * ([OH^-]/([OH^-] + Kb_c)) * [OH^-]
+    #schwarz_weakbase_g2   = (volume + V) *  np.power(10, -pH)  # Schwarz_WeakBase_G2 = (v + V) * 10^(-pH)
 
     # Row 1: Titration curve in all 4 columns
     for col in range(4):
