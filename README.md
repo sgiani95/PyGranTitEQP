@@ -13,6 +13,12 @@ Fusion: Py (Python) + Gran + Tit (Titration) + EQP (Equivalence Point).
 
 ---
 
+## Flowchart
+
+![Flowchart](/flowchart.png)
+
+---
+
 # Gran and Schwartz Titration Curve Processing and Evaluation: Project Requirements
 
 ## 1. Project Overview
