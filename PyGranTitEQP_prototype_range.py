@@ -43,7 +43,7 @@ def plot_titration_and_gran(df, output_file='titration_and_gran.png'):
         print("Cannot plot: Invalid or no data.")
         return
     # Set professional plot style
-    plt.style.use('seaborn')
+    plt.style.use('seaborn-v0_8')
     fig, axes = plt.subplots(7, 4, figsize=(16, 28), sharex=True)
 
     # Convert to NumPy arrays for plotting
