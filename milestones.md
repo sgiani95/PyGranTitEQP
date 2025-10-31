@@ -109,3 +109,4 @@ This document outlines the milestones for developing **PyGranTitEQP**, a Python 
   5. Documentation and deployment (2–3 weeks): Accessibility and usability.
 - **Alignment with Requirements**: Supports dual interfaces (CLI for routine analysis, GUI for method development), endpoint detection (Gran/Schwartz), and chemometric precision (e.g., uncertainty analysis, polyprotic support).
 - **Flexibility**: Milestones can be adjusted (e.g., faster CLI delivery, more GUI focus) based on priorities or sample data availability.
+
