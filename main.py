@@ -1,5 +1,5 @@
 # main.py: Entry Point for GranTED - Orchestrates Full Workflow
-#TEST123
+
 import argparse
 import sys
 from pathlib import Path
