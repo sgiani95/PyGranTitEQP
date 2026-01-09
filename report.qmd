@@ -1,0 +1,58 @@
+---
+title: "Python Project GranTED"
+author: "sgiani95"
+format: 
+  pdf:
+    documentclass: article
+    geometry: landscape
+---
+
+## main.py
+
+```{python}
+#| echo: true
+print(open('main.py').read())
+```
+
+## data_io.py
+
+```{python}
+#| echo: true
+print(open('data_io.py').read())
+```
+
+## preprocess.py
+
+```{python}
+#| echo: true
+print(open('preprocess.py').read())
+```
+
+## gran_functions.py
+
+```{python}
+#| echo: true
+print(open('gran_functions.py').read())
+```
+
+## analyzer.py
+
+```{python}
+#| echo: true
+print(open('analyzer.py').read())
+```
+
+## visualizer.py
+
+```{python}
+#| echo: true
+print(open('visualizer.py').read())
+```
+
+## reporter.py
+
+```{python}
+#| echo: true
+print(open('reporter.py').read())
+```
+

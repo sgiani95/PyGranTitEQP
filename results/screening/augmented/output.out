@@ -1,0 +1,631 @@
+5
+Loaded 5 points from 'data_5.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325]), 'potential': array([-25.7, -54.5, -78.7, -86.8, -94.3]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=1.41e-09 <= 0.001). No smoothing.
+No low-var negative segments found. Falling back to full negative region.
+Raw Zone (initial): indices 0-5, R²=0.9998, V_eq=19.583 mL over 5 points
+Low noise (std_dg1=5.60e-10 <= 0.001). No smoothing.
+No low-var negative segments found. Falling back to full negative region.
+Opt Zone (final): k5=0.937, R²=1.0000, V_eq=19.497 mL over 5 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/5/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/5/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/5
+Visualizations generated.
+CSV report saved to results/augmented/5/gran_results.csv
+PDF report saved to results/augmented/5/gran_report.pdf
+Method JSON saved to results/augmented/5/method.json
+Full report generated in ./results/augmented/5
+Full workflow complete. Results in ./results/augmented/5
+6
+Loaded 6 points from 'data_6.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=1.18e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 2-5, R²=1.000 (Case: Case 3, Score: 105.00)
+Raw Zone (initial): indices 2-5, R²=1.0000, V_eq=19.467 mL over 3 points
+Low noise (std_dg1=3.03e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 2-5, R²=1.000 (Case: Case 3, Score: 105.00)
+Opt Zone (final): k5=4.229, R²=1.0000, V_eq=19.442 mL over 3 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/6/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/6/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/6
+Visualizations generated.
+CSV report saved to results/augmented/6/gran_results.csv
+PDF report saved to results/augmented/6/gran_report.pdf
+Method JSON saved to results/augmented/6/method.json
+Full report generated in ./results/augmented/6
+Full workflow complete. Results in ./results/augmented/6
+7
+Loaded 7 points from 'data_7.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=1.12e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 2-5, R²=1.000 (Case: Case 3, Score: 104.28)
+Raw Zone (initial): indices 2-5, R²=1.0000, V_eq=19.467 mL over 3 points
+Low noise (std_dg1=2.97e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 2-5, R²=1.000 (Case: Case 3, Score: 104.29)
+Opt Zone (final): k5=4.229, R²=1.0000, V_eq=19.442 mL over 3 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/7/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/7/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/7
+Visualizations generated.
+CSV report saved to results/augmented/7/gran_results.csv
+PDF report saved to results/augmented/7/gran_report.pdf
+Method JSON saved to results/augmented/7/method.json
+Full report generated in ./results/augmented/7
+Full workflow complete. Results in ./results/augmented/7
+8
+Loaded 8 points from 'data_8.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874, 19.049]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4, -120.2]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=1.04e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 4-8, R²=1.000 (Case: Case 3, Score: 105.00)
+Raw Zone (initial): indices 4-8, R²=1.0000, V_eq=19.492 mL over 4 points
+Low noise (std_dg1=2.04e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 1-5, R²=1.000 (Case: Case 2, Score: 105.00)
+Opt Zone (final): k5=3.199, R²=1.0000, V_eq=19.455 mL over 4 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/8/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/8/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/8
+Visualizations generated.
+CSV report saved to results/augmented/8/gran_results.csv
+PDF report saved to results/augmented/8/gran_report.pdf
+Method JSON saved to results/augmented/8/method.json
+Full report generated in ./results/augmented/8
+Full workflow complete. Results in ./results/augmented/8
+9
+Loaded 9 points from 'data_9.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874, 19.049,
+       19.173]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4, -120.2,
+       -128.5]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=1.04e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 4-8, R²=1.000 (Case: Case 3, Score: 104.44)
+Raw Zone (initial): indices 4-8, R²=1.0000, V_eq=19.492 mL over 4 points
+Low noise (std_dg1=2.29e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 1-5, R²=1.000 (Case: Case 2, Score: 104.44)
+Opt Zone (final): k5=3.199, R²=1.0000, V_eq=19.455 mL over 4 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/9/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/9/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/9
+Visualizations generated.
+CSV report saved to results/augmented/9/gran_results.csv
+PDF report saved to results/augmented/9/gran_report.pdf
+Method JSON saved to results/augmented/9/method.json
+Full report generated in ./results/augmented/9
+Full workflow complete. Results in ./results/augmented/9
+10
+Loaded 10 points from 'data_10.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874, 19.049,
+       19.173, 19.268]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4, -120.2,
+       -128.5, -137. ]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=1.17e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 4-9, R²=1.000 (Case: Case 3, Score: 105.00)
+Raw Zone (initial): indices 4-9, R²=1.0000, V_eq=19.494 mL over 5 points
+Low noise (std_dg1=2.70e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 2-7, R²=1.000 (Case: Case 3, Score: 105.00)
+Opt Zone (final): k5=-2.247, R²=1.0000, V_eq=19.492 mL over 5 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/10/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/10/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/10
+Visualizations generated.
+CSV report saved to results/augmented/10/gran_results.csv
+PDF report saved to results/augmented/10/gran_report.pdf
+Method JSON saved to results/augmented/10/method.json
+Full report generated in ./results/augmented/10
+Full workflow complete. Results in ./results/augmented/10
+11
+Loaded 11 points from 'data_11.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874, 19.049,
+       19.173, 19.268, 19.339]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4, -120.2,
+       -128.5, -137. , -145.5]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=1.44e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 4-9, R²=1.000 (Case: Case 3, Score: 104.54)
+Raw Zone (initial): indices 4-9, R²=1.0000, V_eq=19.494 mL over 5 points
+Low noise (std_dg1=2.59e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 2-7, R²=1.000 (Case: Case 3, Score: 104.54)
+Opt Zone (final): k5=-2.247, R²=1.0000, V_eq=19.492 mL over 5 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/11/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/11/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/11
+Visualizations generated.
+CSV report saved to results/augmented/11/gran_results.csv
+PDF report saved to results/augmented/11/gran_report.pdf
+Method JSON saved to results/augmented/11/method.json
+Full report generated in ./results/augmented/11
+Full workflow complete. Results in ./results/augmented/11
+12
+Loaded 12 points from 'data_12.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874, 19.049,
+       19.173, 19.268, 19.339, 19.392]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4, -120.2,
+       -128.5, -137. , -145.5, -153.2]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=2.50e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 2-8, R²=1.000 (Case: Case 3, Score: 105.00)
+Raw Zone (initial): indices 2-8, R²=1.0000, V_eq=19.483 mL over 6 points
+Low noise (std_dg1=3.10e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 2-8, R²=1.000 (Case: Case 3, Score: 105.00)
+Opt Zone (final): k5=-2.704, R²=1.0000, V_eq=19.495 mL over 6 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/12/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/12/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/12
+Visualizations generated.
+CSV report saved to results/augmented/12/gran_results.csv
+PDF report saved to results/augmented/12/gran_report.pdf
+Method JSON saved to results/augmented/12/method.json
+Full report generated in ./results/augmented/12
+Full workflow complete. Results in ./results/augmented/12
+13
+Loaded 13 points from 'data_13.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874, 19.049,
+       19.173, 19.268, 19.339, 19.392, 19.438]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4, -120.2,
+       -128.5, -137. , -145.5, -153.2, -160.2]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=4.56e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 2-8, R²=1.000 (Case: Case 3, Score: 104.61)
+Raw Zone (initial): indices 2-8, R²=1.0000, V_eq=19.483 mL over 6 points
+Low noise (std_dg1=4.16e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 2-8, R²=1.000 (Case: Case 3, Score: 104.61)
+Opt Zone (final): k5=-2.704, R²=1.0000, V_eq=19.495 mL over 6 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/13/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/13/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/13
+Visualizations generated.
+CSV report saved to results/augmented/13/gran_results.csv
+PDF report saved to results/augmented/13/gran_report.pdf
+Method JSON saved to results/augmented/13/method.json
+Full report generated in ./results/augmented/13
+Full workflow complete. Results in ./results/augmented/13
+14
+Loaded 14 points from 'data_14.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874, 19.049,
+       19.173, 19.268, 19.339, 19.392, 19.438, 19.488]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4, -120.2,
+       -128.5, -137. , -145.5, -153.2, -160.2, -168.8]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=6.20e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 2-9, R²=1.000 (Case: Case 3, Score: 105.00)
+Raw Zone (initial): indices 2-9, R²=1.0000, V_eq=19.487 mL over 7 points
+Low noise (std_dg1=5.22e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 2-9, R²=1.000 (Case: Case 3, Score: 105.00)
+Opt Zone (final): k5=-3.149, R²=1.0000, V_eq=19.498 mL over 7 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/14/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/14/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/14
+Visualizations generated.
+CSV report saved to results/augmented/14/gran_results.csv
+PDF report saved to results/augmented/14/gran_report.pdf
+Method JSON saved to results/augmented/14/method.json
+Full report generated in ./results/augmented/14
+Full workflow complete. Results in ./results/augmented/14
+15
+Loaded 15 points from 'data_15.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874, 19.049,
+       19.173, 19.268, 19.339, 19.392, 19.438, 19.488, 19.529]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4, -120.2,
+       -128.5, -137. , -145.5, -153.2, -160.2, -168.8, -175.8]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=8.18e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 2-9, R²=1.000 (Case: Case 3, Score: 104.66)
+Raw Zone (initial): indices 2-9, R²=1.0000, V_eq=19.487 mL over 7 points
+Low noise (std_dg1=6.63e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 2-9, R²=1.000 (Case: Case 3, Score: 104.67)
+Opt Zone (final): k5=-3.149, R²=1.0000, V_eq=19.498 mL over 7 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/15/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/15/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/15
+Visualizations generated.
+CSV report saved to results/augmented/15/gran_results.csv
+PDF report saved to results/augmented/15/gran_report.pdf
+Method JSON saved to results/augmented/15/method.json
+Full report generated in ./results/augmented/15
+Full workflow complete. Results in ./results/augmented/15
+16
+Loaded 16 points from 'data_16.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874, 19.049,
+       19.173, 19.268, 19.339, 19.392, 19.438, 19.488, 19.529, 19.576]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4, -120.2,
+       -128.5, -137. , -145.5, -153.2, -160.2, -168.8, -175.8, -183.2]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=9.97e-09 <= 0.001). No smoothing.
+Identified 'the Zone': indices 1-9, R²=1.000 (Case: Case 2, Score: 104.99)
+Raw Zone (initial): indices 1-9, R²=0.9999, V_eq=19.502 mL over 8 points
+Low noise (std_dg1=1.14e-08 <= 0.001). No smoothing.
+Identified 'the Zone': indices 1-9, R²=1.000 (Case: Case 2, Score: 105.00)
+Opt Zone (final): k5=1.760, R²=1.0000, V_eq=19.483 mL over 8 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/16/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/16/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/16
+Visualizations generated.
+CSV report saved to results/augmented/16/gran_results.csv
+PDF report saved to results/augmented/16/gran_report.pdf
+Method JSON saved to results/augmented/16/method.json
+Full report generated in ./results/augmented/16
+Full workflow complete. Results in ./results/augmented/16
+17
+Loaded 17 points from 'data_17.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874, 19.049,
+       19.173, 19.268, 19.339, 19.392, 19.438, 19.488, 19.529, 19.576,
+       19.632]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4, -120.2,
+       -128.5, -137. , -145.5, -153.2, -160.2, -168.8, -175.8, -183.2,
+       -190.9]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=1.16e-08 <= 0.001). No smoothing.
+Identified 'the Zone': indices 1-9, R²=1.000 (Case: Case 2, Score: 104.70)
+Raw Zone (initial): indices 1-9, R²=0.9999, V_eq=19.502 mL over 8 points
+Low noise (std_dg1=1.31e-08 <= 0.001). No smoothing.
+Identified 'the Zone': indices 1-9, R²=1.000 (Case: Case 2, Score: 104.70)
+Opt Zone (final): k5=1.760, R²=1.0000, V_eq=19.483 mL over 8 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/17/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/17/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/17
+Visualizations generated.
+CSV report saved to results/augmented/17/gran_results.csv
+PDF report saved to results/augmented/17/gran_report.pdf
+Method JSON saved to results/augmented/17/method.json
+Full report generated in ./results/augmented/17
+Full workflow complete. Results in ./results/augmented/17
+18
+Loaded 18 points from 'data_18.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874, 19.049,
+       19.173, 19.268, 19.339, 19.392, 19.438, 19.488, 19.529, 19.576,
+       19.632, 19.699]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4, -120.2,
+       -128.5, -137. , -145.5, -153.2, -160.2, -168.8, -175.8, -183.2,
+       -190.9, -198. ]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=1.30e-08 <= 0.001). No smoothing.
+Identified 'the Zone': indices 1-10, R²=1.000 (Case: Case 2, Score: 104.99)
+Raw Zone (initial): indices 1-10, R²=0.9999, V_eq=19.502 mL over 9 points
+Low noise (std_dg1=1.43e-08 <= 0.001). No smoothing.
+Identified 'the Zone': indices 1-10, R²=1.000 (Case: Case 2, Score: 105.00)
+Opt Zone (final): k5=1.439, R²=1.0000, V_eq=19.489 mL over 9 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/18/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/18/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/18
+Visualizations generated.
+CSV report saved to results/augmented/18/gran_results.csv
+PDF report saved to results/augmented/18/gran_report.pdf
+Method JSON saved to results/augmented/18/method.json
+Full report generated in ./results/augmented/18
+Full workflow complete. Results in ./results/augmented/18
+19
+Loaded 19 points from 'data_19.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874, 19.049,
+       19.173, 19.268, 19.339, 19.392, 19.438, 19.488, 19.529, 19.576,
+       19.632, 19.699, 19.807]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4, -120.2,
+       -128.5, -137. , -145.5, -153.2, -160.2, -168.8, -175.8, -183.2,
+       -190.9, -198. , -206.9]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=1.41e-08 <= 0.001). No smoothing.
+Identified 'the Zone': indices 1-10, R²=1.000 (Case: Case 2, Score: 104.73)
+Raw Zone (initial): indices 1-10, R²=0.9999, V_eq=19.502 mL over 9 points
+Low noise (std_dg1=1.55e-08 <= 0.001). No smoothing.
+Identified 'the Zone': indices 1-10, R²=1.000 (Case: Case 2, Score: 104.73)
+Opt Zone (final): k5=1.439, R²=1.0000, V_eq=19.489 mL over 9 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/19/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/19/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/19
+Visualizations generated.
+CSV report saved to results/augmented/19/gran_results.csv
+PDF report saved to results/augmented/19/gran_report.pdf
+Method JSON saved to results/augmented/19/method.json
+Full report generated in ./results/augmented/19
+Full workflow complete. Results in ./results/augmented/19
+20
+Loaded 20 points from 'data_20.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874, 19.049,
+       19.173, 19.268, 19.339, 19.392, 19.438, 19.488, 19.529, 19.576,
+       19.632, 19.699, 19.807, 19.939]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4, -120.2,
+       -128.5, -137. , -145.5, -153.2, -160.2, -168.8, -175.8, -183.2,
+       -190.9, -198. , -206.9, -215.2]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=1.49e-08 <= 0.001). No smoothing.
+Identified 'the Zone': indices 1-11, R²=1.000 (Case: Case 2, Score: 104.99)
+Raw Zone (initial): indices 1-11, R²=0.9999, V_eq=19.503 mL over 10 points
+Low noise (std_dg1=1.61e-08 <= 0.001). No smoothing.
+Identified 'the Zone': indices 0-10, R²=1.000 (Case: Case 3, Score: 105.00)
+Opt Zone (final): k5=1.131, R²=1.0000, V_eq=19.486 mL over 10 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/20/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/20/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/20
+Visualizations generated.
+CSV report saved to results/augmented/20/gran_results.csv
+PDF report saved to results/augmented/20/gran_report.pdf
+Method JSON saved to results/augmented/20/method.json
+Full report generated in ./results/augmented/20
+Full workflow complete. Results in ./results/augmented/20
+21
+Loaded 21 points from 'data_21.dat'.
+   volume  potential
+0   9.982      -25.7
+1  14.973      -54.5
+2  17.470      -78.7
+3  17.970      -86.8
+4  18.325      -94.3
+Applied CLI overrides
+Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Preprocessing complete. Ready for analysis.
+Preprocessed data ready. Final params: {'volume': array([ 9.982, 14.973, 17.47 , 17.97 , 18.325, 18.631, 18.874, 19.049,
+       19.173, 19.268, 19.339, 19.392, 19.438, 19.488, 19.529, 19.576,
+       19.632, 19.699, 19.807, 19.939, 20.   ]), 'potential': array([ -25.7,  -54.5,  -78.7,  -86.8,  -94.3, -102.5, -111.4, -120.2,
+       -128.5, -137. , -145.5, -153.2, -160.2, -168.8, -175.8, -183.2,
+       -190.9, -198. , -206.9, -215.2, -218.4]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Gran functions computed.
+Using Case 1 modified Gran function (moderately weak acid)
+Computed Gran function for weak_acid with default k=0.0
+Low noise (std_dg1=1.56e-08 <= 0.001). No smoothing.
+Identified 'the Zone': indices 1-11, R²=1.000 (Case: Case 2, Score: 104.76)
+Raw Zone (initial): indices 1-11, R²=0.9999, V_eq=19.503 mL over 10 points
+Low noise (std_dg1=1.68e-08 <= 0.001). No smoothing.
+Identified 'the Zone': indices 0-10, R²=1.000 (Case: Case 3, Score: 104.76)
+Opt Zone (final): k5=1.131, R²=1.0000, V_eq=19.486 mL over 10 points
+Gran analysis complete with separate raw/opt Zones.
+Analysis complete.
+Titration curve saved to ./results/augmented/21/titration_curve.png
+Gran plot (separate raw/opt Zones) saved to ./results/augmented/21/gran_functions.png
+No screened k data available. Skipping plot.
+All visualizations saved to ./results/augmented/21
+Visualizations generated.
+CSV report saved to results/augmented/21/gran_results.csv
+PDF report saved to results/augmented/21/gran_report.pdf
+Method JSON saved to results/augmented/21/method.json
+Full report generated in ./results/augmented/21
+Full workflow complete. Results in ./results/augmented/21

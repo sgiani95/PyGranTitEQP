@@ -1,0 +1,12 @@
+{
+  "V": 678.0,
+  "C_B": 0.1,
+  "titration_type": "weak_acid",
+  "strength": "weak",
+  "r2_threshold": 0.95,
+  "k": 0.0,
+  "noise_threshold": 0.001,
+  "var_threshold_rel": 0.1,
+  "min_r2": 0.95,
+  "max_expand": 5
+}

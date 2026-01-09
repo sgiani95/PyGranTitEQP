@@ -1,0 +1,16 @@
+Parameter,Value
+V (mL),50.0
+C_B (M),0.1
+titration_type,weak_acid
+Raw Zone k5,0.0
+Raw Zone R²,0.9984982271768682
+Raw Zone V_eq (mL),5.5104621959097075
+Raw Zone Num Points,13
+Opt Zone k5,1.44531354384685
+Opt Zone R²,0.9997073825971042
+Opt Zone V_eq (mL),5.496256797618779
+Opt Zone Num Points,15
+Raw Interval Start,13
+Raw Interval End,26
+Opt Interval Start,11
+Opt Interval End,26
