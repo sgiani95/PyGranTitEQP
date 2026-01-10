@@ -1,7 +1,7 @@
 # 10Print in python
 import random
 
-Iterations = 1 << 16
+Iterations = 1 << 4
 Random = 0
 
 while Iterations > 0:
