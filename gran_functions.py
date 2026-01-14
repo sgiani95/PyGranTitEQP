@@ -1,82 +1,111 @@
-# gran_functions.py: Module 3 for GranTED - Gran Function Computation
+"""
+gran_functions.py: Mathematical core for computing Gran and Schwartz functions in acid-base titrations.
 
-#######################
-# Core Functionality: #
-#######################
-#
-# Gran Computation: Calculates Gran functions for strong/weak acid/base titrations based on titration_type.
-# Supports 4 cases: strong_acid_g1, weak_acid_g1, strong_base_g1, weak_base_g1, with single tunable k.
-#
-# pH Conversion: Converts 'potential' (mV) to pH = 7 - (potential / 59.16) for calculations.
-#
-# Output: Returns dict {'g1': array, 'gran_func': callable(v, ph, k)} for analyzer.py; screened dicts if k_range provided.
-# Note: Default titration_type='weak_acid'; set via params (CLI/JSON/GUI).
+Computes g1 (Gran, 4 distinct types) and gs (Schwartz, 2 types) arrays; returns reusable Schwartz lambda (with k for analyzer.py).
+pH conversion from potential (mV) via Nernst (25°C). k=0 fixed for arrays; lambdas tunable.
+Assumes acid + strong base or base + strong acid.
+
+Dependencies: numpy, pandas.
+"""
 
 import numpy as np
 import pandas as pd
+from typing import Dict, Callable, Any
 
-def compute_gran_functions(df, params, k_range=None):
+
+def compute_gran_functions(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Compute Gran function for the specified titration type (acid/base, strong/weak).
+    Compute Gran (4 types) and Schwartz (2 types) functions based on titration_type.
+
     Args:
-        df (pd.DataFrame): Data with 'volume' and 'potential' columns.
-        params (dict): From preprocess.py (e.g., {'V': 25.0, 'titration_type': 'weak_acid'}).
-        k_range (list): Optional k values for screening (placeholder).
+        df: DataFrame with 'volume' (titrant vol, mL) and 'potential' (mV) columns.
+        params: Dict with 'titration_type' (weak_acid/strong_acid/weak_base/strong_base),
+                'V' (initial vol, mL, default 25.0).
+
     Returns:
-        dict: {'g1': array, 'gran_func': callable(v, ph, k)} for optimization; screened if k_range.
+        Dict with 'gran' (dict: 'g1' array and lambda), 'schwartz' (dict: 'gs' array and lambda), 'pH' (array).
+
+    Raises:
+        ValueError: For unknown titration_type.
     """
-    # Ensure numeric types
-    volume = pd.to_numeric(df['volume'], errors='coerce').to_numpy()
-    potential = pd.to_numeric(df['potential'], errors='coerce').to_numpy()
-    pH = 7 - (potential / 59.16)  # Convert mV to pH
+    # Extract and coerce data
+    volume = pd.to_numeric(df['volume'], errors='coerce').dropna().values
+    potential = pd.to_numeric(df['potential'], errors='coerce').dropna().values
+    if len(volume) != len(potential):
+        raise ValueError("Volume and potential arrays must have equal length after cleaning.")
 
-    V = float(params.get('V', 25.0))
-    titration_type = params.get('titration_type', 'weak_acid')  # Default weak_acid
-    k_default = float(params.get('k', 0.0))  # Default k for computation
+    # Nernst conversion to pH (25°C)
+    pH = 7.0 - potential / 59.16
 
-    # Select Gran function based on titration_type
+    V0 = params.get('V', 25.0)
+    titration_type = params.get('titration_type', 'weak_acid')
+    k = 0.0  # Fixed for initial arrays
+
+    results = {}
+
+    # Gran: 4 distinct functions
     if titration_type == 'strong_acid':
-        g1 = (volume + V) * np.power(10, k_default - pH)
-        gran_func = lambda v, ph, k: (v + V) * np.power(10, k - ph)
-        print(f"Using strong_acid_g1 with V={V}, k={k_default}")
-
-#########################################################################
-
+        # Strong acid + strong base: g1 = (V0 + v) * 10^{-pH}
+        gran_func = lambda v, ph, kk: (V0 + v) * np.power(10, -ph)  # Ignores kk (placeholder)
+        g1 = gran_func(volume, pH, k)
+        print(f"Gran strong_acid: g1 computed with k={k}.")
     elif titration_type == 'weak_acid':
-        g1 = (volume + k_default) * np.power(10, - pH)
-        gran_func = lambda v, ph, k: (v+k) * np.power(10, - ph)
-        
-        print("Using Case 1 modified Gran function (moderately weak acid)")
-
-#########################################################################
-
-    elif titration_type == 'weak_acidd':
-        g1 = volume * np.power(10, k_default - pH)
-        gran_func = lambda v, ph, k: v * np.power(10, k - ph)
-        print(f"Using weak_acid_g1 with k={k_default}")
-
+        # Weak acid + strong base: g1 = (V0 + v) * 10^{k - pH}
+        gran_func = lambda v, ph, kk: (V0 + v) * np.power(10, kk - ph)
+        g1 = gran_func(volume, pH, k)
+        print(f"Gran weak_acid: g1 computed with k={k}.")
     elif titration_type == 'strong_base':
-        g1 = (volume + V) * np.power(10, k_default + pH)
-        gran_func = lambda v, ph, k: (v + V) * np.power(10, k + ph)
-        print(f"Using strong_base_g1 with V={V}, k={k_default}")
-    
+        # Strong base + strong acid: g1 = (V0 + v) * 10^{pH - 14}
+        gran_func = lambda v, ph, kk: (V0 + v) * np.power(10, ph - 14)  # Ignores kk
+        g1 = gran_func(volume, pH, k)
+        print(f"Gran strong_base: g1 computed with k={k}.")
     elif titration_type == 'weak_base':
-        g1 = volume * np.power(10, k_default + pH)
-        gran_func = lambda v, ph, k: v * np.power(10, k + ph)
-        print(f"Using weak_base_g1 with k={k_default}")
+        # Weak base + strong acid: g1 = (V0 + v) * 10^{pH + k - 14}
+        gran_func = lambda v, ph, kk: (V0 + v) * np.power(10, ph + kk - 14)
+        g1 = gran_func(volume, pH, k)
+        print(f"Gran weak_base: g1 computed with k={k}.")
     else:
-        raise ValueError(f"Unknown titration_type '{titration_type}'; use 'strong_acid', 'weak_acid', 'strong_base', or 'weak_base'.")
+        raise ValueError(f"Unknown titration_type '{titration_type}'. Valid: strong_acid, weak_acid, strong_base, weak_base.")
 
-    results = {
-        'g1': g1,  # Computed array with default k
-        'gran_func': gran_func,  # Callable for analyzer optimization
+    results['gran'] = {
+        'g1': g1,
+        'gran_func': gran_func  # Lambda for potential analyzer use (though Schwartz-focused)
     }
 
-    # Placeholder for k-screening (TODO: Enable for multiple k trials)
-    if k_range is not None:
-        results['g1_screened'] = {}
-        for k in k_range:
-            results['g1_screened'][f'k={k}'] = gran_func(volume, pH, k)
+    # Schwartz: 2 types (weak-based, as extension)
+    acid_mode = titration_type in ['strong_acid', 'weak_acid']
+    if acid_mode:
+        # Schwartz acid (uses weak form)
+        schwartz_func = lambda v, ph, kk: (V0 + v) * np.power(10, kk - ph)
+        gs = schwartz_func(volume, pH, k)
+        print(f"Schwartz acid: gs computed with k={k}.")
+    else:
+        # Schwartz base (mirrored weak)
+        schwartz_func = lambda v, ph, kk: (V0 + v) * np.power(10, ph + kk - 14)
+        gs = schwartz_func(volume, pH, k)
+        print(f"Schwartz base: gs computed with k={k}.")
 
-    print(f"Computed Gran function for {titration_type} with default k={k_default}")
+    results['schwartz'] = {
+        'gs': gs,
+        'gran_func': schwartz_func  # Lambda for analyzer.py (Schwartz-specific)
+    }
+
+    # Add pH for downstream reuse
+    results['pH'] = pH
+
+    print("Gran and Schwartz functions computed successfully.")
     return results
+
+
+if __name__ == "__main__":
+    # Standalone test
+    import pandas as pd
+    test_df = pd.DataFrame({
+        'volume': np.linspace(0, 30, 10),
+        'potential': np.linspace(0, -200, 10)
+    })
+    test_params = {'titration_type': 'weak_acid', 'V': 25.0}
+    results = compute_gran_functions(test_df, test_params)
+    print(f"Gran g1 shape: {results['gran']['g1'].shape}, sample: {results['gran']['g1'][:3]}")
+    print(f"Schwartz gs shape: {results['schwartz']['gs'].shape}, sample: {results['schwartz']['gs'][:3]}")
+    print(f"pH shape: {results['pH'].shape}, sample: {results['pH'][:3]}")
