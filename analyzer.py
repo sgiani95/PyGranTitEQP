@@ -153,17 +153,18 @@ def optimize_k5(gran_func: Callable, volume: np.ndarray, pH: np.ndarray, params:
         return initial_guess
 
 
-def analyze_gran(results: Dict[str, Any], params: Dict[str, Any], method: str, optimize_k: bool = True) -> None:
+def analyze_gran(results: Dict[str, Any], params: Dict[str, Any], method: str, optimize_k: bool = True, fixed_zone_from_gran: Optional[Tuple[int, int]] = None) -> None:
     """
     Analyze one method: Raw zone/fit + optional k opt + Schwartz iteration if applicable.
     Mutates results[method] with 'raw'/'optimized'.
+    For Gran: No k opt (fixed k=0); for Schwartz: k opt in fixed zone + extension.
     """
     if method not in results:
         logger.error(f"Missing {method} in results; skipping.")
         return
 
-    # Extract arrays (fallback to df if params missing; assume df passed or extract from results)
-    df = params.get('df', None)  # Optional df param
+    # Extract arrays (fallback to df if params missing)
+    df = params.get('df', None)
     volume = params.get('volume_array', df['volume'].values if df is not None else np.zeros(0))
     pH = results.get('pH', np.zeros_like(volume))
     g_raw = results[method].get('g1' if method == 'gran' else 'gs')
@@ -179,9 +180,10 @@ def analyze_gran(results: Dict[str, Any], params: Dict[str, Any], method: str, o
     r2_threshold = params.get('r2_threshold', 0.95)
     savgol_window = params.get('savgol_window', 5)
     case = params.get('case', 'default')
+    r2_tolerance = params.get('r2_tolerance', 0.05)  # For extension trials
 
     # Raw analysis
-    start, end = identify_linear_interval(g_raw, volume, params, method)
+    start, end = fixed_zone_from_gran if fixed_zone_from_gran else identify_linear_interval(g_raw, volume, params, method)
     raw_fit = _compute_fit(g_raw, volume, start, end)
     results[method]['raw'] = {
         'zone_start': start, 'zone_end': end,
@@ -194,30 +196,85 @@ def analyze_gran(results: Dict[str, Any], params: Dict[str, Any], method: str, o
     if not optimize_k:
         return
 
-    # Optimization
-    optimized_k = optimize_k5(gran_func, volume, pH, params)
-    g_opt = gran_func(volume, pH, optimized_k)
+    # Skip k opt for Gran (fixed k=0); only for Schwartz
+    if method == 'gran':
+        # For Gran "opt": Re-detect zone on raw g (no recompute, as k=0 fixed)
+        start_opt, end_opt = identify_linear_interval(g_raw, volume, params, method)
+        opt_fit = _compute_fit(g_raw, volume, start_opt, end_opt)
+        optimized_k = 0.0  # Fixed
+    else:  # Schwartz: k opt in fixed zone + extension
+        use_fixed_zone = (method == 'schwartz' and fixed_zone_from_gran is not None)
+        if use_fixed_zone:
+            zone_start, zone_end = fixed_zone_from_gran
+        else:
+            zone_start = zone_end = None
 
-    # Refit on optimized g
-    start_opt, end_opt = identify_linear_interval(g_opt, volume, params, method)
-    opt_fit = _compute_fit(g_opt, volume, start_opt, end_opt)
+        def loss(kk: float) -> float:
+            g_k = gran_func(volume, pH, kk)
+            if use_fixed_zone:
+                fit_k = _compute_fit(g_k, volume, zone_start, zone_end)
+                start_k, end_k = zone_start, zone_end
+            else:
+                start_k, end_k = identify_linear_interval(g_k, volume, params)
+                fit_k = _compute_fit(g_k, volume, start_k, end_k)
+            r2_k = fit_k['rvalue'] ** 2
+            logger.debug(f"k={kk:.3f}: Zone {start_k}-{end_k}, R²={r2_k:.3f}")
+            return -r2_k
 
-    # Schwartz-specific: V_eq iteration (3 max its)
-    if method == 'schwartz':
+        try:
+            res = minimize_scalar(loss, bounds=(-10, 10), method='bounded', tol=1e-6)
+            optimized_k = res.x if res.success else 0.0
+            logger.info(f"k5 optimized to {optimized_k:.3f} (via {res.nfev} evals)")
+        except Exception as e:
+            logger.warning(f"k5 opt error: {e}; fallback to 0.0")
+            optimized_k = 0.0
+
+        g_opt = gran_func(volume, pH, optimized_k)
+
+        # Refit on optimized g (fixed or detect)
+        if use_fixed_zone:
+            start_opt, end_opt = zone_start, zone_end
+        else:
+            start_opt, end_opt = identify_linear_interval(g_opt, volume, params, method)
+        opt_fit = _compute_fit(g_opt, volume, start_opt, end_opt)
+
+        # Extension trials for Schwartz (grow from opt zone if R² stable)
+        initial_r2 = opt_fit['rvalue'] ** 2
+        extended_start, extended_end = start_opt, end_opt
+        for direction in [-1, 1]:  # Left then right
+            current_start, current_end = extended_start, extended_end
+            for trial in range(3):  # Max 3 pts
+                new_start = max(0, current_start + direction)
+                new_end = min(len(volume), current_end + direction)
+                if new_start == current_start and new_end == current_end:
+                    break
+                fit_trial = _compute_fit(g_opt, volume, new_start if direction < 0 else current_start, new_end if direction > 0 else current_end)
+                trial_r2 = fit_trial['rvalue'] ** 2
+                if trial_r2 >= initial_r2 - r2_tolerance:
+                    extended_start, extended_end = new_start, new_end
+                    logger.debug(f"Extended {direction > 0 and 'right' or 'left'}: New zone {extended_start}-{extended_end}, R²={trial_r2:.3f}")
+                else:
+                    break
+        # Update if extended
+        if (extended_start, extended_end) != (start_opt, end_opt):
+            opt_fit = _compute_fit(g_opt, volume, extended_start, extended_end)
+            start_opt, end_opt = extended_start, extended_end
+            logger.info(f"{method} zone extended to {start_opt}-{end_opt}, R²={opt_fit['rvalue']**2:.3f}")
+
+        # Schwartz V_eq iteration (3 max its)
         v_eq_prev = opt_fit['v_eq']
         iterations = 0
         for it in range(3):
             iterations += 1
-            # Refeed V_eq into func (assume lambda uses params['v_eq_guess'] for adjustment; stub if not)
             params_iter = params.copy()
             params_iter['v_eq_guess'] = v_eq_prev
-            g_iter = gran_func(volume, pH, optimized_k)  # Recompute (extend lambda if needed for V_eq)
-            start_iter, end_iter = identify_linear_interval(g_iter, volume, params_iter, method)
+            g_iter = gran_func(volume, pH, optimized_k)  # Recompute (extend lambda for V_eq if needed)
+            start_iter, end_iter = identify_linear_interval(g_iter, volume, params_iter, method) if not use_fixed_zone else (start_opt, end_opt)
             fit_iter = _compute_fit(g_iter, volume, start_iter, end_iter)
             v_eq_new = fit_iter['v_eq']
             delta = abs(v_eq_new - v_eq_prev)
             logger.debug(f"Schwartz iter {it+1}: V_eq={v_eq_new:.3f}, Δ={delta:.3f}")
-            if delta < 0.01:  # Tol 0.01 mL
+            if delta < 0.01:
                 break
             v_eq_prev = v_eq_new
         opt_fit = fit_iter  # Use final
@@ -228,11 +285,10 @@ def analyze_gran(results: Dict[str, Any], params: Dict[str, Any], method: str, o
         'zone_start': start_opt, 'zone_end': end_opt,
         'r2': opt_fit['rvalue'] ** 2,
         'v_eq': opt_fit['v_eq'],
-        'optimized_k': optimized_k,
+        'optimized_k': optimized_k,  # Only meaningful for Schwartz
         'fit': opt_fit
     }
-    logger.info(f"{method} opt: k={optimized_k:.3f}, Zone {start_opt}-{end_opt}, R²={opt_fit['rvalue']**2:.3f}, V_eq={opt_fit['v_eq']:.2f} mL")
-
+    logger.info(f"{method} opt: Zone {start_opt}-{end_opt}, R²={opt_fit['rvalue']**2:.3f}, V_eq={opt_fit['v_eq']:.2f} mL")
 
 def analyze_full_pipeline(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str, Any]:
     """
@@ -251,15 +307,17 @@ def analyze_full_pipeline(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str,
     # Compute base functions
     base_results = compute_gran_functions(df, params)
 
-    # Analyze methods
-    methods = ['gran', 'schwartz']
-    for m in methods:
-        if m in base_results:
-            analyze_gran(base_results, params, m)
+    # Analyze Gran first (full detection)
+    analyze_gran(base_results, params, 'gran')
+
+    # Extract Gran's opt zone for Schwartz seed
+    gran_zone = (base_results['gran']['optimized']['zone_start'], base_results['gran']['optimized']['zone_end']) if 'optimized' in base_results['gran'] else None
+
+    # Analyze Schwartz with inherited zone
+    analyze_gran(base_results, params, 'schwartz', fixed_zone_from_gran=gran_zone)
 
     logger.info("Full pipeline complete: Processed gran and schwartz.")
     return base_results
-
 
 if __name__ == "__main__":
     # Standalone test: Mock data
