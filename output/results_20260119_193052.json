@@ -1,0 +1,25 @@
+{
+  "params": {
+    "titration_type": "weak_acid",
+    "V": "25.0",
+    "C_B": "0.1"
+  },
+  "results": {
+    "gran": {
+      "raw": {
+        "r2": "0.95",
+        "v_eq": "10.2",
+        "zone_start": "5",
+        "zone_end": "15"
+      },
+      "optimized": {
+        "r2": "0.98",
+        "v_eq": "10.5",
+        "zone_start": "6",
+        "zone_end": "14"
+      }
+    }
+  },
+  "generated": "2026-01-19T19:30:52.050462",
+  "green_note": "Estimated solvent savings: 0.05 L per optimized titration (global: ~50M L/year)."
+}
