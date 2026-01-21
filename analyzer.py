@@ -1,327 +1,255 @@
-"""
-analyzer.py: Core analysis engine for GranTED—detects linear zones, fits equivalence points, and optimizes k5.
+# analyzer.py: Module 4 for GranTED - Interval Identification and Parameter Optimization
 
-Supports Gran (4 types) and Schwartz (2 types) with raw/optimized modes. Uses derivatives for zone ID, linregress for fits,
-minimize_scalar for k5 (max R²). Handles Cases 1–3 with fallbacks; Schwartz includes V_eq iteration.
-Configurable thresholds via params; logging for diagnostics.
-
-Dependencies: numpy, pandas, scipy (stats, signal, optimize).
-Local: gran_functions (for recompute/lambdas).
-"""
+#######################
+# Core Functionality: #
+#######################
+#
+# Interval Identification: Automatically detects "the Zone" linear region in the Gran function (g1) using derivative analysis + rolling R² maximization,
+# targeting the steep negative-slope part for reliable fitting. Includes optional SavGol smoothing based on raw derivative noise check and segmented plateau detection for robustness.
+#
+# Parameter Optimization: Tunes k5 to maximize R² in the identified interval, with optional extension to include more points while maintaining linearity. Computes and stores both unoptimized (k5=0) and optimized results for comparison.
+#
+# Analysis Orchestration: Integrates Gran computation, interval finding, and optimization, outputting results (interval indices, fit params, R²) for both cases
+# for visualizer.py and reporter.py.
+#
+# Output: Dict with {'interval': (start, end), 'unoptimized': {...}, 'optimized': {...}, 'g1': array}, ready for plotting/reporting.
 
 import numpy as np
 import pandas as pd
 from scipy.stats import linregress
 from scipy.signal import savgol_filter
+from gran_functions import compute_gran_functions
 from scipy.optimize import minimize_scalar
-from typing import Dict, Any, Tuple, Optional, Callable
-import logging
 
-from gran_functions import compute_gran_functions  # For fallback recompute
+def _compute_r2(g1_smooth, volume, start, end):
+    """Helper: Compute R² and fit for a segment."""
+    if end - start < 2:
+        return 0.0, 0.0, 0.0
+    slope, intercept, r_value, _, _ = linregress(volume[start:end], g1_smooth[start:end])
+    return r_value**2, slope, intercept
 
-# Setup logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
-
-def _compute_derivative(g_values: np.ndarray, volume: np.ndarray, savgol_window: int = 5) -> np.ndarray:
+def identify_linear_interval(g1, volume, min_points=5, window_size=5, noise_threshold=0.001, 
+                             var_threshold_rel=0.1, min_r2=0.95):
     """
-    Compute smoothed derivative dg/dv using SavGol or np.gradient.
+    Identify "the Zone" using derivative-based segmentation and ranking.
+    Handles Cases 1-3 via plateau detection in negative dg1.
     """
-    if len(g_values) < savgol_window:
-        logger.warning(f"Array too short for SavGol (n={len(g_values)} < {savgol_window}); using raw gradient.")
-        deriv = np.gradient(g_values, volume)
+    # Step 1: Compute dg1 (with optional smoothing)
+    dg1_raw = np.gradient(g1, volume)
+    std_dg1 = np.std(dg1_raw)
+    if std_dg1 > noise_threshold:
+        print(f"High noise (std_dg1={std_dg1:.2e} > {noise_threshold}). Smoothing.")
+        g1_smooth = savgol_filter(g1, window_length=window_size, polyorder=2)
+        dg1 = np.gradient(g1_smooth, volume)
     else:
-        smoothed_g = savgol_filter(g_values, window_length=savgol_window, polyorder=2)
-        deriv = np.gradient(smoothed_g, volume)
-    return deriv
-
-
-def _score_zone(r2: float, length: int, slope: float, max_length: int, r2_threshold: float) -> float:
-    """
-    Score zone quality: Weighted R² + normalized length + |slope| (penalize flat but short).
-    """
-    length_norm = length / max_length
-    slope_norm = abs(slope) / (np.max(np.abs(np.gradient(np.logspace(0, 1, max_length)))) or 1)  # Rough norm
-    score = (r2 - r2_threshold + 1) * 0.7 + length_norm * 0.2 + slope_norm * 0.1  # Tunable weights
-    return score
-
-
-def _find_candidate_zones(deriv: np.ndarray, volume: np.ndarray, window_size: int, r2_threshold: float) -> list:
-    """
-    Find candidate zones via low-variance deriv regions (rolling min var).
-    Returns list of (start_idx, end_idx, score).
-    """
+        print(f"Low noise (std_dg1={std_dg1:.2e} <= {noise_threshold}). No smoothing.")
+        g1_smooth = g1
+        dg1 = dg1_raw
+    
+    # Focus on negative dg1 region
+    neg_mask = dg1 < 0
+    if not np.any(neg_mask):
+        print("Warning: No negative derivative. Using full range.")
+        return 0, len(g1) - 1, 0.0
+    
+    dg1_neg = dg1[neg_mask]
+    vol_neg_idx = np.where(neg_mask)[0]
+    
+    # Step 2: Segment into candidate plateaus via sliding-window variance
     candidates = []
-    n = len(deriv)
-    for i in range(0, n - window_size, window_size // 2):  # Overlap
-        end = min(i + window_size, n)
-        var = np.var(deriv[i:end])
-        if var < np.var(deriv) * 0.1:  # Threshold: 10% global var
-            # Reconstruct approx g_slice for scoring (cumsum deriv as log-g proxy)
-            dv = np.diff(volume[i:end], prepend=volume[i])
-            log_g_approx = np.cumsum(deriv[i:end] * dv)
-            g_slice = np.exp(log_g_approx)
-            fit = linregress(volume[i:end], g_slice)
-            score = _score_zone(fit.rvalue**2, end - i, fit.slope, n, r2_threshold)
-            if fit.rvalue**2 > r2_threshold:
-                candidates.append((i, end, score))
-    return sorted(candidates, key=lambda x: x[2], reverse=True)[:3]  # Top 3
+    win_sizes = range(max(3, min_points//2), min(15, len(dg1_neg)//2) + 1)
+    for win_len in win_sizes:
+        for i in range(len(dg1_neg) - win_len + 1):
+            seg_dg1 = dg1_neg[i:i+win_len]
+            mean_dg = np.mean(seg_dg1)
+            var_dg = np.var(seg_dg1)
+            if mean_dg < 0 and var_dg < var_threshold_rel * abs(mean_dg):
+                orig_start = vol_neg_idx[i]
+                orig_end = vol_neg_idx[i + win_len - 1] + 1
+                candidates.append({
+                    'orig_start': orig_start,
+                    'orig_end': orig_end,
+                    'length': win_len,
+                    'mean_dg': mean_dg,
+                    'var_dg': var_dg
+                })
+    
+    if not candidates:
+        print("No low-var negative segments found. Falling back to full negative region.")
+        full_start = vol_neg_idx[0]
+        full_end = vol_neg_idx[-1] + 1
+        _, _, r2_full = _compute_r2(g1_smooth, volume, full_start, full_end)
+        return full_start, full_end, r2_full
+    
+    # Step 3: Rank candidates by R², length, |mean_dg|
+    scored = []
+    for cand in candidates:
+        r2, slope, intercept = _compute_r2(g1_smooth, volume, cand['orig_start'], cand['orig_end'])
+        if r2 >= min_r2:
+            score = r2 * 100 + (cand['length'] / len(g1)) * 10 + abs(cand['mean_dg']) * 0.1
+            scored.append((cand, score, r2))
+    
+    if not scored:
+        # Fallback: Score all by composite even if R² < min_r2
+        fallback_scored = []
+        for cand in candidates:
+            r2, _, _ = _compute_r2(g1_smooth, volume, cand['orig_start'], cand['orig_end'])
+            score = r2 * 100 + (cand['length'] / len(g1)) * 10 + abs(cand['mean_dg']) * 0.1
+            fallback_scored.append((cand, score, r2))
+        scored = fallback_scored
+    
+    best_cand, best_score, best_r2 = max(scored, key=lambda x: x[1])
+    start_idx, end_idx = best_cand['orig_start'], best_cand['orig_end']
+    
+    # Case labeling (heuristic)
+    case = "Case 3"  # Default gradual
+    if start_idx > 0:
+        pre_mean = np.mean(dg1[:start_idx])
+        pre_std = np.std(dg1[:start_idx])
+        if pre_mean > 0:
+            case = "Case 1"
+        elif pre_std < 0.01 * abs(pre_mean):
+            case = "Case 2"
+    
+    print(f"Identified 'the Zone': indices {start_idx}-{end_idx}, R²={best_r2:.3f} (Case: {case}, Score: {best_score:.2f})")
+    return start_idx, end_idx, best_r2
 
-
-def identify_linear_interval(g_values: np.ndarray, volume: np.ndarray, params: Dict[str, Any], method: str = 'gran') -> Tuple[int, int]:
+def _compute_fit(df, start, end, gran_func, k5=0.0):
     """
-    Detect best linear zone via modular deriv var + scoring.
-    Supports cases: Default (var-based), case2 (shrink), case3 (deriv min).
+    Compute fit, R², and V_eq for a zone with given k5, using gran_func callable.
     """
-    r2_threshold = params.get('r2_threshold', 0.95)
-    savgol_window = params.get('savgol_window', 5)
-    case = params.get('case', 'default')
+    volume = df['volume'].iloc[start:end].values
+    potential = df['potential'].iloc[start:end].values
+    pH = 7 - (potential / 59.16)
+    y = gran_func(volume, pH, k5)  # Use callable
+    slope, intercept, r_value, _, _ = linregress(volume, y)
+    r2 = r_value**2
+    veq = -intercept / slope if slope != 0 else np.nan
+    return {'r2': r2, 'fit': (slope, intercept), 'veq': veq}
 
-    if len(g_values) != len(volume):
-        raise ValueError(f"g_values and volume length mismatch: {len(g_values)} vs {len(volume)}")
+def _optimize_single_zone(df, start, end, gran_func, k_bounds):
+    """
+    Optimize k5 for a fixed zone using gran_func callable.
+    """
+    volume = df['volume'].iloc[start:end].values
+    potential = df['potential'].iloc[start:end].values
+    pH = 7 - (potential / 59.16)
+    
+    def negative_r2(k5):
+        y = gran_func(volume, pH, k5)  # Use callable
+        slope, intercept, r_value, _, _ = linregress(volume, y)
+        return -r_value**2
+    
+    result = minimize_scalar(negative_r2, bounds=k_bounds, method='bounded')
+    best_k5 = result.x
+    max_r2 = -result.fun
+    y_opt = gran_func(volume, pH, best_k5)
+    slope, intercept, _, _, _ = linregress(volume, y_opt)
+    return {'best_k5': best_k5, 'best_r2': max_r2, 'fit': (slope, intercept)}
 
-    if len(volume) < 5:
-        raise ValueError("Too few points for zone detection (<5). Use more data.")
+def analyze_gran(df, params, use_segmented=True, use_extension=True):
+    """
+    Main analysis: Compute Gran, identify raw interval, fit raw, then optimize/extend for opt Zone.
+    Returns results with separate raw/opt Zones for comparison.
+    """
+    # Compute Gran functions (weakacid_g1 focus, with k5=0 default)
+    gran_results = compute_gran_functions(df, params)
+    g1 = gran_results['g1']  # General g1 array (weak_acid_g1 by default)
+    gran_func = gran_results['gran_func']  # Extract callable for optimization
+    params['volume'] = df['volume'].values  # Ensure volume in params for visualizer
 
-    deriv = _compute_derivative(g_values, volume, savgol_window)
-    window_size = max(5, len(volume) // 10)  # ~10% rolling
-
-    candidates = _find_candidate_zones(deriv, volume, window_size, r2_threshold)
-    if candidates:
-        start, end, _ = candidates[0]
-        logger.info(f"{method} zone detected: indices {start}-{end} (R² > {r2_threshold})")
-        return start, end
-
-    # Fallback cases
-    if case == 'case2':
-        # Shrink full range by 20%
-        n = len(volume)
-        start, end = int(0.1 * n), int(0.9 * n)
-        logger.warning(f"{method} case2 fallback: Shrunk full range to {start}-{end}")
-    elif case == 'case3':
-        # Expand around deriv min (flattest)
-        min_idx = np.argmin(np.abs(deriv))
-        start, end = max(0, min_idx - len(volume)//10), min(len(volume), min_idx + len(volume)//10)
-        logger.warning(f"{method} case3 fallback: Expanded around deriv min at {min_idx} to {start}-{end}")
+    # Identify initial interval (on raw g1)
+    if use_segmented:
+        start_idx, end_idx, _ = identify_linear_interval(g1, params['volume'])
     else:
-        start, end = 0, len(volume)
-        logger.warning(f"{method} default fallback: Full range (no good zone found)")
+        start_idx, end_idx, _ = _identify_linear_original(g1, params['volume'])
 
-    return start, end
+    initial_interval = (start_idx, end_idx)
+    
+    # Raw Zone: Fit on initial interval (no opt/extension)
+    raw_zone = _compute_fit(df, start_idx, end_idx, gran_func, k5=0.0)
+    raw_zone['start'] = start_idx
+    raw_zone['end'] = end_idx
+    raw_zone['num_points'] = end_idx - start_idx
+    
+    print(f"Raw Zone (initial): indices {start_idx}-{end_idx}, R²={raw_zone['r2']:.4f}, V_eq={raw_zone['veq']:.3f} mL over {raw_zone['num_points']} points")
 
+    # Opt k5 on raw Zone (no extension yet)
+    k_bounds = (-10, 10)  # Default bounds
+    opt_k5 = _optimize_single_zone(df, start_idx, end_idx, gran_func, k_bounds)['best_k5']
+    
+    # Recompute g1_opt and re-detect Zone on it
+    pH_full = 7 - (df['potential'].values / 59.16)
+    g1_opt = gran_func(params['volume'], pH_full, opt_k5)
+    if use_segmented:
+        opt_start, opt_end, opt_interval_r2 = identify_linear_interval(g1_opt, params['volume'])
+    else:
+        opt_start, opt_end, opt_interval_r2 = _identify_linear_original(g1_opt, params['volume'])
+    
+    # Opt fit on re-detected Zone
+    opt_zone = _compute_fit(df, opt_start, opt_end, gran_func, k5=opt_k5)
+    opt_zone['k5'] = opt_k5
+    opt_zone['start'] = opt_start
+    opt_zone['end'] = opt_end
+    opt_zone['num_points'] = opt_end - opt_start
 
-def _compute_fit(g_values: np.ndarray, volume: np.ndarray, start_idx: int, end_idx: int) -> Dict[str, Any]:
-    """
-    Compute linear fit and V_eq on zone.
-    """
-    if end_idx - start_idx < 2:
-        logger.warning("Zone too short for fit (<2 pts); returning defaults.")
-        return {'slope': 0.0, 'intercept': 0.0, 'rvalue': 0.0, 'v_eq': 0.0}
+    # Fallback if opt Zone smaller than raw (prevent shrinkage)
+    if opt_zone['num_points'] < raw_zone['num_points']:
+        opt_start, opt_end = raw_zone['start'], raw_zone['end']
+        opt_zone = _compute_fit(df, opt_start, opt_end, gran_func, k5=opt_k5)
+        opt_zone['k5'] = opt_k5  # Ensure k5 in fallback
+        opt_zone['start'] = opt_start
+        opt_zone['end'] = opt_end
+        opt_zone['num_points'] = opt_end - opt_start
+        print(f"Opt fallback to raw Zone (to avoid shrinkage): R²={opt_zone['r2']:.4f}, points={opt_zone['num_points']}")
 
-    v_slice = volume[start_idx:end_idx]
-    g_slice = g_values[start_idx:end_idx]
-    fit = linregress(v_slice, g_slice)
-    v_eq = -fit.intercept / fit.slope if fit.slope != 0 else 0.0
-    logger.debug(f"Fit: slope={fit.slope:.3f}, intercept={fit.intercept:.3f}, R²={fit.rvalue**2:.3f}, V_eq={v_eq:.3f}")
-    return {'slope': fit.slope, 'intercept': fit.intercept, 'rvalue': fit.rvalue, 'v_eq': v_eq}
+    print(f"Opt Zone (final): k5={opt_k5:.3f}, R²={opt_zone['r2']:.4f}, V_eq={opt_zone['veq']:.3f} mL over {opt_zone['num_points']} points")
 
-
-def optimize_k5(gran_func: Callable, volume: np.ndarray, pH: np.ndarray, params: Dict[str, Any], initial_guess: float = 0.0) -> float:
-    """
-    Optimize k5 via minimize_scalar on -R² (modular, with iteration callback).
-    """
-    r2_threshold = params.get('r2_threshold', 0.95)
-
-    def loss(kk: float) -> float:
-        g_k = gran_func(volume, pH, kk)
-        start, end = identify_linear_interval(g_k, volume, params)
-        fit = _compute_fit(g_k, volume, start, end)
-        r2 = fit['rvalue'] ** 2
-        logger.debug(f"k={kk:.3f}: Zone {start}-{end}, R²={r2:.3f}")
-        return -(r2 - r2_threshold + 1)  # Penalize below threshold
-
-    try:
-        res = minimize_scalar(loss, bounds=(-10, 10), method='bounded', tol=1e-6)
-        if not res.success:
-            logger.warning(f"k5 optimization failed: {res.message}; fallback to {initial_guess}")
-            return initial_guess
-        logger.info(f"k5 optimized to {res.x:.3f} (R² improvement via {res.nfev} evals)")
-        return res.x
-    except Exception as e:
-        logger.warning(f"k5 opt error: {e}; fallback to {initial_guess}")
-        return initial_guess
-
-
-def analyze_gran(results: Dict[str, Any], params: Dict[str, Any], method: str, optimize_k: bool = True, fixed_zone_from_gran: Optional[Tuple[int, int]] = None) -> None:
-    """
-    Analyze one method: Raw zone/fit + optional k opt + Schwartz iteration if applicable.
-    Mutates results[method] with 'raw'/'optimized'.
-    For Gran: No k opt (fixed k=0); for Schwartz: k opt in fixed zone + extension.
-    """
-    if method not in results:
-        logger.error(f"Missing {method} in results; skipping.")
-        return
-
-    # Extract arrays (fallback to df if params missing)
-    df = params.get('df', None)
-    volume = params.get('volume_array', df['volume'].values if df is not None else np.zeros(0))
-    pH = results.get('pH', np.zeros_like(volume))
-    g_raw = results[method].get('g1' if method == 'gran' else 'gs')
-    gran_func = results[method].get('gran_func')  # Lambda
-    if not callable(gran_func):
-        logger.warning(f"No callable {method} func; skipping optimization.")
-        optimize_k = False
-
-    if len(volume) == 0:
-        logger.error("Empty volume array; check preprocess/gran_functions.")
-        return
-
-    r2_threshold = params.get('r2_threshold', 0.95)
-    savgol_window = params.get('savgol_window', 5)
-    case = params.get('case', 'default')
-    r2_tolerance = params.get('r2_tolerance', 0.05)  # For extension trials
-
-    # Raw analysis
-    start, end = fixed_zone_from_gran if fixed_zone_from_gran else identify_linear_interval(g_raw, volume, params, method)
-    raw_fit = _compute_fit(g_raw, volume, start, end)
-    results[method]['raw'] = {
-        'zone_start': start, 'zone_end': end,
-        'r2': raw_fit['rvalue'] ** 2,
-        'v_eq': raw_fit['v_eq'],
-        'fit': raw_fit
+    results = {
+        'raw_zone': raw_zone,  # Initial raw
+        'opt_zone': opt_zone,  # Re-detected or fallback opt
+        'g1': g1,  # Raw g1 for plotting
+        'g1_opt': g1_opt,  # Opt g1 for plotting
+        'interval_r2': raw_zone['r2'],  # Legacy
     }
-    logger.info(f"{method} raw: Zone {start}-{end}, R²={raw_fit['rvalue']**2:.3f}, V_eq={raw_fit['v_eq']:.2f} mL")
 
-    if not optimize_k:
-        return
+    print("Gran analysis complete with separate raw/opt Zones.")
+    return results
 
-    # Skip k opt for Gran (fixed k=0); only for Schwartz
-    if method == 'gran':
-        # For Gran "opt": Re-detect zone on raw g (no recompute, as k=0 fixed)
-        start_opt, end_opt = identify_linear_interval(g_raw, volume, params, method)
-        opt_fit = _compute_fit(g_raw, volume, start_opt, end_opt)
-        optimized_k = 0.0  # Fixed
-    else:  # Schwartz: k opt in fixed zone + extension
-        use_fixed_zone = (method == 'schwartz' and fixed_zone_from_gran is not None)
-        if use_fixed_zone:
-            zone_start, zone_end = fixed_zone_from_gran
-        else:
-            zone_start = zone_end = None
-
-        def loss(kk: float) -> float:
-            g_k = gran_func(volume, pH, kk)
-            if use_fixed_zone:
-                fit_k = _compute_fit(g_k, volume, zone_start, zone_end)
-                start_k, end_k = zone_start, zone_end
-            else:
-                start_k, end_k = identify_linear_interval(g_k, volume, params)
-                fit_k = _compute_fit(g_k, volume, start_k, end_k)
-            r2_k = fit_k['rvalue'] ** 2
-            logger.debug(f"k={kk:.3f}: Zone {start_k}-{end_k}, R²={r2_k:.3f}")
-            return -r2_k
-
-        try:
-            res = minimize_scalar(loss, bounds=(-10, 10), method='bounded', tol=1e-6)
-            optimized_k = res.x if res.success else 0.0
-            logger.info(f"k5 optimized to {optimized_k:.3f} (via {res.nfev} evals)")
-        except Exception as e:
-            logger.warning(f"k5 opt error: {e}; fallback to 0.0")
-            optimized_k = 0.0
-
-        g_opt = gran_func(volume, pH, optimized_k)
-
-        # Refit on optimized g (fixed or detect)
-        if use_fixed_zone:
-            start_opt, end_opt = zone_start, zone_end
-        else:
-            start_opt, end_opt = identify_linear_interval(g_opt, volume, params, method)
-        opt_fit = _compute_fit(g_opt, volume, start_opt, end_opt)
-
-        # Extension trials for Schwartz (grow from opt zone if R² stable)
-        initial_r2 = opt_fit['rvalue'] ** 2
-        extended_start, extended_end = start_opt, end_opt
-        for direction in [-1, 1]:  # Left then right
-            current_start, current_end = extended_start, extended_end
-            for trial in range(3):  # Max 3 pts
-                new_start = max(0, current_start + direction)
-                new_end = min(len(volume), current_end + direction)
-                if new_start == current_start and new_end == current_end:
-                    break
-                fit_trial = _compute_fit(g_opt, volume, new_start if direction < 0 else current_start, new_end if direction > 0 else current_end)
-                trial_r2 = fit_trial['rvalue'] ** 2
-                if trial_r2 >= initial_r2 - r2_tolerance:
-                    extended_start, extended_end = new_start, new_end
-                    logger.debug(f"Extended {direction > 0 and 'right' or 'left'}: New zone {extended_start}-{extended_end}, R²={trial_r2:.3f}")
-                else:
-                    break
-        # Update if extended
-        if (extended_start, extended_end) != (start_opt, end_opt):
-            opt_fit = _compute_fit(g_opt, volume, extended_start, extended_end)
-            start_opt, end_opt = extended_start, extended_end
-            logger.info(f"{method} zone extended to {start_opt}-{end_opt}, R²={opt_fit['rvalue']**2:.3f}")
-
-        # Schwartz V_eq iteration (3 max its)
-        v_eq_prev = opt_fit['v_eq']
-        iterations = 0
-        for it in range(3):
-            iterations += 1
-            params_iter = params.copy()
-            params_iter['v_eq_guess'] = v_eq_prev
-            g_iter = gran_func(volume, pH, optimized_k)  # Recompute (extend lambda for V_eq if needed)
-            start_iter, end_iter = identify_linear_interval(g_iter, volume, params_iter, method) if not use_fixed_zone else (start_opt, end_opt)
-            fit_iter = _compute_fit(g_iter, volume, start_iter, end_iter)
-            v_eq_new = fit_iter['v_eq']
-            delta = abs(v_eq_new - v_eq_prev)
-            logger.debug(f"Schwartz iter {it+1}: V_eq={v_eq_new:.3f}, Δ={delta:.3f}")
-            if delta < 0.01:
-                break
-            v_eq_prev = v_eq_new
-        opt_fit = fit_iter  # Use final
-        results[method]['iterations'] = iterations
-        logger.info(f"Schwartz converged in {iterations} iterations, final V_eq={v_eq_new:.3f} mL")
-
-    results[method]['optimized'] = {
-        'zone_start': start_opt, 'zone_end': end_opt,
-        'r2': opt_fit['rvalue'] ** 2,
-        'v_eq': opt_fit['v_eq'],
-        'optimized_k': optimized_k,  # Only meaningful for Schwartz
-        'fit': opt_fit
-    }
-    logger.info(f"{method} opt: Zone {start_opt}-{end_opt}, R²={opt_fit['rvalue']**2:.3f}, V_eq={opt_fit['v_eq']:.2f} mL")
-
-def analyze_full_pipeline(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str, Any]:
+def _identify_linear_original(g1, volume, min_points=5, window_size=5):
     """
-    Full pipeline: Compute functions → Analyze both methods → Return enriched results.
-    Ensures params has arrays.
+    Original non-segmented interval identification (fallback).
     """
-    if df.empty:
-        raise ValueError("Empty DataFrame; load data first.")
+    dg1_raw = np.gradient(g1, volume)
+    std_dg1 = np.std(dg1_raw)
+    if std_dg1 > 0.001:
+        g1_smooth = savgol_filter(g1, window_length=window_size, polyorder=2)
+        dg1 = np.gradient(g1_smooth, volume)
+    else:
+        g1_smooth = g1
+        dg1 = dg1_raw
+    negative_start = np.where(dg1 < 0)[0]
+    if len(negative_start) == 0:
+        return 0, len(g1) - 1, 0.0
+    start_idx = negative_start[0]
+    min_deriv_idx = start_idx + np.argmin(dg1[start_idx:])
+    best_r2 = 0.0
+    best_start, best_end = start_idx, min_deriv_idx
+    for test_start in range(start_idx, min_deriv_idx - min_points + 1):
+        for test_end in range(test_start + min_points, min(min_deriv_idx + 10, len(g1))):
+            if test_end - test_start < min_points:
+                continue
+            slope, intercept, r_value, _, _ = linregress(volume[test_start:test_end], g1_smooth[test_start:test_end])
+            r2 = r_value**2
+            if r2 > best_r2:
+                best_r2 = r2
+                best_start, best_end = test_start, test_end
+    print(f"Original method: indices {best_start}-{best_end}, R²={best_r2:.3f}")
+    return best_start, best_end, best_r2
 
-    # Ensure params has arrays (from preprocess)
-    if 'volume_array' not in params:
-        params['volume_array'] = df['volume'].values
-        params['df'] = df  # For fallback
-    params['pH'] = None  # Will be set by gran_functions
-
-    # Compute base functions
-    base_results = compute_gran_functions(df, params)
-
-    # Analyze Gran first (full detection)
-    analyze_gran(base_results, params, 'gran')
-
-    # Extract Gran's opt zone for Schwartz seed
-    gran_zone = (base_results['gran']['optimized']['zone_start'], base_results['gran']['optimized']['zone_end']) if 'optimized' in base_results['gran'] else None
-
-    # Analyze Schwartz with inherited zone
-    analyze_gran(base_results, params, 'schwartz', fixed_zone_from_gran=gran_zone)
-
-    logger.info("Full pipeline complete: Processed gran and schwartz.")
-    return base_results
-
+# Example usage (for testing)
 if __name__ == "__main__":
-    # Standalone test: Mock data
-    df = pd.DataFrame({'volume': np.linspace(0, 30, 50), 'potential': np.linspace(0, -300, 50) + np.random.normal(0, 5, 50)})
-    params = {'titration_type': 'weak_acid', 'V': 25.0, 'r2_threshold': 0.95, 'savgol_window': 5, 'case': 'default'}
-    results = analyze_full_pipeline(df, params)
-    print("Test analysis:", {k: list(v.keys()) for k, v in results.items() if k != 'pH'})
+    df = pd.read_csv('data.dat', names=['volume', 'potential'], sep='\s+')
+    params = {'V': 25.0}
+    results = analyze_gran(df, params)
+    print("Results:", results)
