@@ -51,7 +51,7 @@ def compute_gran_functions(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str
         print(f"Gran strong_acid: g1 computed with k={k}.")
     elif titration_type == 'weak_acid':
         # Weak acid + strong base: g1 = (V0 + v) * 10^{k - pH}
-        gran_func = lambda v, ph, kk: (V0 + v) * np.power(10, kk - ph)
+        gran_func = lambda v, ph, kk: (v) * np.power(10, kk - ph)
         g1 = gran_func(volume, pH, k)
         print(f"Gran weak_acid: g1 computed with k={k}.")
     elif titration_type == 'strong_base':
@@ -76,12 +76,12 @@ def compute_gran_functions(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str
     acid_mode = titration_type in ['strong_acid', 'weak_acid']
     if acid_mode:
         # Schwartz acid (uses weak form)
-        schwartz_func = lambda v, ph, kk: (V0 + v) * np.power(10, kk - ph)
+        schwartz_func = lambda v, ph, kk: (v + kk) * np.power(10, - ph)
         gs = schwartz_func(volume, pH, k)
         print(f"Schwartz acid: gs computed with k={k}.")
     else:
         # Schwartz base (mirrored weak)
-        schwartz_func = lambda v, ph, kk: (V0 + v) * np.power(10, ph + kk - 14)
+        schwartz_func = lambda v, ph, kk: (v + kk) * np.power(10, ph - 14)
         gs = schwartz_func(volume, pH, k)
         print(f"Schwartz base: gs computed with k={k}.")
 

@@ -1,77 +1,167 @@
-# main.py: Entry Point for GranTED - Orchestrates Full Workflow
+"""
+main.py: CLI orchestrator for GranTED pipeline.
+
+Supports --verbose for tracing; merges CLI > JSON > defaults for config.
+Optional --skip-analysis (uses raw gran_results for visuals/report).
+Defaults to 'data.dat' if no --data_file provided.
+Full flow: load → preprocess → gran_functions → [analyzer] → visualizer → reporter.
+Profiling via PyCallGraph if --profile.
+
+Dependencies: argparse, sys, json, pathlib + core modules.
+"""
 
 import argparse
 import sys
-from pathlib import Path
 import json
+from pathlib import Path
 
-# Local importsyes
-from data_io import DataLoader
-from preprocess import preprocess_pipeline
+# Core imports
+import data_io
+import preprocess
 from gran_functions import compute_gran_functions
-from analyzer import analyze_gran
-from visualizer import visualize_all
-from reporter import generate_report
-from argparse import Namespace
+import analyzer  # Optional
+import visualizer
+import reporter
 
-# pycallgraph imports
-from pycallgraph2 import PyCallGraph
-from pycallgraph2 import Config
-from pycallgraph2 import GlobbingFilter
-from pycallgraph2.output import GraphvizOutput
+
+def parse_args():
+    """Parse CLI arguments."""
+    parser = argparse.ArgumentParser(description='GranTED: Gran/Schwartz Titration Analysis')
+    parser.add_argument('--data_file', default='data.dat', help='Path to titration data file (default: data.dat)')
+    parser.add_argument('--V', type=float, default=25.0, help='Initial volume (mL)')
+    parser.add_argument('--C_B', type=float, default=0.1, help='Titrant concentration (M)')
+    parser.add_argument('--titration_type', choices=['weak_acid', 'strong_acid', 'weak_base', 'strong_base'], default='weak_acid', help='Titration type')
+    parser.add_argument('--output_dir', default='./output', help='Output directory')
+    parser.add_argument('--config_file', help='Optional JSON config file')
+    parser.add_argument('--verbose', action='store_true', help='Enable verbose tracing')
+    parser.add_argument('--skip-analysis', action='store_true', help='Skip analyzer; use raw gran_results for visuals/report')
+    parser.add_argument('--profile', action='store_true', help='Generate callgraph.svg')
+    
+    args = parser.parse_args()
+    
+    # Structural: Merge CLI > JSON > defaults (if config_file)
+    if args.config_file:
+        try:
+            with open(args.config_file, 'r') as f:
+                config = json.load(f)
+            # Override args with JSON (CLI takes precedence)
+            for key, value in config.items():
+                if hasattr(args, key) and getattr(args, key) is not None:
+                    continue  # CLI wins
+                if key in ['V', 'C_B'] and isinstance(value, (int, float)):
+                    setattr(args, key, value)
+                elif key == 'titration_type' and value in ['weak_acid', 'strong_acid', 'weak_base', 'strong_base']:
+                    setattr(args, key, value)
+            if args.verbose:
+                print(f"Merged config from {args.config_file}")
+        except Exception as e:
+            print(f"Warning: Failed to load config {args.config_file}: {e}")
+    
+    return args
 
 
 def main():
-    parser = argparse.ArgumentParser(description="GranTED Titration Analysis")
-    parser.add_argument('--data_file', default='data.dat', help='Path to data file')
-    parser.add_argument('--config_file', help='Path to JSON config file (optional)')
-    parser.add_argument('--V', type=float, help='Initial volume offset (mL, overrides config)')
-    parser.add_argument('--C_B', type=float, help='Titrant concentration (M, overrides config)')
-    parser.add_argument('--titration_type', default=None, choices=['strong_acid', 'weak_acid', 'strong_base', 'weak_base'], help='Titration type (overrides config)')
-    parser.add_argument('--output_dir', default='./output', help='Output directory for plots/reports')
-    args = parser.parse_args()
-
-    # Step 1: Load data
-    loader = DataLoader()
-    df = loader.load_single_file(args.data_file)
-    if df is None:
-        sys.exit(1)
-
-    # Step 2: Preprocess (load config)
-    config_overrides = {}
-    if args.V is not None:
-        config_overrides['V'] = args.V
-    if args.C_B is not None:
-        config_overrides['C_B'] = args.C_B
-    if args.titration_type is not None:
-        config_overrides['titration_type'] = args.titration_type
+    """Orchestrate pipeline with error chaining (Quick Win)."""
+    args = parse_args()
+    output_dir = Path(args.output_dir)
+    output_dir.mkdir(exist_ok=True)
     
-    # FIXED: Convert config_overrides to Namespace if it's a dict
-    if isinstance(config_overrides, dict):
-        config_overrides = Namespace(**config_overrides)
-
-    df_processed, params = preprocess_pipeline(df, config_overrides, args.config_file)
-    print("Preprocessed data ready. Final params:", params)
-
-    # Step 3: Compute Gran functions
-    gran_results = compute_gran_functions(df_processed, params)
-    print("Gran functions computed.")
-
-    # Step 4: Analyze (interval ID and k optimization)
-    analysis_results = analyze_gran(df_processed, params)
-    print("Analysis complete.")
-
+    if args.verbose:
+        print("Starting GranTED pipeline...")
+    
+    df = None
+    params = None
+    gran_results = None
+    analysis_results = None
+    
+    # Step 1: Load data
+    try:
+        if args.verbose:
+            print("Loading data...")
+        df = data_io.load_single_file(args.data_file)
+        if df is None:
+            raise ValueError(f"Failed to load {args.data_file}")
+        if not data_io.validate_data(df):
+            raise ValueError("Data validation failed")
+        if args.verbose:
+            print(f"Loaded {len(df)} points.")
+    except Exception as e:
+        print(f"Load error: {e}")
+        sys.exit(1)
+    
+    # Step 2: Preprocess
+    try:
+        if args.verbose:
+            print("Preprocessing...")
+        _, params = preprocess.preprocess_pipeline(df, config_overrides=vars(args), interactive=False)
+        params['titration_type'] = args.titration_type  # Ensure CLI override
+        if args.verbose:
+            print(f"Params: V={params['V']}, C_B={params['C_B']}, type={params['titration_type']}")
+    except Exception as e:
+        print(f"Preprocess error: {e}")
+        sys.exit(1)
+    
+    # Step 3: Compute Gran/Schwartz
+    try:
+        if args.verbose:
+            print("Computing functions...")
+        gran_results = compute_gran_functions(df, params)
+        if args.verbose:
+            print("Gran/Schwartz computed.")
+    except Exception as e:
+        print(f"Compute error: {e}")
+        sys.exit(1)
+    
+    # Step 4: Analyze (optional, with fallback)
+    try:
+        if not args.skip_analysis:
+            if args.verbose:
+                print("Analyzing...")
+            # TODO: Replace with analyzer.analyze_gran(gran_results, params)
+            analysis_results = analyzer.analyze_gran(gran_results, params)  # Will raise if not implemented
+        else:
+            if args.verbose:
+                print("Skipping analysis (raw mode).")
+            # Fallback: Use gran_results as "analysis" for visuals/report (no zones/fits)
+            analysis_results = gran_results  # Direct pass; downstream fallbacks handle raw
+        if args.verbose:
+            print("Analysis complete.")
+    except Exception as e:
+        print(f"Analyze error: {e} (falling back to raw)")
+        analysis_results = gran_results  # Graceful raw fallback
+    
     # Step 5: Visualize
-    visualize_all(df_processed, params, analysis_results, args.output_dir)
-    print("Visualizations generated.")
-
+    try:
+        if args.verbose:
+            print("Visualizing...")
+        visualizer.visualize_all(df, params, analysis_results, str(output_dir))
+        if args.verbose:
+            print("Visuals saved.")
+    except Exception as e:
+        print(f"Visualize error: {e}")
+        # Don't exit—continue to report
+    
     # Step 6: Report
-    generate_report(df_processed, params, analysis_results, args.output_dir)
-    print(f"Full workflow complete. Results in {args.output_dir}")
+    try:
+        if args.verbose:
+            print("Generating report...")
+        reporter.generate_report(df, params, analysis_results, str(output_dir))
+        if args.verbose:
+            print("Report generated.")
+    except Exception as e:
+        print(f"Report error: {e}")
+        # Non-fatal
+    
+    print(f"Pipeline complete. Outputs in {output_dir}")
+
 
 if __name__ == "__main__":
-    config = Config()
-    config.trace_filter = GlobbingFilter(include=['analyzer.*', 'compare_gran_schwartz.*', 'data_io.*', 'dynamic_callgraph.*', 'gran_functions.*', 'GUI.*', 'main', 'preprocess.*', 'reporter.*', 'visualizer.*'])
-    graphviz = GraphvizOutput(output_file='full_callgraph.svg', output_type='svg')
-    with PyCallGraph(output=graphviz, config=config):
+    from pycallgraph2 import PyCallGraph, Config
+    from pycallgraph2.output import GraphvizOutput
+    args = parse_args()
+    if args.profile:
+        output = GraphvizOutput(output_file=str(Path(args.output_dir) / 'callgraph.svg'))
+        with PyCallGraph(output=output):
+            main()
+    else:
         main()
