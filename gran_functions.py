@@ -18,7 +18,7 @@ def compute_gran_functions(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str
 
     Args:
         df: DataFrame with 'volume' (titrant vol, mL) and 'potential' (mV) columns.
-        params: Dict with 'V' (initial vol, mL, default 25.0).
+        params
 
     Returns:
         Dict with 'gran' (dict: 'g1' array), 'schwartz' (dict: 'gs' array and lambda), 'pH' (array).
@@ -38,20 +38,21 @@ def compute_gran_functions(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str
     V0 = params.get('V', 25.0)  # Initial volume
     k = 0.0  # Fixed for arrays; lambda allows tuning
 
-    # Weak_acid Gran g1 = (V0 + v) * 10^(k - pH)
-    gran_func = lambda v, ph, kk: (V0 + v) * np.power(10, kk - ph)
-    g1 = gran_func(volume, pH, k)
+    # Weak_acid Gran g1 = v * 10^{-pH} (fixed, no kk)
+    gran_func = lambda v, ph, kk: v * np.power(10, -ph)  # Fixed; kk ignored for consistency
+    g1 = gran_func(volume, pH, k)  # k unused
 
-    # Schwartz gs = same formula (acid extension)
-    schwartz_func = lambda v, ph, kk: (V0 + v) * np.power(10, kk - ph)
+    # Schwartz gs = (v + kk) * 10^{-pH} (kk tunable for opt)
+    schwartz_func = lambda v, ph, kk: (v + kk) * np.power(10, -ph)
     gs = schwartz_func(volume, pH, k)
 
+    gran_func = lambda v, ph, kk: v * np.power(10, -ph)  # Fixed for Gran (kk ignored, matches g1 formula)
     results = {
-        'gran': {'g1': g1},
-        'schwartz': {'gs': gs, 'gran_func': schwartz_func},  # Lambda for analyzer
+        'gran': {'g1': g1, 'gran_func': gran_func},  # Fixed lambda for extraction
+        'schwartz': {'gs': gs, 'gran_func': schwartz_func},
         'pH': pH
     }
-
+    
     print("Gran and Schwartz (weak_acid) computed successfully.")
     return results
 

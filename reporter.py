@@ -44,132 +44,126 @@ def convert_to_serializable(obj: Any) -> Any:
 
 def export_to_csv(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path) -> str:
     """
-    Export to a single CSV: Raw data followed by metrics (oriented to original simple structure).
+    Export to a single CSV: Raw data followed by metrics (combined Gran/Schwartz raw/opt table).
     Handles missing keys gracefully with 'N/A'.
     """
     try:
         csv_filename = output_dir / "report.csv"
-        
         # Section 1: Raw data (original style)
         with open(csv_filename, 'w') as f:
             f.write("=== RAW DATA ===\n")
             df.to_csv(f, index=False, mode='a')
             f.write("\n\n=== METRICS ===\n")
         
-        # Section 2: Metrics (simple per-method tables, appended as text/CSV blocks)
+        # Section 2: Metrics (DataFrame for combined table)
+        data = []
         methods = ['gran', 'schwartz'] if 'schwartz' in results else ['gran']
-        with open(csv_filename, 'a') as f:
-            for method in methods:
-                f.write(f"\n{method.upper()} METRICS:\n")
-                f.write("Mode,R²,V_eq (mL),Zone Start (mL),Zone End (mL),Green Savings (L)\n")
-                for mode in ['raw', 'optimized']:
-                    r2 = results.get(method, {}).get(mode, {}).get('r2', 'N/A')
-                    v_eq = results.get(method, {}).get(mode, {}).get('v_eq', 'N/A')
-                    zone_start = results.get(method, {}).get(mode, {}).get('zone_start', 'N/A')
-                    zone_end = results.get(method, {}).get(mode, {}).get('zone_end', 'N/A')
-                    green = 0.05 if mode == 'optimized' else 0.0  # Placeholder
-                    f.write(f"{mode},{r2},{v_eq},{zone_start},{zone_end},{green}\n")
-                f.write("\n")
+        for method in methods:
+            raw = results[method].get('raw', {})
+            opt = results[method].get('opt', {})
+            data.append({
+                'Method': f'{method.capitalize()} Raw',
+                'V_eq (mL)': raw.get('V_eq', 'N/A'),
+                'R²': raw.get('r2', 'N/A'),
+                'k5': raw.get('k5', 'N/A'),
+                'Zones (start-end)': f"{raw.get('zone_start', 'N/A')}-{raw.get('zone_end', 'N/A')}"
+            })
+            data.append({
+                'Method': f'{method.capitalize()} Optimized',
+                'V_eq (mL)': opt.get('V_eq', 'N/A'),
+                'R²': opt.get('r2', 'N/A'),
+                'k5': opt.get('k5', 'N/A'),
+                'Zones (start-end)': f"{opt.get('zone_start', 'N/A')}-{opt.get('zone_end', 'N/A')}"
+            })
         
-        logger.info(f"Exported single CSV to {csv_filename}")
+        if not data:
+            data = [{'Method': 'No Data', 'V_eq (mL)': 'N/A', 'R²': 'N/A', 'k5': 'N/A', 'Zones (start-end)': 'N/A', 'Green Savings (L)': 0.0}]
+        
+        metrics_df = pd.DataFrame(data)
+        with open(csv_filename, 'a') as f:
+            metrics_df.to_csv(f, index=False, mode='a')
+        
+        print(f"Saved CSV report to {csv_filename}")
         return str(csv_filename)
     except Exception as e:
-        logger.warning(f"CSV export failed: {e}")
+        print(f"CSV export failed: {e}")
         return ""
 
-
-def generate_pdf_report(params: Dict[str, Any], results: Dict[str, Any], output_dir: Path,
-                        buffers: Optional[Dict[str, BytesIO]] = None, include_plots: bool = True) -> str:
+def generate_pdf_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], 
+                        output_dir: Path, embed_in_pdf: bool = False) -> str:
     """
-    Generate PDF with dynamic tables and optional embedded plot buffers.
-    Handles missing results with placeholders; timestamp in text only.
+    Generate PDF report with metrics table and embedded PNGs.
+    Optional embed_in_pdf flag (unused for now, but future-proof).
     """
-    try:
-        pdf_filename = output_dir / "report.pdf"
-        
-        doc = SimpleDocTemplate(str(pdf_filename), pagesize=landscape(letter),
-                                rightMargin=72, leftMargin=72, topMargin=72, bottomMargin=18)
-        story = []
-        styles = getSampleStyleSheet()
-        title_style = ParagraphStyle('CustomTitle', parent=styles['Heading1'], fontSize=18, spaceAfter=30, alignment=1)  # Center
+    Path(output_dir).mkdir(exist_ok=True)
+    pdf_filename = output_dir / 'report.pdf'
+    doc = SimpleDocTemplate(str(pdf_filename), pagesize=letter)
+    story = []
+    styles = getSampleStyleSheet()
 
-        # Title with timestamp (text only)
-        title = f"GranTED Titration Report - {params.get('titration_type', 'Unknown')} (Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')})"
-        story.append(Paragraph(title, title_style))
-        story.append(Spacer(1, 12))
+    # Title
+    title_style = ParagraphStyle('CustomTitle', parent=styles['Heading1'], fontSize=18, spaceAfter=30)
+    titration_type = params.get('titration_type', 'weak_acid')
+    story.append(Paragraph(f"GranTED Report: {titration_type.title()} Titration", title_style))
+    story.append(Spacer(1, 12))
 
-        # Params table
-        params_data = [['Parameter', 'Value']] + [[k, str(v)] for k, v in params.items()]
-        params_table = Table(params_data, colWidths=[2*inch, 3*inch])
-        params_table.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-            ('FONTNAME', (0, 0), (0, 0), 'Helvetica-Bold'),
-            ('FONTSIZE', (0, 0), (-1, 0), 14),
-            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-            ('GRID', (0, 0), (-1, -1), 1, colors.black)
-        ]))
-        story.append(params_table)
-        story.append(Spacer(1, 12))
+    # Combined metrics table (4 rows: Gran/Schwartz raw/opt)
+    data = [['Method', 'V_eq (mL)', 'R²', 'k5', 'Zones (start-end)']]
+    methods = ['gran', 'schwartz']
+    for method in methods:
+        if method in results:
+            raw = results[method].get('raw', {})
+            opt = results[method].get('opt', {})
+            data.append([
+                f'{method.capitalize()} Raw',
+                raw.get('V_eq', 'N/A'),
+                raw.get('r2', 'N/A'),
+                raw.get('k5', 'N/A'),
+                f"{raw.get('zone_start', 'N/A')}-{raw.get('zone_end', 'N/A')}"
+            ])
+            data.append([
+                f'{method.capitalize()} Optimized',
+                opt.get('V_eq', 'N/A'),
+                opt.get('r2', 'N/A'),
+                opt.get('k5', 'N/A'),
+                f"{opt.get('zone_start', 'N/A')}-{opt.get('zone_end', 'N/A')}"
+            ])
 
-        # Metrics table: Dynamic for methods
-        if results:
-            methods = ['gran', 'schwartz'] if 'schwartz' in results else ['gran']
-            for method in methods:
-                header = Paragraph(f"<b>{method.capitalize()} Metrics</b>", styles['Heading2'])
-                story.append(header)
-                story.append(Spacer(1, 6))
+    if len(data) == 1:
+        data.append(['No Data', 'N/A', 'N/A', 'N/A', 'N/A'])
 
-                metrics_data = [['Mode', 'R²', 'V_eq (mL)', 'Zone Start (mL)', 'Zone End (mL)', 'Green Savings (L)']]
-                for mode in ['raw', 'optimized']:
-                    r2 = results.get(method, {}).get(mode, {}).get('r2', 'N/A')
-                    v_eq = results.get(method, {}).get(mode, {}).get('v_eq', 'N/A')
-                    zone_start = results.get(method, {}).get(mode, {}).get('zone_start', 'N/A')
-                    zone_end = results.get(method, {}).get(mode, {}).get('zone_end', 'N/A')
-                    green = 0.05 if mode == 'optimized' else 0.0
-                    metrics_data.append([mode.capitalize(), f"{r2:.3f}" if isinstance(r2, (int, float)) else r2,
-                                         f"{v_eq:.3f}" if isinstance(v_eq, (int, float)) else v_eq,
-                                         f"{zone_start:.3f}" if isinstance(zone_start, (int, float)) else zone_start,
-                                         f"{zone_end:.3f}" if isinstance(zone_end, (int, float)) else zone_end, green])
-                
-                metrics_table = Table(metrics_data, colWidths=[0.8*inch] + [0.8*inch]*5)
-                metrics_table.setStyle(TableStyle([
-                    ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-                    ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                    ('FONTNAME', (0, 0), (0, 0), 'Helvetica-Bold'),
-                    ('FONTSIZE', (0, 0), (-1, 0), 12),
-                    ('ALTERNATEBACKGROUND', (0, 1), (-1, -1), [0.9, 0.9, 0.9]),
-                    ('GRID', (0, 0), (-1, -1), 1, colors.black)
-                ]))
-                story.append(metrics_table)
+    table = Table(data)
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 14),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ]))
+    story.append(table)
+    story.append(Spacer(1, 12))
+
+    # Embed PNGs (safe loading)
+    png_files = ['titration_curve.png', 'gran_schwartz.png']  # Updated filename
+    for png in png_files:
+        png_path = output_dir / png
+        if png_path.exists():
+            try:
+                img = Image(str(png_path), width=400, height=300)
+                story.append(img)
                 story.append(Spacer(1, 12))
-
-                # Embed plots if available
-                if include_plots and buffers:
-                    plot_keys = ['curve', f'{method}', f'{method}_derivatives']
-                    for key in plot_keys:
-                        if key in buffers:
-                            img = Image(buffers[key], width=4*inch, height=3*inch)
-                            story.append(img)
-                            story.append(Spacer(1, 6))
-                    logger.info(f"Embedded {method} plots in PDF.")
-
+            except Exception as e:
+                story.append(Paragraph(f"Error embedding {png}: {e}", styles['Normal']))
         else:
-            story.append(Paragraph("<b>No results available—run analyzer first.</b>", styles['Normal']))
+            story.append(Paragraph(f"Placeholder: {png} not found - run visualizer first.", styles['Normal']))
+        story.append(Spacer(1, 12))
 
-        # Green chemistry note
-        green_para = Paragraph("Green Chemistry Note: Optimized analysis saves ~0.05 L solvent per titration (global est: 50–100M L/year).", styles['Normal'])
-        story.append(green_para)
-
-        doc.build(story)
-        logger.info(f"Generated PDF report to {pdf_filename}")
-        return str(pdf_filename)
-    except Exception as e:
-        logger.warning(f"PDF generation failed: {e}")
-        return ""
-
+    doc.build(story)
+    print(f"Saved PDF report with embeds to {pdf_filename}")
+    return str(pdf_filename)
 
 def generate_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any],
                     output_dir: str = '.', include_plots: bool = False,

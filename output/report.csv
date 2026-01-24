@@ -44,15 +44,8 @@ volume,potential
 
 
 === METRICS ===
-
-GRAN METRICS:
-Mode,R²,V_eq (mL),Zone Start (mL),Zone End (mL),Green Savings (L)
-raw,N/A,N/A,N/A,N/A,0.0
-optimized,N/A,N/A,N/A,N/A,0.05
-
-
-SCHWARTZ METRICS:
-Mode,R²,V_eq (mL),Zone Start (mL),Zone End (mL),Green Savings (L)
-raw,N/A,N/A,N/A,N/A,0.0
-optimized,N/A,N/A,N/A,N/A,0.05
-
+Method,V_eq (mL),R²,k5,Zones (start-end)
+Gran Raw,4.095568089169521,0.999510064846228,0.0,15-30
+Gran Optimized,4.0858338149697815,0.9999020658462247,0.3896946548640536,12-27
+Schwartz Raw,4.095568089169521,0.999510064846228,0.0,15-30
+Schwartz Optimized,4.0858338149697815,0.9999020658462247,0.3896946548640536,12-27

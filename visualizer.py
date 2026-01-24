@@ -1,10 +1,12 @@
 """
-visualizer.py: Generates publication-ready plots for titration analysis in GranTED.
+visualizer.py: Generates publication-ready plots for GranTED titration analysis.
+Creates:
+- titration_curve.png: pH vs volume (simple black line with points)
+- gran_schwartz.png: 3-panel comparison (Gran raw/opt, Schwartz opt, negative derivative)
+- k_screening.png: optional screening plot (if 'g1_screened' in results)
 
-Supports titration curve (pH vs volume) and Gran/Schwartz 3-panel subplots.
-Saves PNGs to output_dir (300 DPI); optional BytesIO buffer for PDF embedding.
-
-Dependencies: matplotlib, seaborn, numpy, pandas, pathlib.
+Saves high-res PNGs (300 DPI) to output_dir.
+Dependencies: matplotlib, seaborn, numpy, pandas, pathlib, scipy.signal.
 """
 
 import matplotlib.pyplot as plt
@@ -13,187 +15,164 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from typing import Dict, Any, Optional
-from io import BytesIO  # For buffer export
+from scipy.signal import savgol_filter
 
 
 def setup_plot_style():
-    """Set global Matplotlib/Seaborn style for consistent aesthetics."""
+    """Set consistent professional style."""
     sns.set_style('whitegrid')
     sns.set_context('paper')
     plt.rc('font', size=10)
     plt.rc('axes', titlesize=12, labelsize=10)
 
 
-def _get_labels(titration_type: str) -> Dict[str, str]:
-    """Dynamic labels/titles based on titration_type."""
-    labels = {
-        'strong_acid': {'title': 'Strong Acid + Strong Base', 'ylabel': 'g1 (Pre-Equiv.)', 'region': 'Pre-Equivalence'},
-        'weak_acid': {'title': 'Weak Acid + Strong Base', 'ylabel': 'g1 (Buffer Region)', 'region': 'Pre-Equivalence Approx.'},
-        'strong_base': {'title': 'Strong Base + Strong Acid', 'ylabel': 'g1 (Post-Equiv.)', 'region': 'Post-Equivalence'},
-        'weak_base': {'title': 'Weak Base + Strong Acid', 'ylabel': 'g1 (Buffer Region)', 'region': 'Post-Equivalence Approx.'}
+def _get_labels(titration_type: str = 'weak_acid') -> Dict[str, str]:
+    """
+    Returns the same title and ylabel for all cases (no type-specific differences).
+    """
+    return {
+        'title': 'Titration Analysis',
+        'ylabel': 'g1'
     }
-    if titration_type not in labels:
-        return {'title': 'Titration Plot', 'ylabel': 'g1', 'region': 'Linear Zone'}
-    return labels[titration_type]
 
 
-def plot_titration_curve(df: pd.DataFrame, params: Dict[str, Any], output_dir: Path,
-                         embed_in_pdf: bool = False) -> Optional[BytesIO]:
-    """Plot simplified titration curve: pH vs. volume (black line with points, no overlays)."""
+def plot_titration_curve(df: pd.DataFrame, params: Dict[str, Any], output_dir: Path = Path('output')):
+    """
+    Plot simple titration curve: pH vs volume (black line with points).
+    """
     setup_plot_style()
-    titration_type = params.get('titration_type', 'weak_acid')
-    labels = _get_labels(titration_type)
+    output_dir.mkdir(exist_ok=True)
 
-    fig, ax = plt.subplots(figsize=(8, 5))
-    pH = 7.0 - df['potential'] / 59.16  # Nernst conversion
+    volume = df['volume'].to_numpy()
+    potential = df['potential'].to_numpy()
+    pH = 7.0 - potential / 59.16
 
-    # Direct plot on ax (no _create_subplots for single—avoids overlay)
-    ax.plot(df['volume'], pH, 'k-o', linewidth=1.5, markersize=4, label='pH')  # Black line with circles
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.plot(volume, pH, 'k-o', linewidth=1.2, markersize=4, label='Titration Curve (pH)')
     ax.set_xlabel('Titrant Volume (mL)')
     ax.set_ylabel('pH')
-    ax.set_title(f"Titration Curve: {labels['title']}")
-    ax.legend(loc='best')
-    ax.grid(True, alpha=0.3)  # Light grid for readability
-
-    # Tight limits to data (no padding/duplication)
-    ax.set_xlim(min(df['volume']) - 1, max(df['volume']) + 1)
-    ax.set_ylim(min(pH) - 0.2, max(pH) + 0.2)
-
-    fig.tight_layout(pad=1.5)  # Space cleanly, no bleed
-
+    ax.set_title('Titration Curve')
+    ax.grid(True, alpha=0.3)
+    ax.legend()
+    plt.tight_layout()
     filename = output_dir / 'titration_curve.png'
-    if embed_in_pdf:
-        buf = BytesIO()
-        fig.savefig(buf, format='png', dpi=300, bbox_inches='tight')
-        buf.seek(0)
-        plt.close(fig)
-        print(f"Curve buffer ready for PDF (embed mode).")
-        return buf
-    else:
-        fig.savefig(filename, dpi=300, bbox_inches='tight')
-        plt.close(fig)
-        print(f"Saved titration curve to {filename}.")
-        return None
+    fig.savefig(filename, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"Titration curve saved to {filename}")
 
 
-def plot_gran_functions_combined(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path, embed_in_pdf: bool = False) -> Optional[BytesIO]:
+def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_dir: Path = Path('output')):
     """
-    3-panel combined plot for Gran/Schwartz comparison (shared x-axis).
-    Top: Gran g1 + fit/opt zone. Middle: Schwartz gs + fit/opt zone.
-    Bottom: Negative derivative (Gran opt zone shaded).
-    Linear y-axis for all panels.
+    3-panel plot with line-point style:
+    1. Gran raw g1 ('b-o') + raw fit dashed line + raw zone shade
+    2. Schwartz optimized gs ('g-o') + opt fit dashed line + opt zone shade
+    3. Negative derivative from raw g1 with opt zone shade
+
+    Panel titles include V_eq (and k for Schwartz opt).
     """
     setup_plot_style()
-    titration_type = params.get('titration_type', 'weak_acid')
-    labels = _get_labels(titration_type)
-    volume = df['volume'].values
+    output_dir.mkdir(exist_ok=True)
 
-    # Extract from results (fallbacks for flat baseline structure)
-    g1 = results.get('g1', np.zeros(len(volume)))  # Raw Gran
-    gs = results.get('g1_opt', np.zeros(len(volume)))  # Opt Schwartz gs (assume 'g1_opt' for Schwartz)
-    raw_zone_start = results.get('raw_zone', {}).get('start', 0)
-    raw_zone_end = results.get('raw_zone', {}).get('end', len(volume))
-    opt_zone_start = results.get('opt_zone', {}).get('start', 0)
-    opt_zone_end = results.get('opt_zone', {}).get('end', len(volume))
-    raw_fit = results.get('raw_zone', {}).get('fit', (0, 0))  # (slope, intercept) tuple
-    opt_fit = results.get('opt_zone', {}).get('fit', (0, 0))  # (slope, intercept) tuple
+    volume = params.get('volume_array', np.arange(41))  # Fallback
 
-    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(8, 10), sharex=True, gridspec_kw={'hspace': 0.3})
+    # ──────────────────────────────────────────────
+    # Safe extraction from nested results
+    # ──────────────────────────────────────────────
+    gran_raw = results.get('gran', {}).get('raw', {})
+    sch_opt = results.get('schwartz', {}).get('opt', {})
 
-    # Top: Gran g1 + fit/opt zone (linear y)
-    ax1.plot(volume, g1, 'b-', linewidth=1.5, label='Gran g1')
-    if gran_opt_zone[0] is not None:
-        start_v, end_v = volume[gran_opt_zone[0]], volume[gran_opt_zone[1]]
-        ax1.axvspan(start_v, end_v, alpha=0.3, color='yellow', label='Opt Zone')
-    if gran_fit:
+    g1_raw = results.get('g1', np.zeros(len(volume)))
+    gs_opt = results.get('g1_opt', np.zeros(len(volume)))  # gs_opt
+
+    # Zones with fallback
+    raw_zone_start = gran_raw.get('zone_start', 0)
+    raw_zone_end = gran_raw.get('zone_end', len(volume) - 1)
+    opt_zone_start = sch_opt.get('zone_start', raw_zone_start)
+    opt_zone_end = sch_opt.get('zone_end', raw_zone_end)
+
+    # Fits and r2 (separate keys)
+    raw_fit = gran_raw.get('fit', None)  # (slope, intercept)
+    raw_r2 = gran_raw.get('r2', 'N/A')
+    opt_fit = sch_opt.get('fit', None)
+    opt_r2 = sch_opt.get('r2', 'N/A')
+    opt_k5 = sch_opt.get('k5', 0.0)
+
+    # Debug print to confirm fit is present
+    print(f"DEBUG: raw_fit = {raw_fit}, raw_r2 = {raw_r2}")
+    print(f"DEBUG: opt_fit = {opt_fit}, opt_r2 = {opt_r2}, k5 = {opt_k5}")
+
+    # ──────────────────────────────────────────────
+    # Figure
+    # ──────────────────────────────────────────────
+    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
+
+    # Panel 1: Gran raw g1 + fit + zone
+    ax1.plot(volume, g1_raw, 'b-o', linewidth=1.5, markersize=4, label='Gran raw g1')
+    ax1.axvspan(volume[raw_zone_start], volume[raw_zone_end], alpha=0.25, color='red', label='Raw Zone')
+
+    if raw_fit:
+        slope, intercept = raw_fit
         x_fit = np.linspace(volume.min(), volume.max(), 100)
-        y_fit = gran_fit['slope'] * x_fit + gran_fit['intercept']
-        ax1.plot(x_fit, y_fit, 'r--', label=f'Fit (R²={gran_fit["rvalue"]**2:.3f})')
-    ax1.set_ylabel('Gran g1')
+        y_fit = slope * x_fit + intercept
+        ax1.plot(x_fit, y_fit, 'k--', label=f'Raw fit (R²={raw_r2:.4f})')
+    else:
+        print("DEBUG: No raw fit available — skipping dashed line")
+
+    ax1.set_ylabel('Gran g1 (raw)')
+    ax1.set_title(f'Gran Raw – V_eq = {gran_raw.get("V_eq", "N/A"):.3f} mL')
     ax1.legend()
     ax1.grid(True, alpha=0.3)
 
-    # Middle: Schwartz gs + fit/opt zone (linear y)
-    ax2.plot(volume, gs, 'g-', linewidth=1.5, label='Schwartz gs')
-    if schwartz_opt_zone[0] is not None:
-        start_v, end_v = volume[schwartz_opt_zone[0]], volume[schwartz_opt_zone[1]]
-        ax2.axvspan(start_v, end_v, alpha=0.3, color='lightblue', label='Opt Zone')
-    if schwartz_fit:
-        x_fit = np.linspace(volume.min(), volume.max(), 100)
-        y_fit = schwartz_fit['slope'] * x_fit + schwartz_fit['intercept']
-        ax2.plot(x_fit, y_fit, 'orange', linestyle='--', label=f'Fit (R²={schwartz_fit["rvalue"]**2:.3f})')
-    ax2.set_ylabel('Schwartz gs')
+    # Panel 2: Schwartz optimized gs + fit + zone
+    ax2.plot(volume, gs_opt, 'g-o', linewidth=1.5, markersize=4, label='Schwartz opt gs')
+    ax2.axvspan(volume[opt_zone_start], volume[opt_zone_end], alpha=0.25, color='orange', label='Opt Zone')
+
+    if opt_fit:
+        slope, intercept = opt_fit
+        y_fit = slope * x_fit + intercept
+        ax2.plot(x_fit, y_fit, 'k--', label=f'Opt fit (R²={opt_r2:.4f})')
+    else:
+        print("DEBUG: No opt fit available — skipping dashed line")
+
+    ax2.set_ylabel('Schwartz gs (opt)')
+    ax2.set_title(f'Schwartz Optimized – V_eq = {sch_opt.get("V_eq", "N/A"):.3f} mL, k = {opt_k5:.3f}')
     ax2.legend()
     ax2.grid(True, alpha=0.3)
 
-    # Bottom: Negative derivative (Gran opt zone shaded)
-    deriv = np.gradient(g1, volume)  # Use Gran g1 for deriv
-    neg_deriv = deriv[deriv < 0]  # Filter negative region
-    neg_vol = volume[deriv < 0]  # Corresponding volumes
-    ax3.plot(neg_vol, neg_deriv, 'purple', linewidth=1.5, label='Negative d g1 / dv')
-    if gran_opt_zone[0] is not None:
-        # Shade Gran opt zone on negative deriv (filter to neg only)
-        neg_mask = (neg_vol >= volume[gran_opt_zone[0]]) & (neg_vol <= volume[gran_opt_zone[1]])
-        if np.any(neg_mask):
-            start_v_neg = neg_vol[neg_mask][0] if neg_mask.any() else volume[gran_opt_zone[0]]
-            end_v_neg = neg_vol[neg_mask][-1] if neg_mask.any() else volume[gran_opt_zone[1]]
-            ax3.axvspan(start_v_neg, end_v_neg, alpha=0.3, color='yellow', label='Gran Opt Zone')
+    # Panel 3: Negative derivative
+    deriv = np.gradient(g1_raw, volume)
+    neg_mask = deriv < 0
+    if np.any(neg_mask):
+        neg_vol = volume[neg_mask]
+        neg_deriv = deriv[neg_mask]
+        ax3.plot(neg_vol, neg_deriv, 'purple', linewidth=1.5, label='Negative d g1 / dv')
+
+        zone_neg_mask = (neg_vol >= volume[opt_zone_start]) & (neg_vol <= volume[opt_zone_end])
+        if np.any(zone_neg_mask):
+            neg_vol_zone = neg_vol[zone_neg_mask]
+            ax3.axvspan(neg_vol_zone[0], neg_vol_zone[-1], alpha=0.3, color='yellow', label='Opt Zone')
+    else:
+        ax3.text(0.5, 0.5, 'No negative derivative', ha='center', va='center', transform=ax3.transAxes)
+
+    ax3.axhline(0, color='gray', linestyle='--', label='Zero')
     ax3.set_xlabel('Titrant Volume (mL)')
     ax3.set_ylabel('d g1 / dv (negative)')
+    ax3.set_title('Negative Derivative (raw g1)')
     ax3.legend()
     ax3.grid(True, alpha=0.3)
 
-    fig.suptitle(f"Gran/Schwartz Analysis: {labels['title']}", fontsize=14, y=0.98)
+    fig.suptitle('Gran/Schwartz Analysis', fontsize=14)
     fig.tight_layout()
+    filename = output_dir / 'gran_schwartz.png'
+    fig.savefig(filename, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"Gran/Schwartz combined plot saved to {filename}")
 
-    filename = output_dir / 'gran_functions.png'
-    if embed_in_pdf:
-        buf = BytesIO()
-        fig.savefig(buf, format='png', dpi=300, bbox_inches='tight')
-        buf.seek(0)
-        plt.close(fig)
-        print(f"Combined gran_functions buffer ready for PDF.")
-        return buf
-    else:
-        fig.savefig(filename, dpi=300, bbox_inches='tight')
-        plt.close(fig)
-        print(f"Saved combined gran_functions plot to {filename}.")
-        return None
-
-def visualize_all(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any],
-                  output_dir: str = '.', embed_in_pdf: bool = False) -> Dict[str, Optional[BytesIO]]:
+def visualize_all(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: str = 'output'):
     """
-    Orchestrate all plots: curve and gran/schwartz subplots.
-    Returns dict of buffers if embed=True, else saves PNGs.
+    Orchestrate all plots: titration curve + gran/schwartz combined.
     """
     output_dir = Path(output_dir)
-    output_dir.mkdir(exist_ok=True)
-
-    buffers = {}  # For PDF embed
-    titration_type = params.get('titration_type', 'weak_acid')
-    pH = results.get('pH', 7.0 - df['potential'] / 59.16)
-    volume = df['volume'].values
-
-    # Curve (always)
-    buf_curve = plot_titration_curve(df, params, output_dir, embed_in_pdf)
-    if embed_in_pdf:
-        buffers['curve'] = buf_curve
-
-    # Combined subplots (Gran/Schwartz + deriv)
-    buf_combined = plot_gran_functions_combined(df, params, results, output_dir, embed_in_pdf)
-    if embed_in_pdf:
-        buffers['gran_functions'] = buf_combined
-
-    if not embed_in_pdf:
-        print("All PNG visualizations saved to output_dir.")
-    else:
-        print("All plot buffers ready for PDF embedding.")
-    return buffers
-
-
-if __name__ == "__main__":
-    # Standalone test (mock data/results)
-    df = pd.DataFrame({'volume': np.linspace(0, 30, 20), 'potential': np.linspace(0, -200, 20)})
-    params = {'titration_type': 'weak_acid', 'V': 25.0}
-    results = {'gran': {'g1': np.random.rand(20)}, 'schwartz': {'gs': np.random.rand(20)}, 'pH': np.random.rand(20)}
-    visualize_all(df, params, results, output_dir='./test_plots')
+    plot_titration_curve(df, params, output_dir)
+    plot_gran_schwartz(results, params, output_dir)
+    print(f"All visualizations saved to {output_dir}")
