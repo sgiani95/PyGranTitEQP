@@ -253,3 +253,6 @@ if __name__ == "__main__":
     params = {'V': 25.0}
     results = analyze_gran(df, params)
     print("Results:", results)
+    
+    
+    
