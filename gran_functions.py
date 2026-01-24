@@ -37,7 +37,7 @@ def compute_gran_functions(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str
     # Nernst conversion to pH (25°C)
     pH = 7.0 - potential / 59.16
 
-    V0 = params.get('V', 25.0)
+    V0 = params.get('V', 50.0)
     titration_type = params.get('titration_type', 'weak_acid')
     k = 0.0  # Fixed for initial arrays
 
