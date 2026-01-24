@@ -1,117 +1,111 @@
-"""
-data_io.py: Simplified module for loading and validating single titration data files.
 
-Always loads without headers, stripping any potential header rows or extra columns.
-Enforces exactly two columns: volume (mL) and potential (mV). Assigns default names.
-Validation checks for monotonic volumes and potential range (-420 to 420 mV).
+# data_io.py: Module 1 for GranTED - Data Input and Validation
 
-Dependencies: pandas, pathlib.
-"""
+#######################
+# Core Functionality: #
+#######################
+#
+# Loading: Supports single files (dat/txt/csv/xlsx) or batch directories, parsing columns ('volume', 'potential' in mV).
+#
+# Validation: Ensures monotonic increasing volumes and potential in -420 to 420 mV (pH 0–14 equivalent); flags issues but doesn't halt.
+# 
+# Output: Returns clean DataFrame(s) for preprocess.py; handles errors gracefully (e.g., missing files, wrong format).
 
 import pandas as pd
 from pathlib import Path
-from typing import Optional
 
-SUPPORTED_FORMATS = ['.dat', '.txt', '.csv', '.xlsx']
+class DataLoader:
+    def __init__(self, default_format='dat'):
+        self.default_format = default_format # e.g., 'dat', 'csv', 'xlsx'
+        self.supported_formats = ['dat', 'txt', 'csv', 'xlsx']
 
-
-def load_single_file(file_path: str) -> Optional[pd.DataFrame]:
-    """
-    Load a single titration data file without headers, enforcing exactly two numeric columns.
-
-    Args:
-        file_path: Path to the file (str).
-
-    Returns:
-        pd.DataFrame with 'volume' and 'potential' columns if successful, else None.
-
-    Raises:
-        ValueError: If file format unsupported, insufficient/extra columns, or non-numeric data.
-    """
-    path = Path(file_path)
-    if not path.exists():
-        print(f"Error: File '{file_path}' not found.")
-        return None
-
-    ext = path.suffix.lower()
-    if ext not in SUPPORTED_FORMATS:
-        print(f"Error: Unsupported format '{ext}'. Supported: {SUPPORTED_FORMATS}")
-        return None
-
-    try:
-        if ext == '.xlsx':
-            df = pd.read_excel(path, header=None)
-        else:  # .dat, .txt, .csv: space-separated assumed
-            df = pd.read_csv(path, sep=r'\s+', header=None)
-
-        # Enforce exactly 2 columns: Drop extras if more, error if fewer
-        if df.shape[1] < 2:
-            print("Error: File must have at least 2 columns.")
-            return None
-        elif df.shape[1] > 2:
-            print(f"Warning: File has {df.shape[1]} columns; keeping only first 2.")
-            df = df.iloc[:, :2]
-
-        # Assign default column names
-        df.columns = ['volume', 'potential']
-
-        # Basic numeric check (strip non-numeric rows if needed, but assume clean)
-        if not pd.api.types.is_numeric_dtype(df['volume']) or not pd.api.types.is_numeric_dtype(df['potential']):
-            print("Error: Columns must contain numeric data only.")
+    def load_single_file(self, file_path, columns=['volume', 'potential']):
+        """
+        Load a single titration file.
+        Args:
+            file_path (str): Path to the file.
+            columns (list): Expected columns (default: ['volume', 'potential']).
+        Returns:
+            pd.DataFrame: Loaded data, or None if invalid.
+        """
+        path = Path(file_path)
+        if not path.exists():
+            print(f"Error: File '{file_path}' not found.")
             return None
 
-        # Print summary
-        print(f"Loaded '{file_path}': {df.shape[0]} rows, 2 columns (volume, potential).")
-        if df.shape[0] > 0:
+        try:
+            if path.suffix in ['.dat', '.txt', '.csv']:
+                df = pd.read_csv(file_path, sep='\s+', names=columns, header=None)
+            elif path.suffix == '.xlsx':
+                df = pd.read_excel(file_path, names=columns, header=None)
+            else:
+                print(f"Unsupported format: {path.suffix}. Use {self.supported_formats}.")
+                return None
+
+            # Basic shape check
+            if df.shape[1] < 2:
+                print("Error: File must have at least 2 columns (volume, potential).")
+                return None
+
+            print(f"Loaded {len(df)} points from '{file_path}'.")
             print(df.head())
+            return df
+        except Exception as e:
+            print(f"Error loading '{file_path}': {e}")
+            return None
 
-        return df
+    def load_batch_files(self, directory_path):
+        """
+        Load multiple files from a directory.
+        Args:
+            directory_path (str): Directory containing .dat/.csv files.
+        Returns:
+            dict: {filename: DataFrame} for valid files.
+        """
+        path = Path(directory_path)
+        if not path.exists():
+            print(f"Error: Directory '{directory_path}' not found.")
+            return {}
 
-    except Exception as e:
-        print(f"Error reading '{file_path}': {e}")
-        return None
+        files = {}
+        for file in path.glob('*.dat'):
+            df = self.load_single_file(file)
+            if df is not None:
+                files[str(file.name)] = df
 
+        print(f"Loaded {len(files)} files from '{directory_path}'.")
+        return files
 
-def validate_data(df: pd.DataFrame) -> bool:
-    """
-    Validate the loaded DataFrame for titration data integrity.
+    def validate_data(self, df):
+        """
+        Validate DataFrame: monotonic volume, reasonable potential.
+        Args:
+            df (pd.DataFrame): Data with 'volume' and 'potential' columns.
+        Returns:
+            bool: True if valid.
+        """
+        if df is None or len(df) < 3:
+            print("Error: DataFrame too small or None.")
+            return False
 
-    Checks:
-    - At least 3 rows.
-    - Volumes are strictly increasing (monotonic).
-    - Potentials in range [-420, 420] mV (Nernst equation bounds).
+        if not df['volume'].is_monotonic_increasing:
+            print("Warning: Volumes not strictly increasing.")
+            return False
 
-    Args:
-        df: DataFrame with 'volume' and 'potential' columns.
+        # Check reasonable potential values (-420 to 420 mV, approx pH 0-14, see Nernst equation pH = 7 - (E / 59.16))
+        if (df['potential'] < -420).any() or (df['potential'] > 420).any():
+            print("Warning: Potential values outside typical range (-420 to 420 mV).")
 
-    Returns:
-        True if valid, False otherwise. Prints warnings for issues.
-    """
-    if df.empty or len(df) < 3:
-        print("Warning: Data has fewer than 3 rows.")
-        return False
+        print(f"Validated: {len(df)} points, volume range {df['volume'].min():.2f}-{df['volume'].max():.2f} mL")
+        return True
 
-    # Use column names (enforced by loader)
-    volumes = df['volume']
-    potentials = df['potential']
-
-    # Monotonic check
-    if not volumes.is_monotonic_increasing:
-        print("Warning: Volumes are not strictly increasing.")
-        return False
-
-    # Range check (soft warning for out-of-range)
-    if (potentials < -420).any() or (potentials > 420).any():
-        print("Warning: Some potentials outside [-420, 420] mV range.")
-
-    print(f"Validation passed: {len(df)} monotonic points in valid range.")
-    return True
-
-
+# Example usage (for testing)
 if __name__ == "__main__":
-    # Quick test with sample file
-    df = load_single_file('data.dat')
-    if df is not None and validate_data(df):
-        print("Test successful!")
-    else:
-        print("Test failed.")
+    loader = DataLoader()
+    df = loader.load_single_file('data.dat')
+    if df is not None:
+        loader.validate_data(df)
+
+    # Batch example
+    # batch = loader.load_batch_files('./titrations/')
+    # print("Batch files:", list(batch.keys()))
