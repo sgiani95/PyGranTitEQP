@@ -195,9 +195,9 @@ def get_metrics(fit: Any, zone: Tuple[int, int], k5: float = 0.0, r2_threshold: 
     green_savings = 0.05 * r2  # Stub: Scale by R² (e.g., 0.05 L for perfect fit)
     print(f"DEBUG: get_metrics returning fit = {fit['fit'] if fit else 'None'} for zone {zone}")
     return {
-        'V_eq': v_eq,
-        'r2': r2,
-        'k5': k5,
+        'V_eq': round(v_eq, 3),
+        'r2': round(r2, 4),
+        'k5': round(k5,4),
         'zone_start': start,
         'zone_end': end,
         'fit': fit['fit'] if fit and 'fit' in fit else None  # Pass the (slope, intercept) tuple
@@ -224,7 +224,8 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
         return None
     g1 = gran_results['gran']['g1']  # Raw g1 array
     gran_func = gran_results['gran'].get('gran_func', lambda v, ph, kk: v * np.power(10, -ph))  # Safe fallback fixed lambda
-    schwartz_func = gran_results['schwartz'].get('gran_func', gran_func)  # Safe fallback to gran_func if Schwartz missing    print("DEBUG: Gran extract OK, g1 shape: {g1.shape}")
+    schwartz_func = gran_results['schwartz'].get('gran_func', gran_func)  # Safe fallback to gran_func if Schwartz missing
+    print("DEBUG: Gran extract OK, g1 shape: {g1.shape}")
 
     diagnostics = []  # For verbose grouping
 

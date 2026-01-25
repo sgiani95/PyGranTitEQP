@@ -97,7 +97,9 @@ def generate_pdf_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[
     """
     Path(output_dir).mkdir(exist_ok=True)
     pdf_filename = output_dir / 'report.pdf'
-    doc = SimpleDocTemplate(str(pdf_filename), pagesize=letter)
+    # doc = SimpleDocTemplate(str(pdf_filename), pagesize=letter)
+    # Set page size to landscape
+    doc = SimpleDocTemplate(str(pdf_filename), pagesize=landscape(letter))
     story = []
     styles = getSampleStyleSheet()
 
@@ -146,20 +148,32 @@ def generate_pdf_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[
     story.append(table)
     story.append(Spacer(1, 12))
 
-    # Embed PNGs (safe loading)
-    png_files = ['titration_curve.png', 'gran_schwartz.png']  # Updated filename
-    for png in png_files:
-        png_path = output_dir / png
-        if png_path.exists():
-            try:
-                img = Image(str(png_path), width=400, height=300)
-                story.append(img)
-                story.append(Spacer(1, 12))
-            except Exception as e:
-                story.append(Paragraph(f"Error embedding {png}: {e}", styles['Normal']))
-        else:
-            story.append(Paragraph(f"Placeholder: {png} not found - run visualizer first.", styles['Normal']))
+    # Embed PNGs (safe loading, proportional)
+    png_files = ['titration_curve.png', 'gran_schwartz.png']
+    existing_pngs = [output_dir / png for png in png_files if (output_dir / png).exists()]
+
+    if existing_pngs:
+        # Calculate width for each image (50% of page width minus a small gap)
+        gap = 12  # points
+        img_width = (doc.width - gap) / 2
+
+        img_row = []
+        for png_path in existing_pngs:
+            img = Image(str(png_path))
+            aspect = img.imageHeight / img.imageWidth
+            img.drawWidth = img_width
+            img.drawHeight = img_width * aspect
+            img_row.append(img)
+
+        # Add images side by side using a Table
+        table = Table([img_row], colWidths=[img.drawWidth for img in img_row])
+        table.setStyle(TableStyle([('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
+        story.append(table)
         story.append(Spacer(1, 12))
+    else:
+        for png in png_files:
+            story.append(Paragraph(f"Placeholder: {png} not found - run visualizer first.", styles['Normal']))
+            story.append(Spacer(1, 12))
 
     doc.build(story)
     print(f"Saved PDF report with embeds to {pdf_filename}")
@@ -185,7 +199,7 @@ def generate_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str,
     outputs['csv'] = [csv_file] if csv_file else []
     
     # PDF
-    pdf_file = generate_pdf_report(params, results, output_dir, buffers, include_plots)
+    pdf_file = generate_pdf_report(df=df, params=params, results=results, output_dir=output_dir, embed_in_pdf=include_plots)
     outputs['pdf'] = [pdf_file] if pdf_file else []
     
     logger.info(f"Full report generated in {output_dir} ({sum(len(v) for v in outputs.values())} files).")
@@ -204,6 +218,5 @@ if __name__ == "__main__":
     }
     # Mock buffers (in real: from visualize_all(..., embed_in_pdf=True))
     mock_buffers = {}  # Or populate with BytesIO for test
-    
     outputs = generate_report(df, params, results, output_dir='./output', include_plots=True, buffers=mock_buffers)
     print("Test outputs:", outputs)
