@@ -1,143 +1,88 @@
-"""
-preprocess.py: Module for parameter configuration and data preparation for titration analysis.
+# preprocess.py: Module 2 for GranTED - Data Preprocessing and Parameter Setup
 
-Handles hybrid input (CLI args, JSON config, prompts) with fallbacks to defaults for acid-base titrations.
-Extracts volume and potential arrays from DataFrame; merges into params dict for downstream use.
-Focus: Acid-base only; extensible to precipitation/complex/redox in future.
+#######################
+# Core Functionality: #
+#######################
+#
+# Parameter Configuration: Loads and validates user parameters (e.g., V=25 mL, C_B=0.1 M, titration_type='weak_acid')
+# via hybrid input (CLI, JSON file, or interactive prompts), ensuring defaults for monoprotic acid-base titrations.
+#
+# Data Preparation: Converts raw DataFrame (from data_io.py) to NumPy arrays (volume, potential, pH via mV-to-pH: pH = 7 - (potential/59.16)),
+# merging params for downstream use.
+#
+# Output: Returns the raw DataFrame and a params dict for gran_functions.py/analyzer.py; no transformation.
 
-Dependencies: numpy, json, pandas.
-"""
-
+import numpy as np
 import json
 import pandas as pd
-import numpy as np
-from typing import Dict, Any, Tuple, Optional
 
-
-def get_config_from_cli_or_file_or_prompt(
-    config_file: Optional[str] = None,
-    args: Optional[Dict[str, Any]] = None,
-    interactive: bool = True
-) -> Dict[str, Any]:
+def get_config_from_cli_or_file_or_prompt(config_file=None, args=None):
     """
-    Load and validate configuration parameters with fallback chain:
-    JSON file -> CLI args -> interactive prompts -> defaults.
-
+    Hybrid parameter loading: CLI (argparse), file (JSON), or interactive prompts.
     Args:
-        config_file: Path to JSON config file (optional).
-        args: Dict of CLI arguments (optional).
-        interactive: If False, skip prompts and use defaults for missing keys.
-
+        config_file (str): Path to JSON config file (optional).
+        args (dict): CLI args from argparse (optional).
     Returns:
-        Dict of validated params.
-
-    Raises:
-        ValueError: For invalid titration_type or missing required keys in non-interactive mode.
+        dict: Config with defaults (V=25, C_B=0.1, titration_type='weak_acid', etc.).
     """
-    # Defaults for acid-base titrations
     config = {
-        'V': 25.0,  # Initial volume (mL)
+        'V': 25.0,  # Initial volume offset (mL)
         'C_B': 0.1,  # Titrant concentration (M)
-        'titration_type': 'weak_acid',
-        'r2_threshold': 0.95
+        'r2_threshold': 0.95,  # For linearity checks
+        'titration_type': 'weak_acid',  # 'strong_acid', 'weak_acid', 'strong_base', 'weak_base'
     }
-    valid_types = ['weak_acid', 'strong_acid', 'weak_base', 'strong_base']
 
-    # Load from JSON if provided
+    # Load from file if provided
     if config_file:
-        try:
-            with open(config_file, 'r') as f:
-                file_config = json.load(f)
-            config.update(file_config)
-            print(f"Loaded config from '{config_file}'.")
-        except FileNotFoundError:
-            print(f"Warning: Config file '{config_file}' not found. Using defaults.")
-        except (json.JSONDecodeError, KeyError) as e:
-            raise ValueError(f"Invalid config file '{config_file}': {e}. Check JSON format and keys.")
+        with open(config_file, 'r') as f:
+            file_config = json.load(f)
+        config.update(file_config)
+        print(f"Loaded config from {config_file}")
 
-    # Override from CLI args if provided
+    # Override with CLI args if provided
     if args:
-        for key, value in args.items():
-            if key in config:
-                try:
-                    config[key] = float(value) if key in ['V', 'C_B', 'r2_threshold'] else str(value)
-                except ValueError:
-                    raise ValueError(f"Invalid value '{value}' for '{key}': Must be numeric for V/C_B/r2_threshold.")
+        config.update(vars(args))
+        print("Applied CLI overrides")
 
-    # Interactive prompts for missing/override
-    required_keys = ['V', 'C_B', 'titration_type']
-    for key in required_keys:
+    # Interactive prompts for missing keys
+    for key in ['V', 'C_B', 'titration_type']:
         if key not in config or config[key] is None:
-            if interactive:
-                prompt = {
-                    'V': "Enter initial volume V (mL, default 25): ",
-                    'C_B': "Enter titrant concentration C_B (M, default 0.1): ",
-                    'titration_type': "Enter titration type (weak_acid/strong_acid/weak_base/strong_base, default weak_acid): "
-                }
-                user_input = input(prompt.get(key, f"Enter {key} (default {config.get(key, 'N/A')}): "))
-                if user_input.strip():
-                    try:
-                        config[key] = float(user_input) if key in ['V', 'C_B'] else user_input.strip()
-                    except ValueError:
-                        print(f"Warning: Invalid input '{user_input}' for {key}. Using default.")
-            else:
-                if key == 'titration_type':
-                    raise ValueError("titration_type required but not provided in non-interactive mode.")
-                print(f"Warning: {key} required but missing in non-interactive mode. Using default {config[key]}.")
+            default = config.get(key, 'default')
+            value = input(f"Enter {key} (default {default}): ") or str(default)
+            config[key] = value if key == 'titration_type' else float(value)
 
-    # Validate titration_type (soft fallback)
-    if config['titration_type'] not in valid_types:
-        print(
-            f"Warning: Invalid titration_type '{config['titration_type']}': Must be one of {valid_types}. "
-            f"Using fallback 'weak_acid'."
-        )
-        config['titration_type'] = 'weak_acid'
+    # Validate titration params
+    if config['titration_type'] not in ['strong_acid', 'weak_acid', 'strong_base', 'weak_base']:
+        print("Warning: titration_type must be 'strong_acid', 'weak_acid', 'strong_base', or 'weak_base'.")
+        config['titration_type'] = 'weak_acid'  # Fallback
 
-    print(f"Final config: {config}")
+    print("Final config:", config)
     return config
 
-
-def preprocess_pipeline(
-    df: pd.DataFrame,
-    config_overrides: Optional[Dict[str, Any]] = None,
-    config_file: Optional[str] = None,
-    interactive: bool = True
-) -> Tuple[pd.DataFrame, Dict[str, Any]]:
+def preprocess_pipeline(df, config_overrides=None, config_file=None):
     """
-    Orchestrate preprocessing: Load config, extract arrays, merge params.
-
+    Main preprocessing routine: Prepare arrays, set params.
     Args:
-        df: Input DataFrame with 'volume' and 'potential' columns.
-        config_overrides: Dict of CLI args for config.
-        config_file: Path to JSON config.
-        interactive: Enable interactive prompts.
-
+        df (pd.DataFrame): Raw data with 'volume' and 'potential' columns.
+        config_overrides (dict): CLI overrides (optional).
+        config_file (str): Path to JSON config (optional).
     Returns:
-        Tuple (df, params) where params includes arrays and config.
-
-    Raises:
-        ValueError: For invalid config.
+        tuple: (df, params_dict).
     """
-    # Load and validate config
-    config = get_config_from_cli_or_file_or_prompt(config_file, config_overrides, interactive)
+    config = get_config_from_cli_or_file_or_prompt(config_file, config_overrides)
 
-    # Extract arrays (assumes columns from data_io.py)
+    # Prepare arrays for analyzer
     params = {
-        'volume_array': df['volume'].values,
-        'potential_array': df['potential'].values
+        'volume': df['volume'].values,
+        'potential': df['potential'].values,
     }
-    params.update(config)
+    params.update(config)  # Merge with user params
 
-    print("Preprocessing complete: Arrays extracted and params merged.")
+    print("Preprocessing complete. Ready for analysis.")
     return df, params
 
-
+# Example usage (for testing)
 if __name__ == "__main__":
-    # Standalone test: Load sample data directly
-    try:
-        df = pd.read_csv('data.dat', sep=r'\s+', header=None, names=['volume', 'potential'])
-        result_df, result_params = preprocess_pipeline(df, interactive=True)
-        print("Test successful!")
-        print(f"Output params keys: {list(result_params.keys())}")
-    except Exception as e:
-        print(f"Test failed: {e}")
+    df = pd.read_csv('data.dat', sep='\s+', names=['volume', 'potential'])
+    df_processed, params = preprocess_pipeline(df, config_file='config.json')
+    print("Processed params:", params)
