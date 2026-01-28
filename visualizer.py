@@ -150,12 +150,85 @@ def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_d
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
     print(f"Gran/Schwartz combined plot saved to {filename}")
+
+def plot_all_combined(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path = Path('output')):
+    """
+    Combined vertical plot: 
+    Top: Titration curve (pH vs volume)
+    Middle: Gran raw g1 + fit + zone
+    Bottom: Schwartz optimized gs + fit + zone
+    Saves as 'plots.png' (300 DPI).
+    """
+    setup_plot_style()
+    output_dir.mkdir(exist_ok=True)
+
+    volume = params.get('volume_array', df['volume'].values)
+    potential = df['potential'].values
+    pH = 7.0 - potential / 59.16
+
+    # Extract Gran/Schwartz data
+    g1_raw = results.get('g1', np.zeros(len(volume)))
+    gs_opt = results.get('g1_opt', np.zeros(len(volume)))
+
+    gran_raw = results.get('gran', {}).get('raw', {})
+    sch_opt = results.get('schwartz', {}).get('opt', {})
+
+    raw_zone_start = gran_raw.get('zone_start', 0)
+    raw_zone_end = gran_raw.get('zone_end', len(volume) - 1)
+    opt_zone_start = sch_opt.get('zone_start', raw_zone_start)
+    opt_zone_end = sch_opt.get('zone_end', raw_zone_end)
+
+    raw_fit = gran_raw.get('fit', None)
+    opt_fit = sch_opt.get('fit', None)
+
+    opt_k5 = sch_opt.get('k5', 0.0)
+
+    # Create figure with 3 vertically stacked subplots
+    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 15), sharex=True)
+
+    # Top: Titration curve (pH vs volume)
+    ax1.plot(volume, pH, 'k-o', linewidth=1.5, markersize=4, label='Titration Curve (pH)')
+    ax1.set_ylabel('pH')
+    ax1.set_title('Titration Curve')
+    ax1.grid(True, alpha=0.3)
+    ax1.legend()
+
+    # Middle: Gran raw g1 + fit + zone
+    ax2.plot(volume, g1_raw, 'b-o', linewidth=1.5, markersize=4, label='Gran raw g1')
+    ax2.axvspan(volume[raw_zone_start], volume[raw_zone_end], alpha=0.25, color='red', label='Raw Zone')
+    if raw_fit:
+        slope, intercept = raw_fit
+        x_fit = np.linspace(volume.min(), volume.max(), 100)
+        y_fit = slope * x_fit + intercept
+        ax2.plot(x_fit, y_fit, 'k--', label=f'Raw fit (R²={gran_raw.get("r2", "N/A"):.4f})')
+    ax2.set_ylabel('Gran g1 (raw)')
+    ax2.set_title(f'Gran Raw – V_eq = {gran_raw.get("V_eq", "N/A"):.3f} mL')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+
+    # Bottom: Schwartz optimized gs + fit + zone
+    ax3.plot(volume, gs_opt, 'g-o', linewidth=1.5, markersize=4, label='Schwartz opt gs')
+    ax3.axvspan(volume[opt_zone_start], volume[opt_zone_end], alpha=0.25, color='orange', label='Opt Zone')
+    if opt_fit:
+        slope, intercept = opt_fit
+        y_fit = slope * x_fit + intercept
+        ax3.plot(x_fit, y_fit, 'k--', label=f'Opt fit (R²={sch_opt.get("r2", "N/A"):.4f})')
+    ax3.set_ylabel('Schwartz gs (opt)')
+    ax3.set_title(f'Schwartz Optimized – V_eq = {sch_opt.get("V_eq", "N/A"):.3f} mL, k = {opt_k5:.3f}')
+    ax3.set_xlabel('Titrant Volume (mL)')
+    ax3.legend()
+    ax3.grid(True, alpha=0.3)
+
+    # fig.suptitle('GranTED Analysis Overview', fontsize=16)
+    fig.tight_layout()
+    filename = output_dir / 'plots.png'
+    fig.savefig(filename, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"Combined overview plot saved to {filename}")
     
 def visualize_all(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: str = 'output'):
-    """
-    Orchestrate all plots: titration curve + gran/schwartz combined.
-    """
     output_dir = Path(output_dir)
     plot_titration_curve(df, params, output_dir)
-    plot_gran_schwartz(results, params, output_dir)
+    plot_gran_schwartz(results, params, output_dir)  # Keep existing if you want both
+    plot_all_combined(df, params, results, output_dir)  # New combined plot
     print(f"All visualizations saved to {output_dir}")
