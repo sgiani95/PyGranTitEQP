@@ -45,7 +45,7 @@ volume,potential
 
 === METRICS ===
 Method,V_eq (mL),R²,k5,Zones (start-end)
-Gran Raw,4.096,0.9995,0.0,15-30
-Gran Optimized,4.086,0.9999,0.3897,12-27
-Schwartz Raw,4.096,0.9995,0.0,15-30
-Schwartz Optimized,4.086,0.9999,0.3897,12-27
+Gran Raw,4.096,0.9995,N/A,15-31
+Gran Optimized,4.087,0.9999,N/A,12-30
+Schwartz Raw,4.096,0.9995,N/A,15-31
+Schwartz Optimized,4.087,0.9999,N/A,12-30

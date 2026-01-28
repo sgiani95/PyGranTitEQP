@@ -1,8 +1,8 @@
 """
 analyzer.py: Validated equivalence point detection via Gran/Schwartz linearization.
 
-Algorithm preserved: Smoothing → deriv → candidates → rank/eval → shrink (raw) → opt k5 → re-shrink (opt).
-Outputs nested metrics for downstream (gran/schwartz raw/opt with V_eq, r2, k5, zones).
+Algorithm preserved: Smoothing → deriv → candidates → rank/eval → shrink (raw) → opt k → re-shrink (opt).
+Outputs nested metrics for downstream (gran/schwartz raw/opt with V_eq, r2, k, zones).
 
 Dependencies: numpy, scipy.stats.linregress, scipy.signal.savgol_filter, scipy.optimize.minimize_scalar.
 """
@@ -62,7 +62,7 @@ def identify_linear_interval(
 
     # Step 2: Segment into candidate plateaus via sliding-window variance
     candidates = []
-    win_sizes = range(max(3, min_points//2), min(15, len(dg1_neg)//2) + 1)
+    win_sizes = range(max(3, min_points//2), min(30, len(dg1_neg)//2) + 1)
     for win_len in win_sizes:
         for i in range(len(dg1_neg) - win_len + 1):
             seg_dg1 = dg1_neg[i:i+win_len]
@@ -112,12 +112,12 @@ def identify_linear_interval(
     return start_idx, end_idx, best_r2
 
 
-def _compute_fit(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k5: float = 0.0) -> Dict[str, Any]:
-    """Compute fit, R², and V_eq for a zone with given k5, using gran_func callable (preserved)."""
+def _compute_fit(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k: float = 0.0) -> Dict[str, Any]:
+    """Compute fit, R², and V_eq for a zone with given k, using gran_func callable (preserved)."""
     volume = df['volume'].iloc[start:end+1].values
     potential = df['potential'].iloc[start:end+1].values
     pH = 7 - (potential / 59.16)
-    y = gran_func(volume, pH, k5)  # Use callable
+    y = gran_func(volume, pH, k)  # Use callable
     slope, intercept, r_value, _, _ = linregress(volume, y)
     r2 = r_value**2
     veq = -intercept / slope if slope != 0 else np.nan
@@ -125,22 +125,22 @@ def _compute_fit(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k5
 
 
 def _optimize_single_zone(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k_bounds: Tuple[float, float] = (-10, 10)) -> Dict[str, Any]:
-    """Optimize k5 for a fixed zone using gran_func callable (preserved)."""
+    """Optimize k for a fixed zone using gran_func callable (preserved)."""
     volume = df['volume'].iloc[start:end+1].values
     potential = df['potential'].iloc[start:end+1].values
     pH = 7 - (potential / 59.16)
 
-    def negative_r2(k5):
-        y = gran_func(volume, pH, k5)  # Use callable
+    def negative_r2(k):
+        y = gran_func(volume, pH, k)  # Use callable
         slope, intercept, r_value, _, _ = linregress(volume, y)
         return -r_value**2
 
     result = minimize_scalar(negative_r2, bounds=k_bounds, method='bounded')
-    best_k5 = result.x
+    best_k = result.x
     max_r2 = -result.fun
-    y_opt = gran_func(volume, pH, best_k5)
+    y_opt = gran_func(volume, pH, best_k)
     slope, intercept, _, _, _ = linregress(volume, y_opt)
-    return {'best_k5': best_k5, 'best_r2': max_r2, 'fit': (slope, intercept)}
+    return {'best_k': best_k, 'best_r2': max_r2, 'fit': (slope, intercept)}
 
 
 def shrink_zone(
@@ -204,11 +204,11 @@ def shrink_zone(
 
     return (start, end)
 
-def get_metrics(fit: Any, zone: Tuple[int, int], k5: float = 0.0, r2_threshold: float = 0.95) -> Dict[str, Any]:
+def get_metrics(fit: Any, zone: Tuple[int, int], k: float = 0.0, r2_threshold: float = 0.95) -> Dict[str, Any]:
     """Extract V_eq, r2 from fit/zone (centralized for raw/opt). Warn on low R²; fallback V_eq if slope ~0."""
     start, end = zone
     if fit is None or end - start < 2:
-        return {'V_eq': np.nan, 'r2': 0.0, 'k5': k5, 'zone_start': start, 'zone_end': end, 'green_savings': 0.0}
+        return {'V_eq': np.nan, 'r2': 0.0, 'k': k, 'zone_start': start, 'zone_end': end, 'green_savings': 0.0}
     slope, intercept = fit['fit']
     r2 = fit['r2']
     if abs(slope) < 1e-6:  # Near-zero slope fallback
@@ -217,13 +217,13 @@ def get_metrics(fit: Any, zone: Tuple[int, int], k5: float = 0.0, r2_threshold: 
     else:
         v_eq = -intercept / slope
     if r2 < r2_threshold:
-        print(f"Warning: Low R²={r2:.3f} for zone {zone} (k5={k5})")
+        print(f"Warning: Low R²={r2:.3f} for zone {zone} (k={k})")
     green_savings = 0.05 * r2  # Stub: Scale by R² (e.g., 0.05 L for perfect fit)
     print(f"DEBUG: get_metrics returning fit = {fit['fit'] if fit else 'None'} for zone {zone}")
     return {
         'V_eq': round(v_eq, 3),
         'r2': round(r2, 4),
-        'k5': round(k5,4),
+        'k': round(k,4),
         'zone_start': start,
         'zone_end': end,
         'fit': fit['fit'] if fit and 'fit' in fit else None  # Pass the (slope, intercept) tuple
@@ -270,32 +270,32 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
     # Step: Raw Zone: Fit on initial interval
     print("DEBUG: Step - Raw Zone fit...")
     try:
-        raw_zone = _compute_fit(df, start_idx, end_idx, gran_func, k5=0.0)
+        raw_zone = _compute_fit(df, start_idx, end_idx, gran_func, k=0.0)
         raw_zone.update({'start': start_idx, 'end': end_idx, 'num_points': end_idx - start_idx})  # Safe update
         raw_num_points = raw_zone['num_points']
-        raw_metrics = get_metrics({'r2': raw_zone['r2'], 'fit': raw_zone['fit']}, initial_interval, k5=0.0)
+        raw_metrics = get_metrics({'r2': raw_zone['r2'], 'fit': raw_zone['fit']}, initial_interval, k=0.0)
         raw_metrics['num_points'] = raw_num_points
         diagnostics.append(f"Raw Zone (initial): indices {start_idx}-{end_idx}, R²={raw_metrics['r2']:.4f}, V_eq={raw_metrics['V_eq']:.3f} mL over {raw_num_points} points")
     except Exception as e:
         print(f"DEBUG: Raw zone failed: {e}")
         return None
 
-    # Step: Opt k5 on raw Zone
-    print("DEBUG: Step - Opt k5...")
+    # Step: Opt k on raw Zone
+    print("DEBUG: Step - Opt k...")
     try:
         k_bounds = (-10, 10)
-        opt_k5_dict = _optimize_single_zone(df, start_idx, end_idx, schwartz_func, k_bounds)
-        opt_k5 = opt_k5_dict['best_k5']
-        print(f"DEBUG: Opt k5 OK, best_k5={opt_k5:.3f}")
+        opt_k_dict = _optimize_single_zone(df, start_idx, end_idx, schwartz_func, k_bounds)
+        opt_k = opt_k_dict['best_k']
+        print(f"DEBUG: Opt k OK, best_k={opt_k:.3f}")
     except Exception as e:
-        print(f"DEBUG: Opt k5 failed: {e}")
+        print(f"DEBUG: Opt k failed: {e}")
         return None
 
     # Step: Recompute gs_opt and re-detect Zone
     print("DEBUG: Step - Recompute gs_opt...")
     try:
         pH_full = 7 - (df['potential'].values / 59.16)
-        gs_opt = schwartz_func(params['volume_array'], pH_full, opt_k5)
+        gs_opt = schwartz_func(params['volume_array'], pH_full, opt_k)
         print(f"DEBUG: gs_opt shape: {gs_opt.shape}")
     except Exception as e:
         print(f"DEBUG: gs_opt recompute failed: {e}")
@@ -315,10 +315,10 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
     # Step: Opt fit on re-detected Zone
     print("DEBUG: Step - Opt fit...")
     try:
-        opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k5=opt_k5)
-        opt_zone.update({'k5': opt_k5, 'start': opt_start, 'end': opt_end, 'num_points': opt_end - opt_start})
+        opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k=opt_k)
+        opt_zone.update({'k': opt_k, 'start': opt_start, 'end': opt_end, 'num_points': opt_end - opt_start})
         opt_num_points = opt_zone['num_points']
-        opt_metrics = get_metrics({'r2': opt_zone['r2'], 'fit': opt_zone['fit']}, (opt_start, opt_end), k5=opt_k5)
+        opt_metrics = get_metrics({'r2': opt_zone['r2'], 'fit': opt_zone['fit']}, (opt_start, opt_end), k=opt_k)
         opt_metrics['num_points'] = opt_num_points
     except Exception as e:
         print(f"DEBUG: Opt zone failed: {e}")
@@ -329,9 +329,9 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
     try:
         if opt_num_points < raw_num_points:
             opt_start, opt_end = raw_metrics['zone_start'], raw_metrics['zone_end']
-            opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k5=opt_k5)
+            opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k=opt_k)
             opt_num_points = opt_end - opt_start + 1
-            opt_metrics = get_metrics({'r2': opt_zone['r2'], 'fit': opt_zone['fit']}, (opt_start, opt_end), k5=opt_k5)
+            opt_metrics = get_metrics({'r2': opt_zone['r2'], 'fit': opt_zone['fit']}, (opt_start, opt_end), k=opt_k)
             opt_metrics['num_points'] = opt_num_points
             diagnostics.append(f"Opt fallback to raw Zone (to avoid shrinkage): R²={opt_metrics['r2']:.4f}, points={opt_num_points}")
             print("DEBUG: Fallback triggered")
@@ -341,7 +341,7 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
         print(f"DEBUG: Fallback failed: {e}")
         return None
 
-    diagnostics.append(f"Opt Zone (final): k5={opt_k5:.3f}, R²={opt_metrics['r2']:.4f}, V_eq={opt_metrics['V_eq']:.3f} mL over {opt_num_points} points")
+    diagnostics.append(f"Opt Zone (final): k={opt_k:.3f}, R²={opt_metrics['r2']:.4f}, V_eq={opt_metrics['V_eq']:.3f} mL over {opt_num_points} points")
 
     # Step: Build results dict
     print("DEBUG: Step - Build results...")
@@ -365,8 +365,8 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
 
     # Print results for debugging
     print("=== ANALYZER ORIGINAL RESULTS ===")
-    print(f"Raw Zone: V_eq = {raw_metrics['V_eq']:.3f} mL, R² = {raw_metrics['r2']:.4f}, k5 = {raw_metrics['k5']}, Zone = {raw_metrics['zone_start']}-{raw_metrics['zone_end']}, Points = {raw_metrics.get('num_points', 'N/A')}")
-    print(f"Opt Zone: V_eq = {opt_metrics['V_eq']:.3f} mL, R² = {opt_metrics['r2']:.4f}, k5 = {opt_metrics['k5']:.3f}, Zone = {opt_metrics['zone_start']}-{opt_metrics['zone_end']}, Points = {opt_metrics.get('num_points', 'N/A')}")
+    print(f"Raw Zone: V_eq = {raw_metrics['V_eq']:.3f} mL, R² = {raw_metrics['r2']:.4f}, k = {raw_metrics['k']}, Zone = {raw_metrics['zone_start']}-{raw_metrics['zone_end']}, Points = {raw_metrics.get('num_points', 'N/A')}")
+    print(f"Opt Zone: V_eq = {opt_metrics['V_eq']:.3f} mL, R² = {opt_metrics['r2']:.4f}, k = {opt_metrics['k']:.3f}, Zone = {opt_metrics['zone_start']}-{opt_metrics['zone_end']}, Points = {opt_metrics.get('num_points', 'N/A')}")
     print(f"g1 shape: {g1.shape}, g1_opt shape: {gs_opt.shape}")
     print(f"Interval R² (legacy): {raw_metrics['r2']:.4f}")
     print("=== END ANALYZER ORIGINAL ===")
@@ -424,14 +424,14 @@ def analyze_gran(gran_results: Dict[str, Any], params: Dict[str, Any], verbose: 
     # Defensive mapping (handle None)
     if original_results is None:
         n = len(params['volume_array'])
-        raw_metrics = {'V_eq': np.nan, 'r2': 0.0, 'k5': 0.0, 'zone_start': 0, 'zone_end': n - 1, 'fit': None}
+        raw_metrics = {'V_eq': np.nan, 'r2': 0.0, 'k': 0.0, 'zone_start': 0, 'zone_end': n - 1, 'fit': None}
         opt_metrics = raw_metrics.copy()
     else:
         raw_original = original_results.get('raw_zone', {})
         raw_metrics = {
             'V_eq': raw_original.get('V_eq', np.nan),  # If you have 'V_eq' here
             'r2': raw_original.get('r2', 0.0),
-            'k5': 0.0,
+            'k': 0.0,
             'zone_start': raw_original.get('zone_start', 0),
             'zone_end': raw_original.get('zone_end', len(params['volume_array']) - 1),
             'fit': raw_original.get('fit', None)  # ← Add this line!
@@ -440,7 +440,7 @@ def analyze_gran(gran_results: Dict[str, Any], params: Dict[str, Any], verbose: 
         opt_metrics = {
             'V_eq': opt_original.get('V_eq', np.nan),
             'r2': opt_original.get('r2', 0.0),
-            'k5': opt_original.get('k5', 0.0),
+            'k': opt_original.get('k', 0.0),
             'zone_start': opt_original.get('zone_start', 0),
             'zone_end': opt_original.get('zone_end', len(params['volume_array']) - 1),
             'fit': opt_original.get('fit', None)
@@ -462,7 +462,7 @@ def analyze_gran(gran_results: Dict[str, Any], params: Dict[str, Any], verbose: 
     for method in ['gran', 'schwartz']:
         for mode in ['raw', 'opt']:
             m_data = analysis_results[method][mode]
-            print(f"{method.capitalize()} {mode.capitalize()}: V_eq = {m_data['V_eq']:.3f} mL, R² = {m_data['r2']:.4f}, k5 = {m_data['k5']:.3f}, Zone = {m_data['zone_start']}-{m_data['zone_end']}")
+            print(f"{method.capitalize()} {mode.capitalize()}: V_eq = {m_data['V_eq']:.3f} mL, R² = {m_data['r2']:.4f}, k = {m_data['k']:.3f}, Zone = {m_data['zone_start']}-{m_data['zone_end']}")
     print(f"pH shape: {analysis_results['pH'].shape}")
     print("=== END ANALYZER NESTED ===")
 
