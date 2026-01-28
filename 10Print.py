@@ -18,7 +18,3 @@ while Iterations > 0:
 # ᘛ⁐̤ᕐᐷ
 # 🎯
 # 🌿
-
-    
-### Complete New identify_linear_interval Function
-### Drop this into analyzer.py (replace the old one around line 20). It returns (start, end, r2) for raw Zone, and I've added an optional extend=True for the probe (default True).

@@ -96,7 +96,40 @@ def generate_pdf_report(results: Dict[str, Any], df: pd.DataFrame, params: Dict[
 ]))
     
     story.append(table)
-#    story.append(Spacer(1, 12))
+    # story.append(Spacer(1, 12))
+
+    # Footer: random 10Print pattern + timestamp
+    footer_text = ""
+
+    # Generate random 10Print pattern (4 rows, 50 chars wide)
+    import random
+    for row in range(4):  # Number of rows — adjust as you like
+        row_text = ""
+        for _ in range(7):  # Width — adjust as you like
+            if random.randrange(0, 10) >= 5:
+                row_text += " / "
+            else:
+                row_text += " \\ "
+        footer_text += row_text.rstrip() + "\n"  # Remove trailing spaces
+
+    # Add timestamp
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S %Z")
+    footer_text += f"\n / / \ Generated on: {timestamp}"
+
+    # Add as preformatted text (monospace, small font)
+# Footer style: Helvetica, small size, left-aligned
+    footer_style = ParagraphStyle(
+        'Footer',
+        parent=styles['Normal'],
+        fontName='Helvetica',
+        fontSize=8,
+        alignment=0,  # Left
+        leading=20,   # Line spacing
+    )
+    
+    story.append(Spacer(1, 15))  # Space above footer
+    story.append(Paragraph("<pre>" + footer_text + "</pre>", footer_style))
 
     doc.build(story)
     print(f"Saved PDF report to {pdf_filename}")
