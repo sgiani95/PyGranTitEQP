@@ -158,7 +158,7 @@ def shrink_zone(
     while improved and iter_count < max_iter and end - start > 2:
         improved = False
 
-        # Step 1: Try growing left (extend start downward)
+        # Priority 1: Try growing left (extend start downward)
         if start > 0:
             new_start = max(0, start - 1)  # Small step left
             left_r2, _, _ = _compute_r2(g_values, volume, new_start, end)
@@ -168,7 +168,7 @@ def shrink_zone(
                 improved = True
                 iter_count = 0  # Reset on improvement
 
-        # Step 2: Try trimming right (shrink end upward)
+        # Priority 2: Try trimming right (shrink end upward)
         if end < len(volume) - 1:
             new_end = min(len(volume) - 1, end + 1)  # Small step right (trim)
             right_r2, _, _ = _compute_r2(g_values, volume, start, new_end)
@@ -178,8 +178,9 @@ def shrink_zone(
                 improved = True
                 iter_count = 0
 
-        # Step 3: Try trimming left (only if no growth happened)
-        if not improved and start + 1 < end:
+        # Fallback: Symmetric trim if no asymmetric improvement
+        if not improved:
+            # Left trim fallback
             left_mid = (start + end) // 2
             if left_mid > start:
                 left_r2, _, _ = _compute_r2(g_values, volume, left_mid, end)
@@ -189,8 +190,7 @@ def shrink_zone(
                     improved = True
                     iter_count = 0
 
-        # Step 4: Try trimming right (symmetric fallback)
-        if not improved and start < end - 1:
+            # Right trim fallback
             right_mid = (start + end) // 2
             if right_mid < end:
                 right_r2, _, _ = _compute_r2(g_values, volume, start, right_mid)
@@ -409,61 +409,57 @@ def _identify_linear_original(g1: np.ndarray, volume: np.ndarray, min_points: in
 
 # Compatibility Wrapper for Downstream (Gran/Schwartz Nest)
 def analyze_gran(gran_results: Dict[str, Any], params: Dict[str, Any], verbose: bool = False) -> Dict[str, Any]:
-    """Compatibility wrapper: Run original analyze_gran_original, nest original output for visualizer/reporter."""
-    # Run original
-    df = pd.DataFrame({
-        'volume': params['volume_array'],
-        'potential': params['potential_array']
-    })
-    try:
-        original_results = analyze_gran_original(df, params, use_segmented=True, verbose=verbose)
-    except Exception as e:
-        print(f"Warning: analyze_gran_original failed: {e}—using fallback metrics.")
-        original_results = None
-    
-    # Defensive mapping (handle None)
-    if original_results is None:
-        n = len(params['volume_array'])
-        raw_metrics = {'V_eq': np.nan, 'r2': 0.0, 'k5': 0.0, 'zone_start': 0, 'zone_end': n - 1, 'fit': None}
-        opt_metrics = raw_metrics.copy()
-    else:
-        raw_original = original_results.get('raw_zone', {})
-        raw_metrics = {
-            'V_eq': raw_original.get('V_eq', np.nan),  # If you have 'V_eq' here
-            'r2': raw_original.get('r2', 0.0),
-            'k5': 0.0,
-            'zone_start': raw_original.get('zone_start', 0),
-            'zone_end': raw_original.get('zone_end', len(params['volume_array']) - 1),
-            'fit': raw_original.get('fit', None)  # ← Add this line!
-        }
-        opt_original = original_results.get('opt_zone', {})
-        opt_metrics = {
-            'V_eq': opt_original.get('V_eq', np.nan),
-            'r2': opt_original.get('r2', 0.0),
-            'k5': opt_original.get('k5', 0.0),
-            'zone_start': opt_original.get('zone_start', 0),
-            'zone_end': opt_original.get('zone_end', len(params['volume_array']) - 1),
-            'fit': opt_original.get('fit', None)
-        }
-    
-    # Nest for dual (gran from original, schwartz copy for stub)
+    """
+    Compatibility wrapper: Uses pre-computed gran_results, runs original analysis on g1,
+    maps keys, nests for visualizer/reporter, adds pH/g1/g1_opt.
+    No redundant df rebuild; copies 'fit' and 'num_points' for plotting.
+    """
+    # No need to rebuild df - we have everything from gran_results and params
+
+    # Run original analysis on passed gran_results (g1, schwartz_func, etc.)
+    original_results = analyze_gran_original(
+        pd.DataFrame({  # Minimal df for _compute_fit calls
+            'volume': params['volume_array'],
+            'potential': params['potential_array']
+        }),
+        params,
+        use_segmented=True,
+        verbose=verbose
+    )
+
+    # Defensive mapping from original keys
+    raw_original = original_results.get('raw_zone', {})
+    raw_metrics = {
+        'V_eq': raw_original.get('V_eq', np.nan),
+        'r2': raw_original.get('r2', 0.0),
+        'k': 0.0,  # Renamed from k5
+        'zone_start': raw_original.get('zone_start', 0),
+        'zone_end': raw_original.get('zone_end', len(params['volume_array']) - 1),
+        'fit': raw_original.get('fit', None),          # For dashed fit line in visualizer
+        'num_points': raw_original.get('num_points', 0)  # For point count in titles
+    }
+
+    opt_original = original_results.get('opt_zone', {})
+    opt_metrics = {
+        'V_eq': opt_original.get('V_eq', np.nan),
+        'r2': opt_original.get('r2', 0.0),
+        'k': opt_original.get('k5', 0.0),  # Renamed from k5
+        'zone_start': opt_original.get('zone_start', 0),
+        'zone_end': opt_original.get('zone_end', len(params['volume_array']) - 1),
+        'fit': opt_original.get('fit', None),          # For dashed fit line
+        'num_points': opt_original.get('num_points', 0)  # For point count
+    }
+
+    # Nest for downstream (gran from original, schwartz as true mirror if needed)
     analysis_results = {
         'gran': {'raw': raw_metrics, 'opt': opt_metrics},
-        'schwartz': {'raw': raw_metrics, 'opt': opt_metrics},  # Copy; extend later for true Schwartz opt
+        'schwartz': {'raw': raw_metrics, 'opt': opt_metrics},  # Stub copy; replace with true opt later
         'pH': gran_results.get('pH', np.array([])),
-        'g1': original_results.get('g1', np.array([])) if original_results is not None else np.array([]),  # For plots
-        'g1_opt': original_results.get('g1_opt', np.array([])) if original_results is not None else np.array([])  # For plots
+        'g1': gran_results.get('gran', {}).get('g1', np.array([])),
+        'g1_opt': gran_results.get('schwartz', {}).get('gs', np.array([]))  # gs = g1_opt
     }
-    
+
     if verbose:
-        print("Analysis wrapped: Original → nested gran/schwartz for downstream.")
-    # Print nested results for debugging
-    print("=== ANALYZER NESTED RESULTS ===")
-    for method in ['gran', 'schwartz']:
-        for mode in ['raw', 'opt']:
-            m_data = analysis_results[method][mode]
-            print(f"{method.capitalize()} {mode.capitalize()}: V_eq = {m_data['V_eq']:.3f} mL, R² = {m_data['r2']:.4f}, k5 = {m_data['k5']:.3f}, Zone = {m_data['zone_start']}-{m_data['zone_end']}")
-    print(f"pH shape: {analysis_results['pH'].shape}")
-    print("=== END ANALYZER NESTED ===")
+        print("Analysis: Gran scout zone → Schwartz k opt → re-detect/shrink cycle on gs_opt.")
 
     return analysis_results
