@@ -81,17 +81,20 @@ def identify_linear_interval(
 
 
 def _compute_fit(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k: float = 0.0, pH_full: np.ndarray = None) -> Dict[str, Any]:
+    """Compute fit, R², and V_eq for a zone with given k."""
     volume_slice = df['volume'].iloc[start:end+1].values
-    pH_slice = pH_full[start:end+1] if pH_full is not None else (7 - (df['potential'].iloc[start:end+1].values / 59.16))
+    pH_slice = pH_full[start:end+1]
     y = gran_func(volume_slice, pH_slice, k)
     slope, intercept, r_value, _, _ = linregress(volume_slice, y)
     r2 = r_value**2
     veq = -intercept / slope if slope != 0 else np.nan
     return {'r2': r2, 'fit': (slope, intercept), 'veq': veq}
 
+
 def _optimize_single_zone(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k_bounds: Tuple[float, float] = (-10, 10), pH_full: np.ndarray = None) -> Dict[str, Any]:
+    """Optimize k for a fixed zone using gran_func callable."""
     volume_slice = df['volume'].iloc[start:end+1].values
-    pH_slice = pH_full[start:end+1] if pH_full is not None else (7 - (df['potential'].iloc[start:end+1].values / 59.16))
+    pH_slice = pH_full[start:end+1]
 
     def negative_r2(k):
         y = gran_func(volume_slice, pH_slice, k)
@@ -104,6 +107,7 @@ def _optimize_single_zone(df: pd.DataFrame, start: int, end: int, gran_func: Cal
     y_opt = gran_func(volume_slice, pH_slice, best_k)
     slope, intercept, _, _, _ = linregress(volume_slice, y_opt)
     return {'best_k': best_k, 'best_r2': max_r2, 'fit': (slope, intercept)}
+
 
 def shrink_zone(
     volume: np.ndarray, g_values: np.ndarray, initial_zone: Tuple[int, int], max_iter: int = 10
@@ -155,7 +159,7 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
     gran_func = gran_results['gran']['gran_func']
     schwartz_func = gran_results['schwartz']['gran_func']
     volume = params['volume_array']
-    pH_full = gran_results['pH']
+    pH_full = gran_results['pH']  # Use precomputed pH (flipped if base)
 
     # Identify initial interval (on raw g1)
     if use_segmented:
@@ -165,13 +169,13 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
     initial_interval = (start_idx, end_idx)
 
     # Raw Zone: Fit on initial interval (k=0)
-    raw_zone = _compute_fit(df, start_idx, end_idx, gran_func, k=0.0, pH_full=gran_results['pH'])
+    raw_zone = _compute_fit(df, start_idx, end_idx, gran_func, k=0.0, pH_full=pH_full)
     raw_zone.update({'start': start_idx, 'end': end_idx, 'num_points': end_idx - start_idx + 1})
     raw_metrics = get_metrics({'r2': raw_zone['r2'], 'fit': raw_zone['fit']}, initial_interval, k=0.0)
 
     # Opt k on raw Zone
     k_bounds = (-10, 10)
-    opt_k_dict = _optimize_single_zone(df, start_idx, end_idx, schwartz_func, k_bounds=(-10, 10), pH_full=gran_results['pH'])
+    opt_k_dict = _optimize_single_zone(df, start_idx, end_idx, schwartz_func, k_bounds, pH_full=pH_full)
     opt_k = opt_k_dict['best_k']
 
     # Recompute gs_opt and re-detect Zone on it
@@ -182,14 +186,14 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
         opt_start, opt_end, opt_interval_r2 = _identify_linear_original(gs_opt, volume)
 
     # Opt fit on re-detected Zone
-    opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k=opt_k, pH_full=gran_results['pH'])
+    opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k=opt_k, pH_full=pH_full)
     opt_zone.update({'k': opt_k, 'start': opt_start, 'end': opt_end, 'num_points': opt_end - opt_start + 1})
     opt_metrics = get_metrics({'r2': opt_zone['r2'], 'fit': opt_zone['fit']}, (opt_start, opt_end), k=opt_k)
 
     # Fallback if opt Zone smaller than raw
     if opt_metrics['zone_end'] - opt_metrics['zone_start'] < raw_metrics['zone_end'] - raw_metrics['zone_start']:
         opt_start, opt_end = raw_metrics['zone_start'], raw_metrics['zone_end']
-        opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k=opt_k)
+        opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k=opt_k, pH_full=pH_full)
         opt_zone.update({'k': opt_k, 'start': opt_start, 'end': opt_end, 'num_points': opt_end - opt_start + 1})
         opt_metrics = get_metrics({'r2': opt_zone['r2'], 'fit': opt_zone['fit']}, (opt_start, opt_end), k=opt_k)
 
