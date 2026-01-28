@@ -20,8 +20,8 @@ def compute_gran_functions(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str
 
     # Extract preprocessed arrays
     volume = params['volume_array']
-    potential = params['potential_array']
-
+    potential = params['potential_array']  # Use preprocessed (flipped if base) array
+    
     # Nernst pH conversion (25°C, 59.16 mV/pH)
     pH = 7.0 - potential / 59.16
 
@@ -64,7 +64,6 @@ def compute_gran_functions(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str
         },
         'pH': pH
     }
-
     print("Gran and Schwartz computed successfully.")
     return results
 

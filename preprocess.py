@@ -132,7 +132,6 @@ def preprocess_pipeline(
         params['is_base'] = False  # Default
 
     print("Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).")
-    print(df)
     return df, params
 
 
