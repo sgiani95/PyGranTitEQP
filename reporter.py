@@ -89,50 +89,37 @@ def export_to_csv(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, A
         print(f"CSV export failed: {e}")
         return ""
 
-def generate_pdf_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], 
+def generate_pdf_report(results: Dict[str, Any], df: pd.DataFrame, params: Dict[str, Any], 
                         output_dir: Path, embed_in_pdf: bool = False) -> str:
     """
-    Generate PDF report with metrics table and embedded PNGs.
-    Optional embed_in_pdf flag (unused for now, but future-proof).
+    Generate PDF report with metrics table and embedded images.
+    Accepts embed_in_pdf flag (for future buffer usage if needed).
     """
     Path(output_dir).mkdir(exist_ok=True)
     pdf_filename = output_dir / 'report.pdf'
-    # doc = SimpleDocTemplate(str(pdf_filename), pagesize=letter)
-    # Set page size to landscape
-    doc = SimpleDocTemplate(str(pdf_filename), pagesize=landscape(letter))
+    doc = SimpleDocTemplate(str(pdf_filename), pagesize=letter)
     story = []
     styles = getSampleStyleSheet()
 
     # Title
-    title_style = ParagraphStyle('CustomTitle', parent=styles['Heading1'], fontSize=18, spaceAfter=30)
-    titration_type = params.get('titration_type', 'weak_acid')
-    story.append(Paragraph(f"GranTED Report: {titration_type.title()} Titration", title_style))
+    title_style = styles['Heading1']
+    titration_type = params.get('titration_type', 'acid_base')
+    story.append(Paragraph(f"GranTED Report: {titration_type.title()}", title_style))
     story.append(Spacer(1, 12))
 
-    # Combined metrics table (4 rows: Gran/Schwartz raw/opt)
-    data = [['Method', 'V_eq (mL)', 'R²', 'k5', 'Zones (start-end)']]
-    methods = ['gran', 'schwartz']
-    for method in methods:
-        if method in results:
-            raw = results[method].get('raw', {})
-            opt = results[method].get('opt', {})
-            data.append([
-                f'{method.capitalize()} Raw',
-                raw.get('V_eq', 'N/A'),
-                raw.get('r2', 'N/A'),
-                raw.get('k5', 'N/A'),
-                f"{raw.get('zone_start', 'N/A')}-{raw.get('zone_end', 'N/A')}"
-            ])
-            data.append([
-                f'{method.capitalize()} Optimized',
-                opt.get('V_eq', 'N/A'),
-                opt.get('r2', 'N/A'),
-                opt.get('k5', 'N/A'),
-                f"{opt.get('zone_start', 'N/A')}-{opt.get('zone_end', 'N/A')}"
-            ])
+    # Metrics table (Gran Raw vs Schwartz Optimized)
+    gran_raw = results.get('gran', {}).get('raw', {})
+    sch_opt = results.get('schwartz', {}).get('opt', {})
 
-    if len(data) == 1:
-        data.append(['No Data', 'N/A', 'N/A', 'N/A', 'N/A'])
+    data = [
+        ['Parameter', 'Gran Raw', 'Schwartz Optimized', 'Difference'],
+        ['R²', f"{gran_raw.get('r2', 'N/A'):.4f}", f"{sch_opt.get('r2', 'N/A'):.4f}", 
+         f"{(sch_opt.get('r2', 0.0) - gran_raw.get('r2', 0.0)):.4f}" if isinstance(gran_raw.get('r2', 0.0), float) and isinstance(sch_opt.get('r2', 0.0), float) else 'N/A'],
+        ['V_eq (mL)', f"{gran_raw.get('V_eq', 'N/A'):.3f}", f"{sch_opt.get('V_eq', 'N/A'):.3f}", 
+         f"{(sch_opt.get('V_eq', 0.0) - gran_raw.get('V_eq', 0.0)):.3f}" if isinstance(gran_raw.get('V_eq', 0.0), float) and isinstance(sch_opt.get('V_eq', 0.0), float) else 'N/A'],
+        ['Zone Start (mL)', gran_raw.get('zone_start', 'N/A'), sch_opt.get('zone_start', 'N/A'), 'N/A'],
+        ['Zone End (mL)', gran_raw.get('zone_end', 'N/A'), sch_opt.get('zone_end', 'N/A'), 'N/A'],
+    ]
 
     table = Table(data)
     table.setStyle(TableStyle([
@@ -140,45 +127,30 @@ def generate_pdf_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 14),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ('FONTSIZE', (0, 0), (-1, -1), 11),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
     ]))
     story.append(table)
-    story.append(Spacer(1, 12))
+    story.append(Spacer(1, 24))
 
-    # Embed PNGs (safe loading, proportional)
-    png_files = ['titration_curve.png', 'gran_schwartz.png']
-    existing_pngs = [output_dir / png for png in png_files if (output_dir / png).exists()]
-
-    if existing_pngs:
-        # Calculate width for each image (50% of page width minus a small gap)
-        gap = 12  # points
-        img_width = (doc.width - gap) / 2
-
-        img_row = []
-        for png_path in existing_pngs:
-            img = Image(str(png_path))
-            aspect = img.imageHeight / img.imageWidth
-            img.drawWidth = img_width
-            img.drawHeight = img_width * aspect
-            img_row.append(img)
-
-        # Add images side by side using a Table
-        table = Table([img_row], colWidths=[img.drawWidth for img in img_row])
-        table.setStyle(TableStyle([('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
-        story.append(table)
+    # Titration curve
+    curve_path = output_dir / 'titration_curve.png'
+    if curve_path.exists():
+        img = Image(str(curve_path), width=500, height=300)
+        story.append(img)
         story.append(Spacer(1, 12))
-    else:
-        for png in png_files:
-            story.append(Paragraph(f"Placeholder: {png} not found - run visualizer first.", styles['Normal']))
-            story.append(Spacer(1, 12))
+
+    # Gran/Schwartz graph
+    gran_path = output_dir / 'gran_schwartz.png'
+    if gran_path.exists():
+        img = Image(str(gran_path), width=500, height=600)
+        story.append(img)
+        story.append(Spacer(1, 12))
 
     doc.build(story)
-    print(f"Saved PDF report with embeds to {pdf_filename}")
+    print(f"Saved PDF report to {pdf_filename}")
     return str(pdf_filename)
-
 def generate_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any],
                     output_dir: str = '.', include_plots: bool = False,
                     buffers: Optional[Dict[str, BytesIO]] = None) -> Dict[str, str]:

@@ -138,19 +138,24 @@ def shrink_zone(
         iter_count += 1
     return (start, end)
 
-
 def get_metrics(fit: Any, zone: Tuple[int, int], k: float = 0.0, r2_threshold: float = 0.95) -> Dict[str, Any]:
-    """Extract V_eq, r2 from fit/zone (centralized). Warn on low R²."""
+    """Extract V_eq, r2 from fit/zone (centralized). Warn on low R². Includes 'fit' for plotting."""
     start, end = zone
     if fit is None or end - start < 2:
-        return {'V_eq': np.nan, 'r2': 0.0, 'k': k, 'zone_start': start, 'zone_end': end}
+        return {'V_eq': np.nan, 'r2': 0.0, 'k': k, 'zone_start': start, 'zone_end': end, 'fit': None}
     slope, intercept = fit['fit']
     r2 = fit['r2']
     v_eq = -intercept / slope if slope != 0 else np.nan
     if r2 < r2_threshold:
         print(f"Warning: Low R²={r2:.3f} for zone {zone} (k={k})")
-    return {'V_eq': v_eq, 'r2': r2, 'k': k, 'zone_start': start, 'zone_end': end}
-
+    return {
+        'V_eq': v_eq,
+        'r2': r2,
+        'k': k,
+        'zone_start': start,
+        'zone_end': end,
+        'fit': fit['fit']  # Pass (slope, intercept) for visualizer dashed line
+    }
 
 def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmented: bool = True, verbose: bool = False) -> Dict[str, Any]:
     """Main analysis: Compute Gran, identify raw interval, fit raw, then optimize for Schwartz opt Zone."""
