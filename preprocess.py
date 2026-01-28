@@ -1,16 +1,15 @@
 """
 preprocess.py: Module for parameter configuration and data preparation for titration analysis.
 
-Handles hybrid input (CLI args, JSON config, prompts) with fallbacks to defaults for acid-base titrations.
-Extracts volume and potential arrays from DataFrame; merges into params dict for downstream use.
-Focus: Acid-base only; extensible to precipitation/complex/redox in future.
-
-Dependencies: numpy, json, pandas.
+Handles hybrid input (CLI args, JSON config, prompts) with fallbacks to defaults.
+Auto-detects acid/base via linear slope for acid_base type; flips potential for bases.
+Focus: Acid-base only at the moment; placeholders for complexometric, precipitation, redox.
 """
 
 import json
 import pandas as pd
 import numpy as np
+from scipy.stats import linregress
 from typing import Dict, Any, Tuple, Optional
 
 
@@ -23,25 +22,16 @@ def get_config_from_cli_or_file_or_prompt(
     Load and validate configuration parameters with fallback chain:
     JSON file -> CLI args -> interactive prompts -> defaults.
 
-    Args:
-        config_file: Path to JSON config file (optional).
-        args: Dict of CLI arguments (optional).
-        interactive: If False, skip prompts and use defaults for missing keys.
-
-    Returns:
-        Dict of validated params.
-
-    Raises:
-        ValueError: For invalid titration_type or missing required keys in non-interactive mode.
+    Updated valid types: acid_base, complexometric, precipitation, redox.
+    Placeholder fallback to acid_base.
     """
-    # Defaults for acid-base titrations
     config = {
-        'V': 25.0,  # Initial volume (mL)
+        'V': 50.0,  # Initial volume (mL)
         'C_B': 0.1,  # Titrant concentration (M)
-        'titration_type': 'weak_acid',
+        'titration_type': 'acid_base',  # Default
         'r2_threshold': 0.95
     }
-    valid_types = ['weak_acid', 'strong_acid', 'weak_base', 'strong_base']
+    valid_types = ['acid_base', 'complexometric', 'precipitation', 'redox']
 
     # Load from JSON if provided
     if config_file:
@@ -72,7 +62,7 @@ def get_config_from_cli_or_file_or_prompt(
                 prompt = {
                     'V': "Enter initial volume V (mL, default 25): ",
                     'C_B': "Enter titrant concentration C_B (M, default 0.1): ",
-                    'titration_type': "Enter titration type (weak_acid/strong_acid/weak_base/strong_base, default weak_acid): "
+                    'titration_type': "Enter titration type (acid_base/complexometric/precipitation/redox, default acid_base): "
                 }
                 user_input = input(prompt.get(key, f"Enter {key} (default {config.get(key, 'N/A')}): "))
                 if user_input.strip():
@@ -85,13 +75,13 @@ def get_config_from_cli_or_file_or_prompt(
                     raise ValueError("titration_type required but not provided in non-interactive mode.")
                 print(f"Warning: {key} required but missing in non-interactive mode. Using default {config[key]}.")
 
-    # Validate titration_type (soft fallback)
+    # Validate titration_type (placeholder for future types)
     if config['titration_type'] not in valid_types:
         print(
             f"Warning: Invalid titration_type '{config['titration_type']}': Must be one of {valid_types}. "
-            f"Using fallback 'weak_acid'."
+            f"Using fallback 'acid_base' (other types are placeholders)."
         )
-        config['titration_type'] = 'weak_acid'
+        config['titration_type'] = 'acid_base'
 
     print(f"Final config: {config}")
     return config
@@ -104,40 +94,55 @@ def preprocess_pipeline(
     interactive: bool = True
 ) -> Tuple[pd.DataFrame, Dict[str, Any]]:
     """
-    Orchestrate preprocessing: Load config, extract arrays, merge params.
-
-    Args:
-        df: Input DataFrame with 'volume' and 'potential' columns.
-        config_overrides: Dict of CLI args for config.
-        config_file: Path to JSON config.
-        interactive: Enable interactive prompts.
-
-    Returns:
-        Tuple (df, params) where params includes arrays and config.
-
-    Raises:
-        ValueError: For invalid config.
+    Orchestrate preprocessing: Load config, extract arrays, auto-detect acid/base for acid_base type.
+    For acid_base: linear slope check; flip potential if base (slope >= 0).
+    Returns (df, params) — df potential possibly flipped, params includes arrays and config.
     """
     # Load and validate config
     config = get_config_from_cli_or_file_or_prompt(config_file, config_overrides, interactive)
 
-    # Extract arrays (assumes columns from data_io.py)
+    # Extract arrays
     params = {
         'volume_array': df['volume'].values,
         'potential_array': df['potential'].values
     }
     params.update(config)
 
-    print("Preprocessing complete: Arrays extracted and params merged.")
+    # Auto-detect for acid_base only
+    if params['titration_type'] == 'acid_base':
+        volume = params['volume_array']
+        potential = df['potential'].values  # Modify df in-place
+
+        # Linear interpolation: slope from linregress
+        slope, intercept, r_value, _, _ = linregress(volume, potential)
+        print(f"Detected slope = {slope:.3f} (R = {r_value:.3f})")
+
+        if slope >= 0:  # Increasing potential → base titration
+            print("Detected base titration (positive slope). Flipping sign and setting type.")
+            df['potential'] *= -1
+            params['potential_array'] *= -1
+            params['is_base'] = True
+        else:  # Decreasing potential → acid titration
+            print("Detected acid titration (negative slope). No flip.")
+            params['is_base'] = False
+
+    else:
+        # Placeholder for other types (no detection/flip)
+        print(f"Titration type '{params['titration_type']}' — no auto-detection/flip (placeholder).")
+        params['is_base'] = False  # Default
+
+    print("Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).")
+    print(df)
     return df, params
 
 
 if __name__ == "__main__":
-    # Standalone test: Load sample data directly
+    # Standalone test stub
     try:
         df = pd.read_csv('data.dat', sep=r'\s+', header=None, names=['volume', 'potential'])
         result_df, result_params = preprocess_pipeline(df, interactive=True)
         print("Test successful!")
         print(f"Output params keys: {list(result_params.keys())}")
+        print(f"Detected type: {result_params['titration_type']}, is_base: {result_params.get('is_base', False)}")
     except Exception as e:
         print(f"Test failed: {e}")

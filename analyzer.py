@@ -146,37 +146,63 @@ def _optimize_single_zone(df: pd.DataFrame, start: int, end: int, gran_func: Cal
 def shrink_zone(
     volume: np.ndarray, g_values: np.ndarray, initial_zone: Tuple[int, int], max_iter: int = 10
 ) -> Tuple[int, int]:
-    """Binary trim edges for max R² (>5% gain; validated Case 3 refinement)."""
+    """
+    Asymmetric zone refinement: prefer growing left (low volumes), trimming right (high volumes).
+    Binary trim + small grow for >5% R² gain; validated Case 3 refinement.
+    """
     start, end = initial_zone
     current_r2, _, _ = _compute_r2(g_values, volume, start, end)
     iter_count = 0
     improved = True
+
     while improved and iter_count < max_iter and end - start > 2:
         improved = False
-        # Test left trim
-        left_mid = (start + end) // 2
-        if left_mid - start > 0:
-            left_r2, _, _ = _compute_r2(g_values, volume, left_mid, end)
+
+        # Step 1: Try growing left (extend start downward)
+        if start > 0:
+            new_start = max(0, start - 1)  # Small step left
+            left_r2, _, _ = _compute_r2(g_values, volume, new_start, end)
             if left_r2 > current_r2 * 1.05:
-                start = left_mid
+                start = new_start
                 current_r2 = left_r2
                 improved = True
-                iter_count = 0  # Reset on improve
-        
-        # Test right trim
-        right_mid = (start + end) // 2
-        if end - right_mid > 0:
-            right_r2, _, _ = _compute_r2(g_values, volume, start, right_mid)
+                iter_count = 0  # Reset on improvement
+
+        # Step 2: Try trimming right (shrink end upward)
+        if end < len(volume) - 1:
+            new_end = min(len(volume) - 1, end + 1)  # Small step right (trim)
+            right_r2, _, _ = _compute_r2(g_values, volume, start, new_end)
             if right_r2 > current_r2 * 1.05:
-                end = right_mid
+                end = new_end
                 current_r2 = right_r2
                 improved = True
                 iter_count = 0
-        
-        iter_count += 1
-    
-    return (start, end)
 
+        # Step 3: Try trimming left (only if no growth happened)
+        if not improved and start + 1 < end:
+            left_mid = (start + end) // 2
+            if left_mid > start:
+                left_r2, _, _ = _compute_r2(g_values, volume, left_mid, end)
+                if left_r2 > current_r2 * 1.05:
+                    start = left_mid
+                    current_r2 = left_r2
+                    improved = True
+                    iter_count = 0
+
+        # Step 4: Try trimming right (symmetric fallback)
+        if not improved and start < end - 1:
+            right_mid = (start + end) // 2
+            if right_mid < end:
+                right_r2, _, _ = _compute_r2(g_values, volume, start, right_mid)
+                if right_r2 > current_r2 * 1.05:
+                    end = right_mid
+                    current_r2 = right_r2
+                    improved = True
+                    iter_count = 0
+
+        iter_count += 1
+
+    return (start, end)
 
 def get_metrics(fit: Any, zone: Tuple[int, int], k5: float = 0.0, r2_threshold: float = 0.95) -> Dict[str, Any]:
     """Extract V_eq, r2 from fit/zone (centralized for raw/opt). Warn on low R²; fallback V_eq if slope ~0."""
@@ -203,7 +229,7 @@ def get_metrics(fit: Any, zone: Tuple[int, int], k5: float = 0.0, r2_threshold: 
         'fit': fit['fit'] if fit and 'fit' in fit else None  # Pass the (slope, intercept) tuple
     }
     
-def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmented: bool = True, use_extension: bool = True, verbose: bool = False) -> Dict[str, Any]:
+def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmented: bool = True, verbose: bool = False) -> Dict[str, Any]:
     """Main analysis: Compute Gran, identify raw interval, fit raw, then optimize/extend for opt Zone (preserved)."""
     print("DEBUG: Entering analyze_gran_original...")
     print(f"DEBUG: df shape: {df.shape}, params keys: {list(params.keys())}")
@@ -215,10 +241,9 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
         g1 = gran_results['gran']['g1']  # Raw g1 array
         gran_func = gran_results['gran']['gran_func']  # Fixed lambda
         schwartz_func = gran_results['schwartz']['gran_func']  # Tunable lambda
-        params['volume'] = df['volume'].values  # Move earlier for ID call
         if 'volume' not in params:
-            params['volume'] = params.get('volume_array', df['volume'].values)  # Fallback
-        print(f"DEBUG: params['volume'] shape: {params['volume'].shape}")  # Temp debug
+            params['volume_array'] = params.get('volume_array', df['volume'].values)  # Fallback
+        print(f"DEBUG: params['volume_array'] shape: {params['volume_array'].shape}")  # Temp debug
     except Exception as e:
         print(f"DEBUG: Gran compute failed: {e}")
         return None
@@ -233,9 +258,9 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
     print("DEBUG: Step - Identify initial interval...")
     try:
         if use_segmented:
-            start_idx, end_idx, _ = identify_linear_interval(g1, params['volume'])
+            start_idx, end_idx, _ = identify_linear_interval(g1, params['volume_array'])
         else:
-            start_idx, end_idx, _ = _identify_linear_original(g1, params['volume'])
+            start_idx, end_idx, _ = _identify_linear_original(g1, params['volume_array'])
         initial_interval = (start_idx, end_idx)
         print(f"DEBUG: Interval ID OK, start={start_idx}, end={end_idx}")
     except Exception as e:
@@ -270,7 +295,7 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
     print("DEBUG: Step - Recompute gs_opt...")
     try:
         pH_full = 7 - (df['potential'].values / 59.16)
-        gs_opt = schwartz_func(params['volume'], pH_full, opt_k5)
+        gs_opt = schwartz_func(params['volume_array'], pH_full, opt_k5)
         print(f"DEBUG: gs_opt shape: {gs_opt.shape}")
     except Exception as e:
         print(f"DEBUG: gs_opt recompute failed: {e}")
@@ -279,9 +304,9 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
     print("DEBUG: Step - Re-detect opt zone...")
     try:
         if use_segmented:
-            opt_start, opt_end, opt_interval_r2 = identify_linear_interval(gs_opt, params['volume'])
+            opt_start, opt_end, opt_interval_r2 = identify_linear_interval(gs_opt, params['volume_array'])
         else:
-            opt_start, opt_end, opt_interval_r2 = _identify_linear_original(gs_opt, params['volume'])
+            opt_start, opt_end, opt_interval_r2 = _identify_linear_original(gs_opt, params['volume_array'])
         print(f"DEBUG: Opt re-detect OK, start={opt_start}, end={opt_end}")
     except Exception as e:
         print(f"DEBUG: Opt re-detect failed: {e}")
@@ -391,7 +416,7 @@ def analyze_gran(gran_results: Dict[str, Any], params: Dict[str, Any], verbose: 
         'potential': params['potential_array']
     })
     try:
-        original_results = analyze_gran_original(df, params, use_segmented=True, use_extension=True, verbose=verbose)
+        original_results = analyze_gran_original(df, params, use_segmented=True, verbose=verbose)
     except Exception as e:
         print(f"Warning: analyze_gran_original failed: {e}—using fallback metrics.")
         original_results = None

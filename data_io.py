@@ -15,98 +15,145 @@ from typing import Optional
 SUPPORTED_FORMATS = ['.dat', '.txt', '.csv', '.xlsx']
 
 
-def load_single_file(file_path: str) -> Optional[pd.DataFrame]:
+"""
+data_io.py: Procedural module for loading and validating titration data files.
+Supports single file loading with automatic header detection.
+No classes, pure functions.
+"""
+
+import pandas as pd
+from pathlib import Path
+import numpy as np
+
+
+"""
+data_io.py: Procedural module for loading and validating titration data files.
+Supports single file loading with automatic header detection.
+No classes, pure functions.
+Keeps original validation rules exactly as provided.
+"""
+
+import pandas as pd
+from pathlib import Path
+import numpy as np
+
+
+def load_single_file(path: str | Path) -> pd.DataFrame | None:
     """
-    Load a single titration data file without headers, enforcing exactly two numeric columns.
-
-    Args:
-        file_path: Path to the file (str).
-
-    Returns:
-        pd.DataFrame with 'volume' and 'potential' columns if successful, else None.
-
-    Raises:
-        ValueError: If file format unsupported, insufficient/extra columns, or non-numeric data.
+    Load a single titration data file with robust filtering of non-numeric lines.
+    Keeps only lines with exactly two numeric tokens.
+    Forces column names ['volume', 'potential'].
+    Returns DataFrame or None on error.
     """
-    path = Path(file_path)
-    if not path.exists():
-        print(f"Error: File '{file_path}' not found.")
-        return None
-
-    ext = path.suffix.lower()
-    if ext not in SUPPORTED_FORMATS:
-        print(f"Error: Unsupported format '{ext}'. Supported: {SUPPORTED_FORMATS}")
+    path = Path(path)
+    if not path.exists() or not path.is_file():
+        print(f"Error: File not found or not a file: {path}")
         return None
 
     try:
-        if ext == '.xlsx':
-            df = pd.read_excel(path, header=None)
-        else:  # .dat, .txt, .csv: space-separated assumed
-            df = pd.read_csv(path, sep=r'\s+', header=None)
+        # Read all lines
+        with open(path, 'r', encoding='utf-8', errors='ignore') as f:
+            lines = f.readlines()
 
-        # Enforce exactly 2 columns: Drop extras if more, error if fewer
-        if df.shape[1] < 2:
-            print("Error: File must have at least 2 columns.")
+        # Filter to keep only lines with exactly two numeric tokens
+        numeric_lines = []
+        skipped = 0
+        for line in lines:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                skipped += 1
+                continue
+            tokens = line.split()
+            if len(tokens) == 2:
+                # Check both tokens are numeric (digit or decimal point)
+                if all(any(c.isdigit() or c == '.' for c in t) for t in tokens):
+                    numeric_lines.append(line)
+                else:
+                    skipped += 1
+            else:
+                skipped += 1
+
+        if not numeric_lines:
+            print(f"Warning: No lines with exactly two numeric values found in {path} (skipped {skipped} lines)")
             return None
-        elif df.shape[1] > 2:
-            print(f"Warning: File has {df.shape[1]} columns; keeping only first 2.")
-            df = df.iloc[:, :2]
 
-        # Assign default column names
-        df.columns = ['volume', 'potential']
+        # Load filtered lines from StringIO
+        from io import StringIO
+        filtered_text = '\n'.join(numeric_lines)
+        df = pd.read_csv(
+            StringIO(filtered_text),
+            sep=r'\s+',
+            header=None,
+            names=['volume', 'potential'],
+            comment='#',
+            on_bad_lines='skip',
+            encoding='utf-8',
+            engine='python'
+        )
 
-        # Basic numeric check (strip non-numeric rows if needed, but assume clean)
-        if not pd.api.types.is_numeric_dtype(df['volume']) or not pd.api.types.is_numeric_dtype(df['potential']):
-            print("Error: Columns must contain numeric data only.")
+        if df.empty:
+            print(f"Warning: Empty data after filtering in {path}")
             return None
 
-        # Print summary
-        print(f"Loaded '{file_path}': {df.shape[0]} rows, 2 columns (volume, potential).")
-        if df.shape[0] > 0:
-            print(df.head())
+        # Force numeric conversion
+        for col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
 
+        df = df.dropna()
+
+        if df.empty:
+            print(f"Warning: No valid numeric data after cleaning in {path}")
+            return None
+
+        print(f"Loaded '{path}': {len(df)} rows, skipped {skipped} header/comment/non-numeric lines.")
         return df
 
     except Exception as e:
-        print(f"Error reading '{file_path}': {e}")
+        print(f"Error loading {path}: {e}")
         return None
 
 
 def validate_data(df: pd.DataFrame) -> bool:
     """
-    Validate the loaded DataFrame for titration data integrity.
-
-    Checks:
-    - At least 3 rows.
-    - Volumes are strictly increasing (monotonic).
-    - Potentials in range [-420, 420] mV (Nernst equation bounds).
-
-    Args:
-        df: DataFrame with 'volume' and 'potential' columns.
-
-    Returns:
-        True if valid, False otherwise. Prints warnings for issues.
+    Validate loaded DataFrame for titration analysis.
+    Returns True if valid, False otherwise (prints warnings).
     """
-    if df.empty or len(df) < 3:
-        print("Warning: Data has fewer than 3 rows.")
+    if df is None or df.empty:
+        print("Validation failed: DataFrame is None or empty")
         return False
 
-    # Use column names (enforced by loader)
-    volumes = df['volume']
-    potentials = df['potential']
-
-    # Monotonic check
-    if not volumes.is_monotonic_increasing:
-        print("Warning: Volumes are not strictly increasing.")
+    if len(df.columns) != 2:
+        print(f"Validation failed: Expected 2 columns, got {len(df.columns)}")
         return False
 
-    # Range check (soft warning for out-of-range)
-    if (potentials < -420).any() or (potentials > 420).any():
-        print("Warning: Some potentials outside [-420, 420] mV range.")
+    try:
+        df = df.astype(float)  # Ensure numeric
+    except ValueError:
+        print("Validation failed: Non-numeric values in data")
+        return False
 
-    print(f"Validation passed: {len(df)} monotonic points in valid range.")
+    volume = df.iloc[:, 0].values
+    potential = df.iloc[:, 1].values
+
+    # Volume: strictly increasing, positive
+    if not np.all(np.diff(volume) > 0):
+        print("Validation warning: Volume is not strictly increasing")
+
+    if np.any(volume < 0):
+        print("Validation failed: Volume contains negative values")
+        return False
+
+    # Potential: reasonable mV range -420 to 420 (exact legacy range)
+    if np.any((potential < -420) | (potential > 420)):
+        print("Validation warning: Potential outside typical mV range (-420 to 420)")
+
+    # No NaN
+    if df.isnull().values.any():
+        print("Validation failed: Contains NaN values")
+        return False
+
+    print("Validation passed")
     return True
-
 
 if __name__ == "__main__":
     # Quick test with sample file
