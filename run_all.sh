@@ -8,9 +8,9 @@ CSV=rawdata.csv
 BASE_OUT=./results/strong_base
 
 # Convert ODS to CSV
-soffice --headless \
-  --convert-to "csv:Text - txt - csv (StarCalc):44,34,UTF8" \
-  "$ODS"
+#soffice --headless \
+#  --convert-to "csv:Text - txt - csv (StarCalc):44,34,UTF8" \
+#  "$ODS"
 
 # Count columns
 ncols=$(awk -F',' 'NR==1 {print NF}' "$CSV")
@@ -32,13 +32,12 @@ for ((i=1; i<=ntriplets; i++)); do
 #        '{print $c1, $c2}' "$CSV" > "$outfile"
 awk -F',' -v c1="$col1" -v c2="$col2" '{
     val1 = $c1
-    val2 = ($c2 != "") ? -$c2 : ""
+    val2 = ($c2 != "") ? $c2 : ""
     print val1, val2
 }' "$CSV" > "$outfile"
 
 
     "$PYTHON" "$SCRIPT" \
-        --V 50 \
 	--data_file "$outfile" \
         --output_dir "$outdir"
 

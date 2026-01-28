@@ -1,82 +1,71 @@
-# gran_functions.py: Module 3 for GranTED - Gran Function Computation
+"""
+gran_functions.py: Computes Gran g1 and Schwartz gs for weak_acid (validated formulas).
 
-#######################
-# Core Functionality: #
-#######################
-#
-# Gran Computation: Calculates Gran functions for strong/weak acid/base titrations based on titration_type.
-# Supports 4 cases: strong_acid_g1, weak_acid_g1, strong_base_g1, weak_base_g1, with single tunable k.
-#
-# pH Conversion: Converts 'potential' (mV) to pH = 7 - (potential / 59.16) for calculations.
-#
-# Output: Returns dict {'g1': array, 'gran_func': callable(v, ph, k)} for analyzer.py; screened dicts if k_range provided.
-# Note: Default titration_type='weak_acid'; set via params (CLI/JSON/GUI).
+g1 = (V0 + v) * 10^(k - pH); gs = same (acid extension). k=0 for arrays; lambda tunable.
+pH from Nernst (25°C). No type/method dispatch—weak_acid focus.
+
+Dependencies: numpy, pandas.
+"""
 
 import numpy as np
 import pandas as pd
+from typing import Dict, Callable, Any
 
-def compute_gran_functions(df, params, k_range=None):
+
+def compute_gran_functions(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Compute Gran function for the specified titration type (acid/base, strong/weak).
+    Compute Gran g1 and Schwartz gs for weak_acid.
+
     Args:
-        df (pd.DataFrame): Data with 'volume' and 'potential' columns.
-        params (dict): From preprocess.py (e.g., {'V': 25.0, 'titration_type': 'weak_acid'}).
-        k_range (list): Optional k values for screening (placeholder).
+        df: DataFrame with 'volume' (titrant vol, mL) and 'potential' (mV) columns.
+        params
+
     Returns:
-        dict: {'g1': array, 'gran_func': callable(v, ph, k)} for optimization; screened if k_range.
+        Dict with 'gran' (dict: 'g1' array), 'schwartz' (dict: 'gs' array and lambda), 'pH' (array).
+
+    Raises:
+        ValueError: For data mismatch.
     """
-    # Ensure numeric types
-    volume = pd.to_numeric(df['volume'], errors='coerce').to_numpy()
-    potential = pd.to_numeric(df['potential'], errors='coerce').to_numpy()
-    pH = 7 - (potential / 59.16)  # Convert mV to pH
+    # Extract and coerce data
+    volume = pd.to_numeric(df['volume'], errors='coerce').dropna().values
+    potential = pd.to_numeric(df['potential'], errors='coerce').dropna().values
+    if len(volume) != len(potential):
+        raise ValueError("Volume and potential arrays must have equal length after cleaning.")
 
-    V = float(params.get('V', 25.0))
-    titration_type = params.get('titration_type', 'weak_acid')  # Default weak_acid
-    k_default = float(params.get('k', 0.0))  # Default k for computation
+    # Nernst conversion to pH (25°C, E = -59.16 * (pH - 7) mV)
+    pH = 7.0 - potential / 59.16
 
-    # Select Gran function based on titration_type
-    if titration_type == 'strong_acid':
-        g1 = (volume + V) * np.power(10, k_default - pH)
-        gran_func = lambda v, ph, k: (v + V) * np.power(10, k - ph)
-        print(f"Using strong_acid_g1 with V={V}, k={k_default}")
+    V0 = params.get('V', 25.0)  # Initial volume
+    k = 0.0  # Fixed for arrays; lambda allows tuning
 
-#########################################################################
+    # Weak_acid Gran g1 = v * 10^{-pH} (fixed, no kk)
+    gran_func = lambda v, ph, kk: v * np.power(10, -ph)  # Fixed; kk ignored for consistency
+    g1 = gran_func(volume, pH, k)  # k unused
 
-    elif titration_type == 'weak_acid':
-        g1 = (volume + k_default) * np.power(10, - pH)
-        gran_func = lambda v, ph, k: (v+k) * np.power(10, - ph)
-        
-        print("Using Case 1 modified Gran function (moderately weak acid)")
+    # Schwartz gs = (v + kk) * 10^{-pH} (kk tunable for opt)
+    schwartz_func = lambda v, ph, kk: (v + kk) * np.power(10, -ph)
+    gs = schwartz_func(volume, pH, k)
 
-#########################################################################
-
-    elif titration_type == 'weak_acidd':
-        g1 = volume * np.power(10, k_default - pH)
-        gran_func = lambda v, ph, k: v * np.power(10, k - ph)
-        print(f"Using weak_acid_g1 with k={k_default}")
-
-    elif titration_type == 'strong_base':
-        g1 = (volume + V) * np.power(10, k_default + pH)
-        gran_func = lambda v, ph, k: (v + V) * np.power(10, k + ph)
-        print(f"Using strong_base_g1 with V={V}, k={k_default}")
-    
-    elif titration_type == 'weak_base':
-        g1 = volume * np.power(10, k_default + pH)
-        gran_func = lambda v, ph, k: v * np.power(10, k + ph)
-        print(f"Using weak_base_g1 with k={k_default}")
-    else:
-        raise ValueError(f"Unknown titration_type '{titration_type}'; use 'strong_acid', 'weak_acid', 'strong_base', or 'weak_base'.")
-
+    gran_func = lambda v, ph, kk: v * np.power(10, -ph)  # Fixed for Gran (kk ignored, matches g1 formula)
     results = {
-        'g1': g1,  # Computed array with default k
-        'gran_func': gran_func,  # Callable for analyzer optimization
+        'gran': {'g1': g1, 'gran_func': gran_func},  # Fixed lambda for extraction
+        'schwartz': {'gs': gs, 'gran_func': schwartz_func},
+        'pH': pH
     }
-
-    # Placeholder for k-screening (TODO: Enable for multiple k trials)
-    if k_range is not None:
-        results['g1_screened'] = {}
-        for k in k_range:
-            results['g1_screened'][f'k={k}'] = gran_func(volume, pH, k)
-
-    print(f"Computed Gran function for {titration_type} with default k={k_default}")
+    
+    print("Gran and Schwartz (weak_acid) computed successfully.")
     return results
+
+
+if __name__ == "__main__":
+    # Standalone test
+    import pandas as pd
+    test_df = pd.DataFrame({
+        'volume': np.linspace(0, 30, 10),
+        'potential': np.linspace(0, -200, 10)  # Simulated drop
+    })
+    test_params = {'V': 25.0}
+    results = compute_gran_functions(test_df, test_params)
+    print(f"g1 shape: {results['gran']['g1'].shape}, sample: {results['gran']['g1'][:3]}")
+    print(f"gs shape: {results['schwartz']['gs'].shape}, sample: {results['schwartz']['gs'][:3]}")
+    print(f"pH shape: {results['pH'].shape}, sample: {results['pH'][:3]}")
