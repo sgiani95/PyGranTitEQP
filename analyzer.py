@@ -158,7 +158,7 @@ def shrink_zone(
     while improved and iter_count < max_iter and end - start > 2:
         improved = False
 
-        # Step 1: Try growing left (extend start downward)
+        # Priority 1: Try growing left (extend start downward)
         if start > 0:
             new_start = max(0, start - 1)  # Small step left
             left_r2, _, _ = _compute_r2(g_values, volume, new_start, end)
@@ -168,7 +168,7 @@ def shrink_zone(
                 improved = True
                 iter_count = 0  # Reset on improvement
 
-        # Step 2: Try trimming right (shrink end upward)
+        # Priority 2: Try trimming right (shrink end upward)
         if end < len(volume) - 1:
             new_end = min(len(volume) - 1, end + 1)  # Small step right (trim)
             right_r2, _, _ = _compute_r2(g_values, volume, start, new_end)
@@ -178,8 +178,9 @@ def shrink_zone(
                 improved = True
                 iter_count = 0
 
-        # Step 3: Try trimming left (only if no growth happened)
-        if not improved and start + 1 < end:
+        # Fallback: Symmetric trim if no asymmetric improvement
+        if not improved:
+            # Left trim fallback
             left_mid = (start + end) // 2
             if left_mid > start:
                 left_r2, _, _ = _compute_r2(g_values, volume, left_mid, end)
@@ -189,8 +190,7 @@ def shrink_zone(
                     improved = True
                     iter_count = 0
 
-        # Step 4: Try trimming right (symmetric fallback)
-        if not improved and start < end - 1:
+            # Right trim fallback
             right_mid = (start + end) // 2
             if right_mid < end:
                 right_r2, _, _ = _compute_r2(g_values, volume, start, right_mid)
