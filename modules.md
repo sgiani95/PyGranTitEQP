@@ -8,14 +8,8 @@
 | 6 | reporter.py | Export results (CSV/PDF: endpoints, pKa, R², green scores), method sharing (JSON). |
 
 
-
-
-
-
 | 7 | gui_cli.py | Tkinter GUI for batch param selection, argparse CLI for headless/batch runs. |
 | 8 | learning.py | Parameter optimization (grid search/ML for k-values, R²-based scoring), auto-tuning for sample-driven mode. |
-
-
 
 
 | 9 | main.py | Entry point: Orchestrate workflow (load → preprocess → analyze → visualize → report), CLI/GUI dispatch. |
