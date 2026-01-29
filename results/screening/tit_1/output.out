@@ -1,1429 +1,2289 @@
 5
-Loaded 5 points from 'data_5.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.   , 0.02 , 0.04 , 0.09 , 0.215]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=1.84e-05 <= 0.001). No smoothing.
-Warning: No negative derivative. Using full range.
-Raw Zone (initial): indices 0-4, R²=0.9974, V_eq=-0.002 mL over 4 points
-Low noise (std_dg1=2.13e-08 <= 0.001). No smoothing.
-Warning: No negative derivative. Using full range.
-Opt Zone (final): k5=-2.938, R²=0.9974, V_eq=-0.002 mL over 4 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/5/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/5/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/5
-Visualizations generated.
-CSV report saved to results/screening/5/gran_results.csv
-PDF report saved to results/screening/5/gran_report.pdf
-Method JSON saved to results/screening/5/method.json
-Full report generated in ./results/screening/5
-Full workflow complete. Results in ./results/screening/5
+Loaded 'data_5.dat': 5 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:    volume  potential
+0   0.000      182.1
+1   0.020      181.6
+2   0.040      180.9
+3   0.090      178.7
+4   0.215      172.9
+DEBUG params: {'volume_array': array([0.   , 0.02 , 0.04 , 0.09 , 0.215]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = -0.011 mL, R² = 0.9871, k = 0.000, Zone = 0-4
+Gran Opt: V_eq = 0.590 mL, R² = 0.9992, k = -2.508, Zone = 0-4
+Schwartz Raw: V_eq = -0.011 mL, R² = 0.9871, k = 0.000, Zone = 0-4
+Schwartz Opt: V_eq = 0.590 mL, R² = 0.9992, k = -2.508, Zone = 0-4
+pH shape: (5,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/5/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/5/gran_schwartz.png
+Combined overview plot saved to results/screening/5/plots.png
+All visualizations saved to results/screening/5
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/5/report.pdf
+PDF report generated.
+Full report generated in results/screening/5
+Pipeline complete. Outputs in results/screening/5
 6
-Loaded 6 points from 'data_6.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=3.09e-05 <= 0.001). No smoothing.
-Warning: No negative derivative. Using full range.
-Raw Zone (initial): indices 0-5, R²=0.9879, V_eq=-0.010 mL over 5 points
-Low noise (std_dg1=4.68e-09 <= 0.001). No smoothing.
-Warning: No negative derivative. Using full range.
-Opt Zone (final): k5=-3.820, R²=0.9879, V_eq=-0.010 mL over 5 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/6/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/6/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/6
-Visualizations generated.
-CSV report saved to results/screening/6/gran_results.csv
-PDF report saved to results/screening/6/gran_report.pdf
-Method JSON saved to results/screening/6/method.json
-Full report generated in ./results/screening/6
-Full workflow complete. Results in ./results/screening/6
+Loaded 'data_6.dat': 6 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:    volume  potential
+0  0.0000      182.1
+1  0.0200      181.6
+2  0.0400      180.9
+3  0.0900      178.7
+4  0.2150      172.9
+5  0.3825      166.0
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. ]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = -0.029 mL, R² = 0.9642, k = 0.000, Zone = 0-5
+Gran Opt: V_eq = 1.142 mL, R² = 0.9953, k = 1.440, Zone = 0-5
+Schwartz Raw: V_eq = -0.029 mL, R² = 0.9642, k = 0.000, Zone = 0-5
+Schwartz Opt: V_eq = 1.142 mL, R² = 0.9953, k = 1.440, Zone = 0-5
+pH shape: (6,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/6/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/6/gran_schwartz.png
+Combined overview plot saved to results/screening/6/plots.png
+All visualizations saved to results/screening/6
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/6/report.pdf
+PDF report generated.
+Full report generated in results/screening/6
+Pipeline complete. Outputs in results/screening/6
 7
-Loaded 7 points from 'data_7.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.01e-05 <= 0.001). No smoothing.
-Warning: No negative derivative. Using full range.
-Raw Zone (initial): indices 0-6, R²=0.9589, V_eq=-0.032 mL over 6 points
-Low noise (std_dg1=1.75e-06 <= 0.001). No smoothing.
-Warning: No negative derivative. Using full range.
-Opt Zone (final): k5=-1.362, R²=0.9589, V_eq=-0.032 mL over 6 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/7/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/7/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/7
-Visualizations generated.
-CSV report saved to results/screening/7/gran_results.csv
-PDF report saved to results/screening/7/gran_report.pdf
-Method JSON saved to results/screening/7/method.json
-Full report generated in ./results/screening/7
-Full workflow complete. Results in ./results/screening/7
+Loaded 'data_7.dat': 7 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:    volume  potential
+0  0.0000      182.1
+1  0.0200      181.6
+2  0.0400      180.9
+3  0.0900      178.7
+4  0.2150      172.9
+5  0.3825      166.0
+6  0.5825      158.2
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Warning: Low R²=0.919 for zone (0, 6) (k=0.0)
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = -0.066 mL, R² = 0.9188, k = 0.000, Zone = 0-6
+Gran Opt: V_eq = 1.616 mL, R² = 0.9954, k = 0.887, Zone = 0-6
+Schwartz Raw: V_eq = -0.066 mL, R² = 0.9188, k = 0.000, Zone = 0-6
+Schwartz Opt: V_eq = 1.616 mL, R² = 0.9954, k = 0.887, Zone = 0-6
+pH shape: (7,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/7/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/7/gran_schwartz.png
+Combined overview plot saved to results/screening/7/plots.png
+All visualizations saved to results/screening/7
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/7/report.pdf
+PDF report generated.
+Full report generated in results/screening/7
+Pipeline complete. Outputs in results/screening/7
 8
-Loaded 8 points from 'data_8.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.45e-05 <= 0.001). No smoothing.
-Warning: No negative derivative. Using full range.
-Raw Zone (initial): indices 0-7, R²=0.9172, V_eq=-0.070 mL over 7 points
-Low noise (std_dg1=1.96e-05 <= 0.001). No smoothing.
-Warning: No negative derivative. Using full range.
-Opt Zone (final): k5=-0.357, R²=0.9172, V_eq=-0.070 mL over 7 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/8/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/8/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/8
-Visualizations generated.
-CSV report saved to results/screening/8/gran_results.csv
-PDF report saved to results/screening/8/gran_report.pdf
-Method JSON saved to results/screening/8/method.json
-Full report generated in ./results/screening/8
-Full workflow complete. Results in ./results/screening/8
+Loaded 'data_8.dat': 8 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:    volume  potential
+0  0.0000      182.1
+1  0.0200      181.6
+2  0.0400      180.9
+3  0.0900      178.7
+4  0.2150      172.9
+5  0.3825      166.0
+6  0.5825      158.2
+7  0.7825      151.4
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Warning: Low R²=0.868 for zone (0, 7) (k=0.0)
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = -0.120 mL, R² = 0.8684, k = 0.000, Zone = 0-7
+Gran Opt: V_eq = 1.970 mL, R² = 0.9947, k = 0.741, Zone = 0-7
+Schwartz Raw: V_eq = -0.120 mL, R² = 0.8684, k = 0.000, Zone = 0-7
+Schwartz Opt: V_eq = 1.970 mL, R² = 0.9947, k = 0.741, Zone = 0-7
+pH shape: (8,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/8/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/8/gran_schwartz.png
+Combined overview plot saved to results/screening/8/plots.png
+All visualizations saved to results/screening/8
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/8/report.pdf
+PDF report generated.
+Full report generated in results/screening/8
+Pipeline complete. Outputs in results/screening/8
 9
-Loaded 9 points from 'data_9.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.83e-05 <= 0.001). No smoothing.
-No low-var negative segments found. Falling back to full negative region.
-Raw Zone (initial): indices 8-9, R²=0.0000, V_eq=nan mL over 1 points
-High noise (std_dg1=4.83e+05 > 0.001). Smoothing.
-No low-var negative segments found. Falling back to full negative region.
-Opt Zone (final): k5=10.000, R²=1.0000, V_eq=6.765 mL over 2 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/9/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/9/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/9
-Visualizations generated.
-CSV report saved to results/screening/9/gran_results.csv
-PDF report saved to results/screening/9/gran_report.pdf
-Method JSON saved to results/screening/9/method.json
-Full report generated in ./results/screening/9
-Full workflow complete. Results in ./results/screening/9
+Loaded 'data_9.dat': 9 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:    volume  potential
+0  0.0000      182.1
+1  0.0200      181.6
+2  0.0400      180.9
+3  0.0900      178.7
+4  0.2150      172.9
+5  0.3825      166.0
+6  0.5825      158.2
+7  0.7825      151.4
+8  0.9825      145.6
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Warning: Low R²=0.817 for zone (0, 8) (k=0.0)
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = -0.193 mL, R² = 0.8171, k = 0.000, Zone = 0-8
+Gran Opt: V_eq = 2.309 mL, R² = 0.9926, k = 0.657, Zone = 0-8
+Schwartz Raw: V_eq = -0.193 mL, R² = 0.8171, k = 0.000, Zone = 0-8
+Schwartz Opt: V_eq = 2.309 mL, R² = 0.9926, k = 0.657, Zone = 0-8
+pH shape: (9,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/9/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/9/gran_schwartz.png
+Combined overview plot saved to results/screening/9/plots.png
+All visualizations saved to results/screening/9
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/9/report.pdf
+PDF report generated.
+Full report generated in results/screening/9
+Pipeline complete. Outputs in results/screening/9
 10
-Loaded 10 points from 'data_10.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.92e-05 <= 0.001). No smoothing.
-No low-var negative segments found. Falling back to full negative region.
-Raw Zone (initial): indices 8-10, R²=1.0000, V_eq=10.945 mL over 2 points
-High noise (std_dg1=4.92e+05 > 0.001). Smoothing.
-No low-var negative segments found. Falling back to full negative region.
-Opt Zone (final): k5=10.000, R²=1.0000, V_eq=10.945 mL over 2 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/10/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/10/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/10
-Visualizations generated.
-CSV report saved to results/screening/10/gran_results.csv
-PDF report saved to results/screening/10/gran_report.pdf
-Method JSON saved to results/screening/10/method.json
-Full report generated in ./results/screening/10
-Full workflow complete. Results in ./results/screening/10
+Loaded 'data_10.dat': 10 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:    volume  potential
+0  0.0000      182.1
+1  0.0200      181.6
+2  0.0400      180.9
+3  0.0900      178.7
+4  0.2150      172.9
+5  0.3825      166.0
+6  0.5825      158.2
+7  0.7825      151.4
+8  0.9825      145.6
+9  1.1825      140.1
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 8.032 mL, R² = 1.0000, k = 0.000, Zone = 8-10
+Gran Opt: V_eq = 0.833 mL, R² = 0.9930, k = 9.943, Zone = 0-5
+Schwartz Raw: V_eq = 8.032 mL, R² = 1.0000, k = 0.000, Zone = 8-10
+Schwartz Opt: V_eq = 0.833 mL, R² = 0.9930, k = 9.943, Zone = 0-5
+pH shape: (10,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/10/titration_curve.png
+Visualize error: index 10 is out of bounds for axis 0 with size 10
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/10/report.pdf
+PDF report generated.
+Full report generated in results/screening/10
+Pipeline complete. Outputs in results/screening/10
 11
-Loaded 11 points from 'data_11.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=5.00e-05 <= 0.001). No smoothing.
-No low-var negative segments found. Falling back to full negative region.
-Raw Zone (initial): indices 8-11, R²=0.9507, V_eq=7.049 mL over 3 points
-Low noise (std_dg1=4.87e-07 <= 0.001). No smoothing.
-No low-var negative segments found. Falling back to full negative region.
-Opt Zone (final): k5=-2.012, R²=0.9507, V_eq=7.049 mL over 3 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/11/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/11/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/11
-Visualizations generated.
-CSV report saved to results/screening/11/gran_results.csv
-PDF report saved to results/screening/11/gran_report.pdf
-Method JSON saved to results/screening/11/method.json
-Full report generated in ./results/screening/11
-Full workflow complete. Results in ./results/screening/11
+Loaded 'data_11.dat': 11 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 6.041 mL, R² = 0.9736, k = 0.000, Zone = 8-11
+Gran Opt: V_eq = 3.235 mL, R² = 0.9999, k = 0.560, Zone = 7-11
+Schwartz Raw: V_eq = 6.041 mL, R² = 0.9736, k = 0.000, Zone = 8-11
+Schwartz Opt: V_eq = 3.235 mL, R² = 0.9999, k = 0.560, Zone = 7-11
+pH shape: (11,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/11/titration_curve.png
+Visualize error: index 11 is out of bounds for axis 0 with size 11
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/11/report.pdf
+PDF report generated.
+Full report generated in results/screening/11
+Pipeline complete. Outputs in results/screening/11
 12
-Loaded 12 points from 'data_12.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=5.02e-05 <= 0.001). No smoothing.
-No low-var negative segments found. Falling back to full negative region.
-Raw Zone (initial): indices 8-12, R²=0.9670, V_eq=6.026 mL over 4 points
-Low noise (std_dg1=2.19e-07 <= 0.001). No smoothing.
-No low-var negative segments found. Falling back to full negative region.
-Opt Zone (final): k5=-2.361, R²=0.9670, V_eq=6.026 mL over 4 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/12/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/12/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/12
-Visualizations generated.
-CSV report saved to results/screening/12/gran_results.csv
-PDF report saved to results/screening/12/gran_report.pdf
-Method JSON saved to results/screening/12/method.json
-Full report generated in ./results/screening/12
-Full workflow complete. Results in ./results/screening/12
+Loaded 'data_12.dat': 12 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 5.574 mL, R² = 0.9853, k = 0.000, Zone = 8-12
+Gran Opt: V_eq = 3.871 mL, R² = 0.9993, k = 0.298, Zone = 8-12
+Schwartz Raw: V_eq = 5.574 mL, R² = 0.9853, k = 0.000, Zone = 8-12
+Schwartz Opt: V_eq = 3.871 mL, R² = 0.9993, k = 0.298, Zone = 8-12
+pH shape: (12,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/12/titration_curve.png
+Visualize error: index 12 is out of bounds for axis 0 with size 12
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/12/report.pdf
+PDF report generated.
+Full report generated in results/screening/12
+Pipeline complete. Outputs in results/screening/12
 13
-Loaded 13 points from 'data_13.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=5.00e-05 <= 0.001). No smoothing.
-No low-var negative segments found. Falling back to full negative region.
-Raw Zone (initial): indices 8-13, R²=0.9786, V_eq=5.604 mL over 5 points
-Low noise (std_dg1=3.44e-07 <= 0.001). No smoothing.
-No low-var negative segments found. Falling back to full negative region.
-Opt Zone (final): k5=-2.162, R²=0.9786, V_eq=5.604 mL over 5 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/13/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/13/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/13
-Visualizations generated.
-CSV report saved to results/screening/13/gran_results.csv
-PDF report saved to results/screening/13/gran_report.pdf
-Method JSON saved to results/screening/13/method.json
-Full report generated in ./results/screening/13
-Full workflow complete. Results in ./results/screening/13
+Loaded 'data_13.dat': 13 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 5.197 mL, R² = 0.9866, k = 0.000, Zone = 8-13
+Gran Opt: V_eq = 3.957 mL, R² = 0.9996, k = 0.271, Zone = 8-13
+Schwartz Raw: V_eq = 5.197 mL, R² = 0.9866, k = 0.000, Zone = 8-13
+Schwartz Opt: V_eq = 3.957 mL, R² = 0.9996, k = 0.271, Zone = 8-13
+pH shape: (13,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/13/titration_curve.png
+Visualize error: index 13 is out of bounds for axis 0 with size 13
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/13/report.pdf
+PDF report generated.
+Full report generated in results/screening/13
+Pipeline complete. Outputs in results/screening/13
 14
-Loaded 14 points from 'data_14.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.97e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 10-13, R²=1.000 (Case: Case 1, Score: 102.14)
-Raw Zone (initial): indices 10-13, R²=1.0000, V_eq=4.976 mL over 3 points
-Low noise (std_dg1=2.11e-07 <= 0.001). No smoothing.
-Identified 'the Zone': indices 10-13, R²=1.000 (Case: Case 1, Score: 102.14)
-Opt Zone (final): k5=-2.372, R²=1.0000, V_eq=4.976 mL over 3 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/14/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/14/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/14
-Visualizations generated.
-CSV report saved to results/screening/14/gran_results.csv
-PDF report saved to results/screening/14/gran_report.pdf
-Method JSON saved to results/screening/14/method.json
-Full report generated in ./results/screening/14
-Full workflow complete. Results in ./results/screening/14
+Loaded 'data_14.dat': 14 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.485 mL, R² = 1.0000, k = 0.000, Zone = 11-14
+Gran Opt: V_eq = 4.545 mL, R² = 1.0000, k = -0.025, Zone = 11-14
+Schwartz Raw: V_eq = 4.485 mL, R² = 1.0000, k = 0.000, Zone = 11-14
+Schwartz Opt: V_eq = 4.545 mL, R² = 1.0000, k = -0.025, Zone = 11-14
+pH shape: (14,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/14/titration_curve.png
+Visualize error: index 14 is out of bounds for axis 0 with size 14
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/14/report.pdf
+PDF report generated.
+Full report generated in results/screening/14
+Pipeline complete. Outputs in results/screening/14
 15
-Loaded 15 points from 'data_15.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.92e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 10-13, R²=1.000 (Case: Case 1, Score: 102.00)
-Raw Zone (initial): indices 10-13, R²=1.0000, V_eq=4.976 mL over 3 points
-Low noise (std_dg1=2.09e-07 <= 0.001). No smoothing.
-Identified 'the Zone': indices 10-13, R²=1.000 (Case: Case 1, Score: 102.00)
-Opt Zone (final): k5=-2.372, R²=1.0000, V_eq=4.976 mL over 3 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/15/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/15/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/15
-Visualizations generated.
-CSV report saved to results/screening/15/gran_results.csv
-PDF report saved to results/screening/15/gran_report.pdf
-Method JSON saved to results/screening/15/method.json
-Full report generated in ./results/screening/15
-Full workflow complete. Results in ./results/screening/15
+Loaded 'data_15.dat': 15 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.566 mL, R² = 0.9994, k = 0.000, Zone = 11-14
+Gran Opt: V_eq = 4.969 mL, R² = 0.9999, k = -0.154, Zone = 11-14
+Schwartz Raw: V_eq = 4.566 mL, R² = 0.9994, k = 0.000, Zone = 11-14
+Schwartz Opt: V_eq = 4.969 mL, R² = 0.9999, k = -0.154, Zone = 11-14
+pH shape: (15,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/15/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/15/gran_schwartz.png
+Combined overview plot saved to results/screening/15/plots.png
+All visualizations saved to results/screening/15
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/15/report.pdf
+PDF report generated.
+Full report generated in results/screening/15
+Pipeline complete. Outputs in results/screening/15
 16
-Loaded 16 points from 'data_16.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. ]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.87e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 12-16, R²=0.999 (Case: Case 1, Score: 102.44)
-Raw Zone (initial): indices 12-16, R²=0.9994, V_eq=4.430 mL over 4 points
-Low noise (std_dg1=2.57e-10 <= 0.001). No smoothing.
-Identified 'the Zone': indices 12-16, R²=0.999 (Case: Case 1, Score: 102.44)
-Opt Zone (final): k5=-5.277, R²=0.9994, V_eq=4.430 mL over 4 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/16/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/16/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/16
-Visualizations generated.
-CSV report saved to results/screening/16/gran_results.csv
-PDF report saved to results/screening/16/gran_report.pdf
-Method JSON saved to results/screening/16/method.json
-Full report generated in ./results/screening/16
-Full workflow complete. Results in ./results/screening/16
+Loaded 'data_16.dat': 16 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. ]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.513 mL, R² = 0.9993, k = 0.000, Zone = 11-15
+Gran Opt: V_eq = 4.413 mL, R² = 0.9994, k = 0.063, Zone = 11-15
+Schwartz Raw: V_eq = 4.513 mL, R² = 0.9993, k = 0.000, Zone = 11-15
+Schwartz Opt: V_eq = 4.413 mL, R² = 0.9994, k = 0.063, Zone = 11-15
+pH shape: (16,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/16/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/16/gran_schwartz.png
+Combined overview plot saved to results/screening/16/plots.png
+All visualizations saved to results/screening/16
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/16/report.pdf
+PDF report generated.
+Full report generated in results/screening/16
+Pipeline complete. Outputs in results/screening/16
 17
-Loaded 17 points from 'data_17.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. ]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.81e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 12-16, R²=0.999 (Case: Case 1, Score: 102.29)
-Raw Zone (initial): indices 12-16, R²=0.9994, V_eq=4.430 mL over 4 points
-Low noise (std_dg1=2.54e-10 <= 0.001). No smoothing.
-Identified 'the Zone': indices 12-16, R²=0.999 (Case: Case 1, Score: 102.29)
-Opt Zone (final): k5=-5.277, R²=0.9994, V_eq=4.430 mL over 4 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/17/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/17/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/17
-Visualizations generated.
-CSV report saved to results/screening/17/gran_results.csv
-PDF report saved to results/screening/17/gran_report.pdf
-Method JSON saved to results/screening/17/method.json
-Full report generated in ./results/screening/17
-Full workflow complete. Results in ./results/screening/17
+Loaded 'data_17.dat': 17 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.513 mL, R² = 0.9993, k = 0.000, Zone = 11-15
+Gran Opt: V_eq = 4.496 mL, R² = 0.9996, k = 0.063, Zone = 9-14
+Schwartz Raw: V_eq = 4.513 mL, R² = 0.9993, k = 0.000, Zone = 11-15
+Schwartz Opt: V_eq = 4.496 mL, R² = 0.9996, k = 0.063, Zone = 9-14
+pH shape: (17,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/17/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/17/gran_schwartz.png
+Combined overview plot saved to results/screening/17/plots.png
+All visualizations saved to results/screening/17
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/17/report.pdf
+PDF report generated.
+Full report generated in results/screening/17
+Pipeline complete. Outputs in results/screening/17
 18
-Loaded 18 points from 'data_18.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.75e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 12-17, R²=0.999 (Case: Case 1, Score: 102.70)
-Raw Zone (initial): indices 12-17, R²=0.9992, V_eq=4.375 mL over 5 points
-High noise (std_dg1=3.38e+03 > 0.001). Smoothing.
-No low-var negative segments found. Falling back to full negative region.
-Opt Zone (final): k5=7.852, R²=0.9882, V_eq=4.619 mL over 10 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/18/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/18/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/18
-Visualizations generated.
-CSV report saved to results/screening/18/gran_results.csv
-PDF report saved to results/screening/18/gran_report.pdf
-Method JSON saved to results/screening/18/method.json
-Full report generated in ./results/screening/18
-Full workflow complete. Results in ./results/screening/18
+Loaded 'data_18.dat': 18 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7, 100.2]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.569 mL, R² = 0.9989, k = 0.000, Zone = 10-15
+Gran Opt: V_eq = 4.323 mL, R² = 0.9996, k = 0.135, Zone = 10-15
+Schwartz Raw: V_eq = 4.569 mL, R² = 0.9989, k = 0.000, Zone = 10-15
+Schwartz Opt: V_eq = 4.323 mL, R² = 0.9996, k = 0.135, Zone = 10-15
+pH shape: (18,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/18/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/18/gran_schwartz.png
+Combined overview plot saved to results/screening/18/plots.png
+All visualizations saved to results/screening/18
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/18/report.pdf
+PDF report generated.
+Full report generated in results/screening/18
+Pipeline complete. Outputs in results/screening/18
 19
-Loaded 19 points from 'data_19.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6,
-        95.2]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.69e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 14-19, R²=1.000 (Case: Case 1, Score: 102.61)
-Raw Zone (initial): indices 14-19, R²=0.9998, V_eq=4.249 mL over 5 points
-High noise (std_dg1=1.61e-01 > 0.001). Smoothing.
-Identified 'the Zone': indices 14-19, R²=1.000 (Case: Case 1, Score: 102.62)
-Opt Zone (final): k5=3.535, R²=0.9998, V_eq=4.249 mL over 5 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/19/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/19/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/19
-Visualizations generated.
-CSV report saved to results/screening/19/gran_results.csv
-PDF report saved to results/screening/19/gran_report.pdf
-Method JSON saved to results/screening/19/method.json
-Full report generated in ./results/screening/19
-Full workflow complete. Results in ./results/screening/19
+Loaded 'data_19.dat': 19 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7, 100.2,
+        94.8]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.177 mL, R² = 0.9993, k = 0.000, Zone = 14-19
+Gran Opt: V_eq = 4.196 mL, R² = 0.9993, k = -0.047, Zone = 14-19
+Schwartz Raw: V_eq = 4.177 mL, R² = 0.9993, k = 0.000, Zone = 14-19
+Schwartz Opt: V_eq = 4.196 mL, R² = 0.9993, k = -0.047, Zone = 14-19
+pH shape: (19,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/19/titration_curve.png
+Visualize error: index 19 is out of bounds for axis 0 with size 19
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/19/report.pdf
+PDF report generated.
+Full report generated in results/screening/19
+Pipeline complete. Outputs in results/screening/19
 20
-Loaded 20 points from 'data_20.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6,
-        95.2,  88.7]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.63e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 14-20, R²=1.000 (Case: Case 1, Score: 102.98)
-Raw Zone (initial): indices 14-20, R²=0.9998, V_eq=4.235 mL over 6 points
-High noise (std_dg1=8.44e-01 > 0.001). Smoothing.
-Identified 'the Zone': indices 14-20, R²=1.000 (Case: Case 1, Score: 103.00)
-Opt Zone (final): k5=4.261, R²=0.9998, V_eq=4.235 mL over 6 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/20/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/20/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/20
-Visualizations generated.
-CSV report saved to results/screening/20/gran_results.csv
-PDF report saved to results/screening/20/gran_report.pdf
-Method JSON saved to results/screening/20/method.json
-Full report generated in ./results/screening/20
-Full workflow complete. Results in ./results/screening/20
+Loaded 'data_20.dat': 20 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7, 100.2,
+        94.8,  88. ]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.165 mL, R² = 0.9995, k = 0.000, Zone = 14-20
+Gran Opt: V_eq = 4.440 mL, R² = 0.9996, k = 0.074, Zone = 9-15
+Schwartz Raw: V_eq = 4.165 mL, R² = 0.9995, k = 0.000, Zone = 14-20
+Schwartz Opt: V_eq = 4.440 mL, R² = 0.9996, k = 0.074, Zone = 9-15
+pH shape: (20,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/20/titration_curve.png
+Visualize error: index 20 is out of bounds for axis 0 with size 20
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/20/report.pdf
+PDF report generated.
+Full report generated in results/screening/20
+Pipeline complete. Outputs in results/screening/20
 21
-Loaded 21 points from 'data_21.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6,
-        95.2,  88.7,  81.1]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.57e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 14-20, R²=1.000 (Case: Case 1, Score: 102.84)
-Raw Zone (initial): indices 14-20, R²=0.9998, V_eq=4.235 mL over 6 points
-High noise (std_dg1=8.33e-01 > 0.001). Smoothing.
-Identified 'the Zone': indices 15-21, R²=1.000 (Case: Case 1, Score: 102.86)
-Opt Zone (final): k5=4.261, R²=0.9996, V_eq=4.207 mL over 6 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/21/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/21/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/21
-Visualizations generated.
-CSV report saved to results/screening/21/gran_results.csv
-PDF report saved to results/screening/21/gran_report.pdf
-Method JSON saved to results/screening/21/method.json
-Full report generated in ./results/screening/21
-Full workflow complete. Results in ./results/screening/21
+Loaded 'data_21.dat': 21 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7, 100.2,
+        94.8,  88. ,  80.5]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.159 mL, R² = 0.9997, k = 0.000, Zone = 14-20
+Gran Opt: V_eq = 4.140 mL, R² = 0.9997, k = 0.081, Zone = 14-21
+Schwartz Raw: V_eq = 4.159 mL, R² = 0.9997, k = 0.000, Zone = 14-20
+Schwartz Opt: V_eq = 4.140 mL, R² = 0.9997, k = 0.081, Zone = 14-21
+pH shape: (21,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/21/titration_curve.png
+Visualize error: index 21 is out of bounds for axis 0 with size 21
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/21/report.pdf
+PDF report generated.
+Full report generated in results/screening/21
+Pipeline complete. Outputs in results/screening/21
 22
-Loaded 22 points from 'data_22.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6,
-        95.2,  88.7,  81.1,  71.8]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.51e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 14-21, R²=1.000 (Case: Case 1, Score: 103.15)
-Raw Zone (initial): indices 14-21, R²=0.9997, V_eq=4.216 mL over 7 points
-Low noise (std_dg1=6.01e-08 <= 0.001). No smoothing.
-Identified 'the Zone': indices 14-21, R²=1.000 (Case: Case 1, Score: 103.15)
-Opt Zone (final): k5=-2.875, R²=0.9997, V_eq=4.216 mL over 7 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/22/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/22/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/22
-Visualizations generated.
-CSV report saved to results/screening/22/gran_results.csv
-PDF report saved to results/screening/22/gran_report.pdf
-Method JSON saved to results/screening/22/method.json
-Full report generated in ./results/screening/22
-Full workflow complete. Results in ./results/screening/22
+Loaded 'data_22.dat': 22 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7, 100.2,
+        94.8,  88. ,  80.5,  70.2]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.141 mL, R² = 0.9995, k = 0.000, Zone = 14-21
+Gran Opt: V_eq = 4.108 mL, R² = 0.9997, k = 0.203, Zone = 14-22
+Schwartz Raw: V_eq = 4.141 mL, R² = 0.9995, k = 0.000, Zone = 14-21
+Schwartz Opt: V_eq = 4.108 mL, R² = 0.9997, k = 0.203, Zone = 14-22
+pH shape: (22,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/22/titration_curve.png
+Visualize error: index 22 is out of bounds for axis 0 with size 22
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/22/report.pdf
+PDF report generated.
+Full report generated in results/screening/22
+Pipeline complete. Outputs in results/screening/22
 23
-Loaded 23 points from 'data_23.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  ]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6,
-        95.2,  88.7,  81.1,  71.8,  62. ]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.45e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 14-21, R²=1.000 (Case: Case 1, Score: 103.01)
-Raw Zone (initial): indices 14-21, R²=0.9997, V_eq=4.216 mL over 7 points
-Low noise (std_dg1=5.93e-08 <= 0.001). No smoothing.
-Identified 'the Zone': indices 14-21, R²=1.000 (Case: Case 1, Score: 103.01)
-Opt Zone (final): k5=-2.875, R²=0.9997, V_eq=4.216 mL over 7 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/23/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/23/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/23
-Visualizations generated.
-CSV report saved to results/screening/23/gran_results.csv
-PDF report saved to results/screening/23/gran_report.pdf
-Method JSON saved to results/screening/23/method.json
-Full report generated in ./results/screening/23
-Full workflow complete. Results in ./results/screening/23
+Loaded 'data_23.dat': 23 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 ]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7, 100.2,
+        94.8,  88. ,  80.5,  70.2,  62.8]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.126 mL, R² = 0.9995, k = 0.000, Zone = 15-22
+Gran Opt: V_eq = 4.101 mL, R² = 0.9998, k = 0.239, Zone = 14-22
+Schwartz Raw: V_eq = 4.126 mL, R² = 0.9995, k = 0.000, Zone = 15-22
+Schwartz Opt: V_eq = 4.101 mL, R² = 0.9998, k = 0.239, Zone = 14-22
+pH shape: (23,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/23/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/23/gran_schwartz.png
+Combined overview plot saved to results/screening/23/plots.png
+All visualizations saved to results/screening/23
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/23/report.pdf
+PDF report generated.
+Full report generated in results/screening/23
+Pipeline complete. Outputs in results/screening/23
 24
-Loaded 24 points from 'data_24.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6,
-        95.2,  88.7,  81.1,  71.8,  62. ,  54.3]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.40e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 14-22, R²=1.000 (Case: Case 1, Score: 103.29)
-Raw Zone (initial): indices 14-22, R²=0.9996, V_eq=4.201 mL over 8 points
-High noise (std_dg1=8.13e+00 > 0.001). Smoothing.
-Identified 'the Zone': indices 15-23, R²=1.000 (Case: Case 1, Score: 103.50)
-Opt Zone (final): k5=5.267, R²=0.9994, V_eq=4.176 mL over 8 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/24/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/24/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/24
-Visualizations generated.
-CSV report saved to results/screening/24/gran_results.csv
-PDF report saved to results/screening/24/gran_report.pdf
-Method JSON saved to results/screening/24/method.json
-Full report generated in ./results/screening/24
-Full workflow complete. Results in ./results/screening/24
+Loaded 'data_24.dat': 24 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7, 100.2,
+        94.8,  88. ,  80.5,  70.2,  62.8,  53.5]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.132 mL, R² = 0.9996, k = 0.000, Zone = 14-22
+Gran Opt: V_eq = 4.101 mL, R² = 0.9998, k = 0.219, Zone = 14-23
+Schwartz Raw: V_eq = 4.132 mL, R² = 0.9996, k = 0.000, Zone = 14-22
+Schwartz Opt: V_eq = 4.101 mL, R² = 0.9998, k = 0.219, Zone = 14-23
+pH shape: (24,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/24/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/24/gran_schwartz.png
+Combined overview plot saved to results/screening/24/plots.png
+All visualizations saved to results/screening/24
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/24/report.pdf
+PDF report generated.
+Full report generated in results/screening/24
+Pipeline complete. Outputs in results/screening/24
 25
-Loaded 25 points from 'data_25.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6,
-        95.2,  88.7,  81.1,  71.8,  62. ,  54.3,  48.4]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.33e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 14-22, R²=1.000 (Case: Case 1, Score: 103.16)
-Raw Zone (initial): indices 14-22, R²=0.9996, V_eq=4.201 mL over 8 points
-High noise (std_dg1=8.01e+00 > 0.001). Smoothing.
-Identified 'the Zone': indices 15-23, R²=1.000 (Case: Case 1, Score: 103.35)
-Opt Zone (final): k5=5.267, R²=0.9994, V_eq=4.176 mL over 8 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/25/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/25/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/25
-Visualizations generated.
-CSV report saved to results/screening/25/gran_results.csv
-PDF report saved to results/screening/25/gran_report.pdf
-Method JSON saved to results/screening/25/method.json
-Full report generated in ./results/screening/25
-Full workflow complete. Results in ./results/screening/25
+Loaded 'data_25.dat': 25 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 ]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7, 100.2,
+        94.8,  88. ,  80.5,  70.2,  62.8,  53.5,  46.2]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.132 mL, R² = 0.9996, k = 0.000, Zone = 14-22
+Gran Opt: V_eq = 4.101 mL, R² = 0.9998, k = 0.219, Zone = 14-23
+Schwartz Raw: V_eq = 4.132 mL, R² = 0.9996, k = 0.000, Zone = 14-22
+Schwartz Opt: V_eq = 4.101 mL, R² = 0.9998, k = 0.219, Zone = 14-23
+pH shape: (25,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/25/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/25/gran_schwartz.png
+Combined overview plot saved to results/screening/25/plots.png
+All visualizations saved to results/screening/25
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/25/report.pdf
+PDF report generated.
+Full report generated in results/screening/25
+Pipeline complete. Outputs in results/screening/25
 26
-Loaded 26 points from 'data_26.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6,
-        95.2,  88.7,  81.1,  71.8,  62. ,  54.3,  48.4,  35. ]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.28e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 14-23, R²=0.999 (Case: Case 1, Score: 103.40)
-Raw Zone (initial): indices 14-23, R²=0.9994, V_eq=4.184 mL over 9 points
-High noise (std_dg1=8.11e+00 > 0.001). Smoothing.
-Identified 'the Zone': indices 15-24, R²=0.999 (Case: Case 1, Score: 103.61)
-Opt Zone (final): k5=5.277, R²=0.9993, V_eq=4.163 mL over 9 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/26/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/26/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/26
-Visualizations generated.
-CSV report saved to results/screening/26/gran_results.csv
-PDF report saved to results/screening/26/gran_report.pdf
-Method JSON saved to results/screening/26/method.json
-Full report generated in ./results/screening/26
-Full workflow complete. Results in ./results/screening/26
+Loaded 'data_26.dat': 26 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 ]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7, 100.2,
+        94.8,  88. ,  80.5,  70.2,  62.8,  53.5,  46.2,  36.6]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.115 mL, R² = 0.9996, k = 0.000, Zone = 15-24
+Gran Opt: V_eq = 4.095 mL, R² = 0.9999, k = 0.285, Zone = 14-24
+Schwartz Raw: V_eq = 4.115 mL, R² = 0.9996, k = 0.000, Zone = 15-24
+Schwartz Opt: V_eq = 4.095 mL, R² = 0.9999, k = 0.285, Zone = 14-24
+pH shape: (26,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/26/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/26/gran_schwartz.png
+Combined overview plot saved to results/screening/26/plots.png
+All visualizations saved to results/screening/26
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/26/report.pdf
+PDF report generated.
+Full report generated in results/screening/26
+Pipeline complete. Outputs in results/screening/26
 27
-Loaded 27 points from 'data_27.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 ]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6,
-        95.2,  88.7,  81.1,  71.8,  62. ,  54.3,  48.4,  35. ,  28.6]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.23e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 18-27, R²=1.000 (Case: Case 1, Score: 103.30)
-Raw Zone (initial): indices 18-27, R²=0.9997, V_eq=4.132 mL over 9 points
-Low noise (std_dg1=1.60e-07 <= 0.001). No smoothing.
-Identified 'the Zone': indices 18-27, R²=1.000 (Case: Case 1, Score: 103.30)
-Opt Zone (final): k5=-2.423, R²=0.9997, V_eq=4.132 mL over 9 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/27/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/27/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/27
-Visualizations generated.
-CSV report saved to results/screening/27/gran_results.csv
-PDF report saved to results/screening/27/gran_report.pdf
-Method JSON saved to results/screening/27/method.json
-Full report generated in ./results/screening/27
-Full workflow complete. Results in ./results/screening/27
+Loaded 'data_27.dat': 27 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 ]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7, 100.2,
+        94.8,  88. ,  80.5,  70.2,  62.8,  53.5,  46.2,  36.6,  28.4]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.091 mL, R² = 0.9997, k = 0.000, Zone = 18-27
+Gran Opt: V_eq = 4.080 mL, R² = 0.9997, k = 0.582, Zone = 15-27
+Schwartz Raw: V_eq = 4.091 mL, R² = 0.9997, k = 0.000, Zone = 18-27
+Schwartz Opt: V_eq = 4.080 mL, R² = 0.9997, k = 0.582, Zone = 15-27
+pH shape: (27,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/27/titration_curve.png
+Visualize error: index 27 is out of bounds for axis 0 with size 27
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/27/report.pdf
+PDF report generated.
+Full report generated in results/screening/27
+Pipeline complete. Outputs in results/screening/27
 28
-Loaded 28 points from 'data_28.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 , 4.0415]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6,
-        95.2,  88.7,  81.1,  71.8,  62. ,  54.3,  48.4,  35. ,  28.6,
-        21.5]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.18e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 18-28, R²=1.000 (Case: Case 1, Score: 103.54)
-Raw Zone (initial): indices 18-28, R²=0.9997, V_eq=4.131 mL over 10 points
-High noise (std_dg1=5.82e+02 > 0.001). Smoothing.
-Identified 'the Zone': indices 19-22, R²=1.000 (Case: Case 1, Score: 115.85)
-Opt fallback to raw Zone (to avoid shrinkage): R²=0.9997, points=10
-Opt Zone (final): k5=7.144, R²=0.9997, V_eq=4.131 mL over 10 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/28/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/28/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/28
-Visualizations generated.
-CSV report saved to results/screening/28/gran_results.csv
-PDF report saved to results/screening/28/gran_report.pdf
-Method JSON saved to results/screening/28/method.json
-Full report generated in ./results/screening/28
-Full workflow complete. Results in ./results/screening/28
+Loaded 'data_28.dat': 28 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+27  3.9890       25.6
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 , 3.989 ]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7, 100.2,
+        94.8,  88. ,  80.5,  70.2,  62.8,  53.5,  46.2,  36.6,  28.4,
+        25.6]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.091 mL, R² = 0.9997, k = 0.000, Zone = 18-28
+Gran Opt: V_eq = 4.085 mL, R² = 0.9999, k = 0.534, Zone = 16-28
+Schwartz Raw: V_eq = 4.091 mL, R² = 0.9997, k = 0.000, Zone = 18-28
+Schwartz Opt: V_eq = 4.085 mL, R² = 0.9999, k = 0.534, Zone = 16-28
+pH shape: (28,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/28/titration_curve.png
+Visualize error: index 28 is out of bounds for axis 0 with size 28
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/28/report.pdf
+PDF report generated.
+Full report generated in results/screening/28
+Pipeline complete. Outputs in results/screening/28
 29
-Loaded 29 points from 'data_29.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 , 4.0415, 4.067 ]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6,
-        95.2,  88.7,  81.1,  71.8,  62. ,  54.3,  48.4,  35. ,  28.6,
-        21.5,  11.9]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.13e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 19-29, R²=1.000 (Case: Case 1, Score: 103.42)
-Raw Zone (initial): indices 19-29, R²=0.9997, V_eq=4.128 mL over 10 points
-Low noise (std_dg1=6.25e-09 <= 0.001). No smoothing.
-Identified 'the Zone': indices 19-29, R²=1.000 (Case: Case 1, Score: 103.42)
-Opt Zone (final): k5=-3.820, R²=0.9997, V_eq=4.128 mL over 10 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/29/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/29/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/29
-Visualizations generated.
-CSV report saved to results/screening/29/gran_results.csv
-PDF report saved to results/screening/29/gran_report.pdf
-Method JSON saved to results/screening/29/method.json
-Full report generated in ./results/screening/29
-Full workflow complete. Results in ./results/screening/29
+Loaded 'data_29.dat': 29 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+27  3.9890       25.6
+28  4.0390        5.4
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 , 3.989 , 4.039 ]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7, 100.2,
+        94.8,  88. ,  80.5,  70.2,  62.8,  53.5,  46.2,  36.6,  28.4,
+        25.6,   5.4]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.090 mL, R² = 0.9997, k = 0.000, Zone = 18-28
+Gran Opt: V_eq = 4.085 mL, R² = 0.9999, k = 0.528, Zone = 16-29
+Schwartz Raw: V_eq = 4.090 mL, R² = 0.9997, k = 0.000, Zone = 18-28
+Schwartz Opt: V_eq = 4.085 mL, R² = 0.9999, k = 0.528, Zone = 16-29
+pH shape: (29,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/29/titration_curve.png
+Visualize error: index 29 is out of bounds for axis 0 with size 29
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/29/report.pdf
+PDF report generated.
+Full report generated in results/screening/29
+Pipeline complete. Outputs in results/screening/29
 30
-Loaded 30 points from 'data_30.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 , 4.0415, 4.067 , 4.087 ]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6,
-        95.2,  88.7,  81.1,  71.8,  62. ,  54.3,  48.4,  35. ,  28.6,
-        21.5,  11.9,  -0.9]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.08e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 18-29, R²=1.000 (Case: Case 1, Score: 103.64)
-Raw Zone (initial): indices 18-29, R²=0.9997, V_eq=4.130 mL over 11 points
-Low noise (std_dg1=1.47e-08 <= 0.001). No smoothing.
-Identified 'the Zone': indices 18-29, R²=1.000 (Case: Case 1, Score: 103.64)
-Opt Zone (final): k5=-3.444, R²=0.9997, V_eq=4.130 mL over 11 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/30/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/30/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/30
-Visualizations generated.
-CSV report saved to results/screening/30/gran_results.csv
-PDF report saved to results/screening/30/gran_report.pdf
-Method JSON saved to results/screening/30/method.json
-Full report generated in ./results/screening/30
-Full workflow complete. Results in ./results/screening/30
+Loaded 'data_30.dat': 30 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+27  3.9890       25.6
+28  4.0390        5.4
+29  4.0590       -7.9
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 , 3.989 , 4.039 , 4.059 ]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7, 100.2,
+        94.8,  88. ,  80.5,  70.2,  62.8,  53.5,  46.2,  36.6,  28.4,
+        25.6,   5.4,  -7.9]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.089 mL, R² = 0.9997, k = 0.000, Zone = 18-29
+Gran Opt: V_eq = 4.085 mL, R² = 0.9999, k = 0.495, Zone = 16-29
+Schwartz Raw: V_eq = 4.089 mL, R² = 0.9997, k = 0.000, Zone = 18-29
+Schwartz Opt: V_eq = 4.085 mL, R² = 0.9999, k = 0.495, Zone = 16-29
+pH shape: (30,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/30/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/30/gran_schwartz.png
+Combined overview plot saved to results/screening/30/plots.png
+All visualizations saved to results/screening/30
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/30/report.pdf
+PDF report generated.
+Full report generated in results/screening/30
+Pipeline complete. Outputs in results/screening/30
 31
-Loaded 31 points from 'data_31.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 , 4.0415, 4.067 , 4.087 , 4.107 ]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6,
-        95.2,  88.7,  81.1,  71.8,  62. ,  54.3,  48.4,  35. ,  28.6,
-        21.5,  11.9,  -0.9, -20.6]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=4.03e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 20-31, R²=1.000 (Case: Case 1, Score: 103.52)
-Raw Zone (initial): indices 20-31, R²=0.9998, V_eq=4.125 mL over 11 points
-High noise (std_dg1=8.90e-03 > 0.001). Smoothing.
-Identified 'the Zone': indices 18-29, R²=0.999 (Case: Case 1, Score: 103.49)
-Opt Zone (final): k5=2.344, R²=0.9997, V_eq=4.130 mL over 11 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/31/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/31/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/31
-Visualizations generated.
-CSV report saved to results/screening/31/gran_results.csv
-PDF report saved to results/screening/31/gran_report.pdf
-Method JSON saved to results/screening/31/method.json
-Full report generated in ./results/screening/31
-Full workflow complete. Results in ./results/screening/31
+Loaded 'data_31.dat': 31 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+27  3.9890       25.6
+28  4.0390        5.4
+29  4.0590       -7.9
+30  4.0790      -55.1
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 , 3.989 , 4.039 , 4.059 , 4.079 ]), 'potential_array': array([182.1, 181.6, 180.9, 178.7, 172.9, 166. , 158.2, 151.4, 145.6,
+       140.1, 134.7, 129.8, 124.9, 120.2, 115.8, 111. , 105.7, 100.2,
+        94.8,  88. ,  80.5,  70.2,  62.8,  53.5,  46.2,  36.6,  28.4,
+        25.6,   5.4,  -7.9, -55.1]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.089 mL, R² = 0.9997, k = 0.000, Zone = 18-29
+Gran Opt: V_eq = 4.085 mL, R² = 0.9999, k = 0.495, Zone = 16-30
+Schwartz Raw: V_eq = 4.089 mL, R² = 0.9997, k = 0.000, Zone = 18-29
+Schwartz Opt: V_eq = 4.085 mL, R² = 0.9999, k = 0.495, Zone = 16-30
+pH shape: (31,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/31/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/31/gran_schwartz.png
+Combined overview plot saved to results/screening/31/plots.png
+All visualizations saved to results/screening/31
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/31/report.pdf
+PDF report generated.
+Full report generated in results/screening/31
+Pipeline complete. Outputs in results/screening/31
 32
-Loaded 32 points from 'data_32.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 , 4.0415, 4.067 , 4.087 , 4.107 , 4.127 ]), 'potential': array([182.6, 182. , 181.2, 178.8, 173.2, 165.4, 157.8, 151.6, 145. ,
-       139.8, 134.6, 129.7, 125.1, 120.3, 115.8, 111. , 106. , 100.6,
-        95.2,  88.7,  81.1,  71.8,  62. ,  54.3,  48.4,  35. ,  28.6,
-        21.5,  11.9,  -0.9, -20.6, -86.4]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=3.98e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 20-32, R²=1.000 (Case: Case 1, Score: 103.73)
-Raw Zone (initial): indices 20-32, R²=0.9998, V_eq=4.125 mL over 12 points
-High noise (std_dg1=3.38e+01 > 0.001). Smoothing.
-Identified 'the Zone': indices 13-25, R²=0.999 (Case: Case 1, Score: 104.52)
-Opt Zone (final): k5=5.929, R²=0.9989, V_eq=4.174 mL over 12 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/32/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/32/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/32
-Visualizations generated.
-CSV report saved to results/screening/32/gran_results.csv
-PDF report saved to results/screening/32/gran_report.pdf
-Method JSON saved to results/screening/32/method.json
-Full report generated in ./results/screening/32
-Full workflow complete. Results in ./results/screening/32
+Loaded 'data_32.dat': 32 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+27  3.9890       25.6
+28  4.0390        5.4
+29  4.0590       -7.9
+30  4.0790      -55.1
+31  4.0990     -114.1
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 , 3.989 , 4.039 , 4.059 , 4.079 , 4.099 ]), 'potential_array': array([ 182.1,  181.6,  180.9,  178.7,  172.9,  166. ,  158.2,  151.4,
+        145.6,  140.1,  134.7,  129.8,  124.9,  120.2,  115.8,  111. ,
+        105.7,  100.2,   94.8,   88. ,   80.5,   70.2,   62.8,   53.5,
+         46.2,   36.6,   28.4,   25.6,    5.4,   -7.9,  -55.1, -114.1]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.088 mL, R² = 0.9997, k = 0.000, Zone = 18-30
+Gran Opt: V_eq = 4.085 mL, R² = 0.9999, k = 0.501, Zone = 16-30
+Schwartz Raw: V_eq = 4.088 mL, R² = 0.9997, k = 0.000, Zone = 18-30
+Schwartz Opt: V_eq = 4.085 mL, R² = 0.9999, k = 0.501, Zone = 16-30
+pH shape: (32,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/32/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/32/gran_schwartz.png
+Combined overview plot saved to results/screening/32/plots.png
+All visualizations saved to results/screening/32
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/32/report.pdf
+PDF report generated.
+Full report generated in results/screening/32
+Pipeline complete. Outputs in results/screening/32
 33
-Loaded 33 points from 'data_33.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 , 4.0415, 4.067 , 4.087 , 4.107 , 4.127 ,
-       4.147 ]), 'potential': array([ 182.6,  182. ,  181.2,  178.8,  173.2,  165.4,  157.8,  151.6,
-        145. ,  139.8,  134.6,  129.7,  125.1,  120.3,  115.8,  111. ,
-        106. ,  100.6,   95.2,   88.7,   81.1,   71.8,   62. ,   54.3,
-         48.4,   35. ,   28.6,   21.5,   11.9,   -0.9,  -20.6,  -86.4,
-       -125.8]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=3.92e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 20-32, R²=1.000 (Case: Case 1, Score: 103.61)
-Raw Zone (initial): indices 20-32, R²=0.9998, V_eq=4.125 mL over 12 points
-High noise (std_dg1=3.33e+01 > 0.001). Smoothing.
-Identified 'the Zone': indices 13-25, R²=0.999 (Case: Case 1, Score: 104.40)
-Opt Zone (final): k5=5.929, R²=0.9989, V_eq=4.174 mL over 12 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/33/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/33/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/33
-Visualizations generated.
-CSV report saved to results/screening/33/gran_results.csv
-PDF report saved to results/screening/33/gran_report.pdf
-Method JSON saved to results/screening/33/method.json
-Full report generated in ./results/screening/33
-Full workflow complete. Results in ./results/screening/33
+Loaded 'data_33.dat': 33 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+27  3.9890       25.6
+28  4.0390        5.4
+29  4.0590       -7.9
+30  4.0790      -55.1
+31  4.0990     -114.1
+32  4.1190     -134.6
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 , 3.989 , 4.039 , 4.059 , 4.079 , 4.099 ,
+       4.119 ]), 'potential_array': array([ 182.1,  181.6,  180.9,  178.7,  172.9,  166. ,  158.2,  151.4,
+        145.6,  140.1,  134.7,  129.8,  124.9,  120.2,  115.8,  111. ,
+        105.7,  100.2,   94.8,   88. ,   80.5,   70.2,   62.8,   53.5,
+         46.2,   36.6,   28.4,   25.6,    5.4,   -7.9,  -55.1, -114.1,
+       -134.6]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.088 mL, R² = 0.9997, k = 0.000, Zone = 18-30
+Gran Opt: V_eq = 4.087 mL, R² = 0.9999, k = 0.501, Zone = 16-31
+Schwartz Raw: V_eq = 4.088 mL, R² = 0.9997, k = 0.000, Zone = 18-30
+Schwartz Opt: V_eq = 4.087 mL, R² = 0.9999, k = 0.501, Zone = 16-31
+pH shape: (33,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/33/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/33/gran_schwartz.png
+Combined overview plot saved to results/screening/33/plots.png
+All visualizations saved to results/screening/33
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/33/report.pdf
+PDF report generated.
+Full report generated in results/screening/33
+Pipeline complete. Outputs in results/screening/33
 34
-Loaded 34 points from 'data_34.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 , 4.0415, 4.067 , 4.087 , 4.107 , 4.127 ,
-       4.147 , 4.167 ]), 'potential': array([ 182.6,  182. ,  181.2,  178.8,  173.2,  165.4,  157.8,  151.6,
-        145. ,  139.8,  134.6,  129.7,  125.1,  120.3,  115.8,  111. ,
-        106. ,  100.6,   95.2,   88.7,   81.1,   71.8,   62. ,   54.3,
-         48.4,   35. ,   28.6,   21.5,   11.9,   -0.9,  -20.6,  -86.4,
-       -125.8, -140.8]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=3.86e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 19-32, R²=1.000 (Case: Case 1, Score: 103.80)
-Raw Zone (initial): indices 19-32, R²=0.9998, V_eq=4.127 mL over 13 points
-High noise (std_dg1=4.23e-02 > 0.001). Smoothing.
-Identified 'the Zone': indices 18-30, R²=0.999 (Case: Case 1, Score: 103.48)
-Opt fallback to raw Zone (to avoid shrinkage): R²=0.9998, points=13
-Opt Zone (final): k5=3.040, R²=0.9998, V_eq=4.127 mL over 13 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/34/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/34/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/34
-Visualizations generated.
-CSV report saved to results/screening/34/gran_results.csv
-PDF report saved to results/screening/34/gran_report.pdf
-Method JSON saved to results/screening/34/method.json
-Full report generated in ./results/screening/34
-Full workflow complete. Results in ./results/screening/34
+Loaded 'data_34.dat': 34 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+27  3.9890       25.6
+28  4.0390        5.4
+29  4.0590       -7.9
+30  4.0790      -55.1
+31  4.0990     -114.1
+32  4.1190     -134.6
+33  4.1415     -148.0
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 , 3.989 , 4.039 , 4.059 , 4.079 , 4.099 ,
+       4.119 , 4.1415]), 'potential_array': array([ 182.1,  181.6,  180.9,  178.7,  172.9,  166. ,  158.2,  151.4,
+        145.6,  140.1,  134.7,  129.8,  124.9,  120.2,  115.8,  111. ,
+        105.7,  100.2,   94.8,   88. ,   80.5,   70.2,   62.8,   53.5,
+         46.2,   36.6,   28.4,   25.6,    5.4,   -7.9,  -55.1, -114.1,
+       -134.6, -148. ]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.090 mL, R² = 0.9997, k = 0.000, Zone = 18-31
+Gran Opt: V_eq = 4.089 mL, R² = 0.9999, k = 0.354, Zone = 12-26
+Schwartz Raw: V_eq = 4.090 mL, R² = 0.9997, k = 0.000, Zone = 18-31
+Schwartz Opt: V_eq = 4.089 mL, R² = 0.9999, k = 0.354, Zone = 12-26
+pH shape: (34,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/34/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/34/gran_schwartz.png
+Combined overview plot saved to results/screening/34/plots.png
+All visualizations saved to results/screening/34
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/34/report.pdf
+PDF report generated.
+Full report generated in results/screening/34
+Pipeline complete. Outputs in results/screening/34
 35
-Loaded 35 points from 'data_35.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 , 4.0415, 4.067 , 4.087 , 4.107 , 4.127 ,
-       4.147 , 4.167 , 4.195 ]), 'potential': array([ 182.6,  182. ,  181.2,  178.8,  173.2,  165.4,  157.8,  151.6,
-        145. ,  139.8,  134.6,  129.7,  125.1,  120.3,  115.8,  111. ,
-        106. ,  100.6,   95.2,   88.7,   81.1,   71.8,   62. ,   54.3,
-         48.4,   35. ,   28.6,   21.5,   11.9,   -0.9,  -20.6,  -86.4,
-       -125.8, -140.8, -153.8]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=3.81e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 19-32, R²=1.000 (Case: Case 1, Score: 103.69)
-Raw Zone (initial): indices 19-32, R²=0.9998, V_eq=4.127 mL over 13 points
-High noise (std_dg1=4.17e-02 > 0.001). Smoothing.
-Identified 'the Zone': indices 18-30, R²=0.999 (Case: Case 1, Score: 103.38)
-Opt fallback to raw Zone (to avoid shrinkage): R²=0.9998, points=13
-Opt Zone (final): k5=3.040, R²=0.9998, V_eq=4.127 mL over 13 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/35/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/35/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/35
-Visualizations generated.
-CSV report saved to results/screening/35/gran_results.csv
-PDF report saved to results/screening/35/gran_report.pdf
-Method JSON saved to results/screening/35/method.json
-Full report generated in ./results/screening/35
-Full workflow complete. Results in ./results/screening/35
+Loaded 'data_35.dat': 35 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+27  3.9890       25.6
+28  4.0390        5.4
+29  4.0590       -7.9
+30  4.0790      -55.1
+31  4.0990     -114.1
+32  4.1190     -134.6
+33  4.1415     -148.0
+34  4.1645     -156.5
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 , 3.989 , 4.039 , 4.059 , 4.079 , 4.099 ,
+       4.119 , 4.1415, 4.1645]), 'potential_array': array([ 182.1,  181.6,  180.9,  178.7,  172.9,  166. ,  158.2,  151.4,
+        145.6,  140.1,  134.7,  129.8,  124.9,  120.2,  115.8,  111. ,
+        105.7,  100.2,   94.8,   88. ,   80.5,   70.2,   62.8,   53.5,
+         46.2,   36.6,   28.4,   25.6,    5.4,   -7.9,  -55.1, -114.1,
+       -134.6, -148. , -156.5]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.090 mL, R² = 0.9997, k = 0.000, Zone = 18-31
+Gran Opt: V_eq = 4.088 mL, R² = 0.9999, k = 0.354, Zone = 12-27
+Schwartz Raw: V_eq = 4.090 mL, R² = 0.9997, k = 0.000, Zone = 18-31
+Schwartz Opt: V_eq = 4.088 mL, R² = 0.9999, k = 0.354, Zone = 12-27
+pH shape: (35,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/35/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/35/gran_schwartz.png
+Combined overview plot saved to results/screening/35/plots.png
+All visualizations saved to results/screening/35
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/35/report.pdf
+PDF report generated.
+Full report generated in results/screening/35
+Pipeline complete. Outputs in results/screening/35
 36
-Loaded 36 points from 'data_36.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 , 4.0415, 4.067 , 4.087 , 4.107 , 4.127 ,
-       4.147 , 4.167 , 4.195 , 4.223 ]), 'potential': array([ 182.6,  182. ,  181.2,  178.8,  173.2,  165.4,  157.8,  151.6,
-        145. ,  139.8,  134.6,  129.7,  125.1,  120.3,  115.8,  111. ,
-        106. ,  100.6,   95.2,   88.7,   81.1,   71.8,   62. ,   54.3,
-         48.4,   35. ,   28.6,   21.5,   11.9,   -0.9,  -20.6,  -86.4,
-       -125.8, -140.8, -153.8, -162.4]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=3.76e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 18-32, R²=1.000 (Case: Case 1, Score: 103.87)
-Raw Zone (initial): indices 18-32, R²=0.9998, V_eq=4.128 mL over 14 points
-Low noise (std_dg1=7.02e-10 <= 0.001). No smoothing.
-Identified 'the Zone': indices 18-32, R²=1.000 (Case: Case 1, Score: 103.87)
-Opt Zone (final): k5=-4.728, R²=0.9998, V_eq=4.128 mL over 14 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/36/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/36/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/36
-Visualizations generated.
-CSV report saved to results/screening/36/gran_results.csv
-PDF report saved to results/screening/36/gran_report.pdf
-Method JSON saved to results/screening/36/method.json
-Full report generated in ./results/screening/36
-Full workflow complete. Results in ./results/screening/36
+Loaded 'data_36.dat': 36 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+27  3.9890       25.6
+28  4.0390        5.4
+29  4.0590       -7.9
+30  4.0790      -55.1
+31  4.0990     -114.1
+32  4.1190     -134.6
+33  4.1415     -148.0
+34  4.1645     -156.5
+35  4.1995     -166.1
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 , 3.989 , 4.039 , 4.059 , 4.079 , 4.099 ,
+       4.119 , 4.1415, 4.1645, 4.1995]), 'potential_array': array([ 182.1,  181.6,  180.9,  178.7,  172.9,  166. ,  158.2,  151.4,
+        145.6,  140.1,  134.7,  129.8,  124.9,  120.2,  115.8,  111. ,
+        105.7,  100.2,   94.8,   88. ,   80.5,   70.2,   62.8,   53.5,
+         46.2,   36.6,   28.4,   25.6,    5.4,   -7.9,  -55.1, -114.1,
+       -134.6, -148. , -156.5, -166.1]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.097 mL, R² = 0.9995, k = 0.000, Zone = 15-29
+Gran Opt: V_eq = 4.086 mL, R² = 0.9999, k = 0.383, Zone = 12-28
+Schwartz Raw: V_eq = 4.097 mL, R² = 0.9995, k = 0.000, Zone = 15-29
+Schwartz Opt: V_eq = 4.086 mL, R² = 0.9999, k = 0.383, Zone = 12-28
+pH shape: (36,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/36/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/36/gran_schwartz.png
+Combined overview plot saved to results/screening/36/plots.png
+All visualizations saved to results/screening/36
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/36/report.pdf
+PDF report generated.
+Full report generated in results/screening/36
+Pipeline complete. Outputs in results/screening/36
 37
-Loaded 37 points from 'data_37.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 , 4.0415, 4.067 , 4.087 , 4.107 , 4.127 ,
-       4.147 , 4.167 , 4.195 , 4.223 , 4.262 ]), 'potential': array([ 182.6,  182. ,  181.2,  178.8,  173.2,  165.4,  157.8,  151.6,
-        145. ,  139.8,  134.6,  129.7,  125.1,  120.3,  115.8,  111. ,
-        106. ,  100.6,   95.2,   88.7,   81.1,   71.8,   62. ,   54.3,
-         48.4,   35. ,   28.6,   21.5,   11.9,   -0.9,  -20.6,  -86.4,
-       -125.8, -140.8, -153.8, -162.4, -172.1]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=3.71e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 18-32, R²=1.000 (Case: Case 1, Score: 103.76)
-Raw Zone (initial): indices 18-32, R²=0.9998, V_eq=4.128 mL over 14 points
-Low noise (std_dg1=6.93e-10 <= 0.001). No smoothing.
-Identified 'the Zone': indices 18-32, R²=1.000 (Case: Case 1, Score: 103.76)
-Opt Zone (final): k5=-4.728, R²=0.9998, V_eq=4.128 mL over 14 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/37/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/37/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/37
-Visualizations generated.
-CSV report saved to results/screening/37/gran_results.csv
-PDF report saved to results/screening/37/gran_report.pdf
-Method JSON saved to results/screening/37/method.json
-Full report generated in ./results/screening/37
-Full workflow complete. Results in ./results/screening/37
+Loaded 'data_37.dat': 37 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+27  3.9890       25.6
+28  4.0390        5.4
+29  4.0590       -7.9
+30  4.0790      -55.1
+31  4.0990     -114.1
+32  4.1190     -134.6
+33  4.1415     -148.0
+34  4.1645     -156.5
+35  4.1995     -166.1
+36  4.2385     -173.7
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 , 3.989 , 4.039 , 4.059 , 4.079 , 4.099 ,
+       4.119 , 4.1415, 4.1645, 4.1995, 4.2385]), 'potential_array': array([ 182.1,  181.6,  180.9,  178.7,  172.9,  166. ,  158.2,  151.4,
+        145.6,  140.1,  134.7,  129.8,  124.9,  120.2,  115.8,  111. ,
+        105.7,  100.2,   94.8,   88. ,   80.5,   70.2,   62.8,   53.5,
+         46.2,   36.6,   28.4,   25.6,    5.4,   -7.9,  -55.1, -114.1,
+       -134.6, -148. , -156.5, -166.1, -173.7]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.097 mL, R² = 0.9995, k = 0.000, Zone = 15-29
+Gran Opt: V_eq = 4.086 mL, R² = 0.9999, k = 0.383, Zone = 12-28
+Schwartz Raw: V_eq = 4.097 mL, R² = 0.9995, k = 0.000, Zone = 15-29
+Schwartz Opt: V_eq = 4.086 mL, R² = 0.9999, k = 0.383, Zone = 12-28
+pH shape: (37,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/37/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/37/gran_schwartz.png
+Combined overview plot saved to results/screening/37/plots.png
+All visualizations saved to results/screening/37
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/37/report.pdf
+PDF report generated.
+Full report generated in results/screening/37
+Pipeline complete. Outputs in results/screening/37
 38
-Loaded 38 points from 'data_38.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 , 4.0415, 4.067 , 4.087 , 4.107 , 4.127 ,
-       4.147 , 4.167 , 4.195 , 4.223 , 4.262 , 4.302 ]), 'potential': array([ 182.6,  182. ,  181.2,  178.8,  173.2,  165.4,  157.8,  151.6,
-        145. ,  139.8,  134.6,  129.7,  125.1,  120.3,  115.8,  111. ,
-        106. ,  100.6,   95.2,   88.7,   81.1,   71.8,   62. ,   54.3,
-         48.4,   35. ,   28.6,   21.5,   11.9,   -0.9,  -20.6,  -86.4,
-       -125.8, -140.8, -153.8, -162.4, -172.1, -178.4]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=3.66e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 18-33, R²=1.000 (Case: Case 1, Score: 103.91)
-Raw Zone (initial): indices 18-33, R²=0.9996, V_eq=4.131 mL over 15 points
-High noise (std_dg1=3.40e+01 > 0.001). Smoothing.
-Identified 'the Zone': indices 13-25, R²=0.999 (Case: Case 1, Score: 104.01)
-Opt fallback to raw Zone (to avoid shrinkage): R²=0.9996, points=15
-Opt Zone (final): k5=5.967, R²=0.9996, V_eq=4.131 mL over 15 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/38/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/38/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/38
-Visualizations generated.
-CSV report saved to results/screening/38/gran_results.csv
-PDF report saved to results/screening/38/gran_report.pdf
-Method JSON saved to results/screening/38/method.json
-Full report generated in ./results/screening/38
-Full workflow complete. Results in ./results/screening/38
+Loaded 'data_38.dat': 38 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+27  3.9890       25.6
+28  4.0390        5.4
+29  4.0590       -7.9
+30  4.0790      -55.1
+31  4.0990     -114.1
+32  4.1190     -134.6
+33  4.1415     -148.0
+34  4.1645     -156.5
+35  4.1995     -166.1
+36  4.2385     -173.7
+37  4.2965     -182.1
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 , 3.989 , 4.039 , 4.059 , 4.079 , 4.099 ,
+       4.119 , 4.1415, 4.1645, 4.1995, 4.2385, 4.2965]), 'potential_array': array([ 182.1,  181.6,  180.9,  178.7,  172.9,  166. ,  158.2,  151.4,
+        145.6,  140.1,  134.7,  129.8,  124.9,  120.2,  115.8,  111. ,
+        105.7,  100.2,   94.8,   88. ,   80.5,   70.2,   62.8,   53.5,
+         46.2,   36.6,   28.4,   25.6,    5.4,   -7.9,  -55.1, -114.1,
+       -134.6, -148. , -156.5, -166.1, -173.7, -182.1]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.096 mL, R² = 0.9995, k = 0.000, Zone = 15-30
+Gran Opt: V_eq = 4.086 mL, R² = 0.9999, k = 0.390, Zone = 12-29
+Schwartz Raw: V_eq = 4.096 mL, R² = 0.9995, k = 0.000, Zone = 15-30
+Schwartz Opt: V_eq = 4.086 mL, R² = 0.9999, k = 0.390, Zone = 12-29
+pH shape: (38,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/38/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/38/gran_schwartz.png
+Combined overview plot saved to results/screening/38/plots.png
+All visualizations saved to results/screening/38
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/38/report.pdf
+PDF report generated.
+Full report generated in results/screening/38
+Pipeline complete. Outputs in results/screening/38
 39
-Loaded 39 points from 'data_39.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 , 4.0415, 4.067 , 4.087 , 4.107 , 4.127 ,
-       4.147 , 4.167 , 4.195 , 4.223 , 4.262 , 4.302 , 4.38  ]), 'potential': array([ 182.6,  182. ,  181.2,  178.8,  173.2,  165.4,  157.8,  151.6,
-        145. ,  139.8,  134.6,  129.7,  125.1,  120.3,  115.8,  111. ,
-        106. ,  100.6,   95.2,   88.7,   81.1,   71.8,   62. ,   54.3,
-         48.4,   35. ,   28.6,   21.5,   11.9,   -0.9,  -20.6,  -86.4,
-       -125.8, -140.8, -153.8, -162.4, -172.1, -178.4, -187.5]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=3.62e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 18-33, R²=1.000 (Case: Case 1, Score: 103.81)
-Raw Zone (initial): indices 18-33, R²=0.9996, V_eq=4.131 mL over 15 points
-High noise (std_dg1=3.36e+01 > 0.001). Smoothing.
-Identified 'the Zone': indices 13-25, R²=0.999 (Case: Case 1, Score: 103.93)
-Opt fallback to raw Zone (to avoid shrinkage): R²=0.9996, points=15
-Opt Zone (final): k5=5.967, R²=0.9996, V_eq=4.131 mL over 15 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/39/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/39/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/39
-Visualizations generated.
-CSV report saved to results/screening/39/gran_results.csv
-PDF report saved to results/screening/39/gran_report.pdf
-Method JSON saved to results/screening/39/method.json
-Full report generated in ./results/screening/39
-Full workflow complete. Results in ./results/screening/39
+Loaded 'data_39.dat': 39 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+27  3.9890       25.6
+28  4.0390        5.4
+29  4.0590       -7.9
+30  4.0790      -55.1
+31  4.0990     -114.1
+32  4.1190     -134.6
+33  4.1415     -148.0
+34  4.1645     -156.5
+35  4.1995     -166.1
+36  4.2385     -173.7
+37  4.2965     -182.1
+38  4.3710     -189.7
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 , 3.989 , 4.039 , 4.059 , 4.079 , 4.099 ,
+       4.119 , 4.1415, 4.1645, 4.1995, 4.2385, 4.2965, 4.371 ]), 'potential_array': array([ 182.1,  181.6,  180.9,  178.7,  172.9,  166. ,  158.2,  151.4,
+        145.6,  140.1,  134.7,  129.8,  124.9,  120.2,  115.8,  111. ,
+        105.7,  100.2,   94.8,   88. ,   80.5,   70.2,   62.8,   53.5,
+         46.2,   36.6,   28.4,   25.6,    5.4,   -7.9,  -55.1, -114.1,
+       -134.6, -148. , -156.5, -166.1, -173.7, -182.1, -189.7]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.096 mL, R² = 0.9995, k = 0.000, Zone = 15-30
+Gran Opt: V_eq = 4.086 mL, R² = 0.9999, k = 0.390, Zone = 12-29
+Schwartz Raw: V_eq = 4.096 mL, R² = 0.9995, k = 0.000, Zone = 15-30
+Schwartz Opt: V_eq = 4.086 mL, R² = 0.9999, k = 0.390, Zone = 12-29
+pH shape: (39,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/39/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/39/gran_schwartz.png
+Combined overview plot saved to results/screening/39/plots.png
+All visualizations saved to results/screening/39
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/39/report.pdf
+PDF report generated.
+Full report generated in results/screening/39
+Pipeline complete. Outputs in results/screening/39
 40
-Loaded 40 points from 'data_40.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 , 4.0415, 4.067 , 4.087 , 4.107 , 4.127 ,
-       4.147 , 4.167 , 4.195 , 4.223 , 4.262 , 4.302 , 4.38  , 4.4735]), 'potential': array([ 182.6,  182. ,  181.2,  178.8,  173.2,  165.4,  157.8,  151.6,
-        145. ,  139.8,  134.6,  129.7,  125.1,  120.3,  115.8,  111. ,
-        106. ,  100.6,   95.2,   88.7,   81.1,   71.8,   62. ,   54.3,
-         48.4,   35. ,   28.6,   21.5,   11.9,   -0.9,  -20.6,  -86.4,
-       -125.8, -140.8, -153.8, -162.4, -172.1, -178.4, -187.5, -195.9]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=3.57e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 18-33, R²=1.000 (Case: Case 1, Score: 103.71)
-Raw Zone (initial): indices 18-33, R²=0.9996, V_eq=4.131 mL over 15 points
-High noise (std_dg1=3.32e+01 > 0.001). Smoothing.
-Identified 'the Zone': indices 13-25, R²=0.999 (Case: Case 1, Score: 103.85)
-Opt fallback to raw Zone (to avoid shrinkage): R²=0.9996, points=15
-Opt Zone (final): k5=5.967, R²=0.9996, V_eq=4.131 mL over 15 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/40/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/40/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/40
-Visualizations generated.
-CSV report saved to results/screening/40/gran_results.csv
-PDF report saved to results/screening/40/gran_report.pdf
-Method JSON saved to results/screening/40/method.json
-Full report generated in ./results/screening/40
-Full workflow complete. Results in ./results/screening/40
+Loaded 'data_40.dat': 40 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+27  3.9890       25.6
+28  4.0390        5.4
+29  4.0590       -7.9
+30  4.0790      -55.1
+31  4.0990     -114.1
+32  4.1190     -134.6
+33  4.1415     -148.0
+34  4.1645     -156.5
+35  4.1995     -166.1
+36  4.2385     -173.7
+37  4.2965     -182.1
+38  4.3710     -189.7
+39  4.4815     -198.3
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 , 3.989 , 4.039 , 4.059 , 4.079 , 4.099 ,
+       4.119 , 4.1415, 4.1645, 4.1995, 4.2385, 4.2965, 4.371 , 4.4815]), 'potential_array': array([ 182.1,  181.6,  180.9,  178.7,  172.9,  166. ,  158.2,  151.4,
+        145.6,  140.1,  134.7,  129.8,  124.9,  120.2,  115.8,  111. ,
+        105.7,  100.2,   94.8,   88. ,   80.5,   70.2,   62.8,   53.5,
+         46.2,   36.6,   28.4,   25.6,    5.4,   -7.9,  -55.1, -114.1,
+       -134.6, -148. , -156.5, -166.1, -173.7, -182.1, -189.7, -198.3]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.096 mL, R² = 0.9995, k = 0.000, Zone = 15-31
+Gran Opt: V_eq = 4.087 mL, R² = 0.9999, k = 0.360, Zone = 12-29
+Schwartz Raw: V_eq = 4.096 mL, R² = 0.9995, k = 0.000, Zone = 15-31
+Schwartz Opt: V_eq = 4.087 mL, R² = 0.9999, k = 0.360, Zone = 12-29
+pH shape: (40,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/40/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/40/gran_schwartz.png
+Combined overview plot saved to results/screening/40/plots.png
+All visualizations saved to results/screening/40
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/40/report.pdf
+PDF report generated.
+Full report generated in results/screening/40
+Pipeline complete. Outputs in results/screening/40
 41
-Loaded 41 points from 'data_41.dat'.
-   volume  potential
-0   0.000      182.6
-1   0.020      182.0
-2   0.040      181.2
-3   0.090      178.8
-4   0.215      173.2
-Final config: {'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Preprocessing complete. Ready for analysis.
-Preprocessed data ready. Final params: {'volume': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.4015, 0.6015, 0.8015,
-       1.0015, 1.2015, 1.4015, 1.6015, 1.8015, 2.0015, 2.2015, 2.4015,
-       2.6015, 2.8015, 3.0015, 3.2015, 3.4015, 3.6015, 3.75  , 3.8355,
-       3.8995, 3.9845, 4.014 , 4.0415, 4.067 , 4.087 , 4.107 , 4.127 ,
-       4.147 , 4.167 , 4.195 , 4.223 , 4.262 , 4.302 , 4.38  , 4.4735,
-       4.591 ]), 'potential': array([ 182.6,  182. ,  181.2,  178.8,  173.2,  165.4,  157.8,  151.6,
-        145. ,  139.8,  134.6,  129.7,  125.1,  120.3,  115.8,  111. ,
-        106. ,  100.6,   95.2,   88.7,   81.1,   71.8,   62. ,   54.3,
-         48.4,   35. ,   28.6,   21.5,   11.9,   -0.9,  -20.6,  -86.4,
-       -125.8, -140.8, -153.8, -162.4, -172.1, -178.4, -187.5, -195.9,
-       -203.2]), 'V': 25.0, 'C_B': 0.1, 'r2_threshold': 0.95, 'titration_type': 'weak_acid'}
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Gran functions computed.
-Using weak_acid_g1 with k=0.0
-Computed Gran function for weak_acid with default k=0.0
-Low noise (std_dg1=3.53e-05 <= 0.001). No smoothing.
-Identified 'the Zone': indices 18-33, R²=1.000 (Case: Case 1, Score: 103.62)
-Raw Zone (initial): indices 18-33, R²=0.9996, V_eq=4.131 mL over 15 points
-High noise (std_dg1=3.28e+01 > 0.001). Smoothing.
-Identified 'the Zone': indices 13-25, R²=0.999 (Case: Case 1, Score: 103.78)
-Opt fallback to raw Zone (to avoid shrinkage): R²=0.9996, points=15
-Opt Zone (final): k5=5.967, R²=0.9996, V_eq=4.131 mL over 15 points
-Gran analysis complete with separate raw/opt Zones.
-Analysis complete.
-Titration curve saved to ./results/screening/41/titration_curve.png
-Gran plot (separate raw/opt Zones) saved to ./results/screening/41/gran_functions.png
-No screened k data available. Skipping plot.
-All visualizations saved to ./results/screening/41
-Visualizations generated.
-CSV report saved to results/screening/41/gran_results.csv
-PDF report saved to results/screening/41/gran_report.pdf
-Method JSON saved to results/screening/41/method.json
-Full report generated in ./results/screening/41
-Full workflow complete. Results in ./results/screening/41
+Loaded 'data_41.dat': 41 rows, skipped 0 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000      182.1
+1   0.0200      181.6
+2   0.0400      180.9
+3   0.0900      178.7
+4   0.2150      172.9
+5   0.3825      166.0
+6   0.5825      158.2
+7   0.7825      151.4
+8   0.9825      145.6
+9   1.1825      140.1
+10  1.3825      134.7
+11  1.5825      129.8
+12  1.7825      124.9
+13  1.9825      120.2
+14  2.1825      115.8
+15  2.3825      111.0
+16  2.5825      105.7
+17  2.7825      100.2
+18  2.9825       94.8
+19  3.1825       88.0
+20  3.3825       80.5
+21  3.5825       70.2
+22  3.7030       62.8
+23  3.8115       53.5
+24  3.8790       46.2
+25  3.9370       36.6
+26  3.9690       28.4
+27  3.9890       25.6
+28  4.0390        5.4
+29  4.0590       -7.9
+30  4.0790      -55.1
+31  4.0990     -114.1
+32  4.1190     -134.6
+33  4.1415     -148.0
+34  4.1645     -156.5
+35  4.1995     -166.1
+36  4.2385     -173.7
+37  4.2965     -182.1
+38  4.3710     -189.7
+39  4.4815     -198.3
+40  4.6175     -206.4
+DEBUG params: {'volume_array': array([0.    , 0.02  , 0.04  , 0.09  , 0.215 , 0.3825, 0.5825, 0.7825,
+       0.9825, 1.1825, 1.3825, 1.5825, 1.7825, 1.9825, 2.1825, 2.3825,
+       2.5825, 2.7825, 2.9825, 3.1825, 3.3825, 3.5825, 3.703 , 3.8115,
+       3.879 , 3.937 , 3.969 , 3.989 , 4.039 , 4.059 , 4.079 , 4.099 ,
+       4.119 , 4.1415, 4.1645, 4.1995, 4.2385, 4.2965, 4.371 , 4.4815,
+       4.6175]), 'potential_array': array([ 182.1,  181.6,  180.9,  178.7,  172.9,  166. ,  158.2,  151.4,
+        145.6,  140.1,  134.7,  129.8,  124.9,  120.2,  115.8,  111. ,
+        105.7,  100.2,   94.8,   88. ,   80.5,   70.2,   62.8,   53.5,
+         46.2,   36.6,   28.4,   25.6,    5.4,   -7.9,  -55.1, -114.1,
+       -134.6, -148. , -156.5, -166.1, -173.7, -182.1, -189.7, -198.3,
+       -206.4]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [182.1 181.6 180.9 178.7 172.9]
+DEBUG gran_functions: pH first 5: [3.92190669 3.93035835 3.94219067 3.97937796 4.07741717]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 4.096 mL, R² = 0.9995, k = 0.000, Zone = 15-31
+Gran Opt: V_eq = 4.087 mL, R² = 0.9999, k = 0.360, Zone = 12-30
+Schwartz Raw: V_eq = 4.096 mL, R² = 0.9995, k = 0.000, Zone = 15-31
+Schwartz Opt: V_eq = 4.087 mL, R² = 0.9999, k = 0.360, Zone = 12-30
+pH shape: (41,)
+=== END ANALYZER NESTED ===
+Titration curve saved to results/screening/41/titration_curve.png
+Gran/Schwartz combined plot saved to results/screening/41/gran_schwartz.png
+Combined overview plot saved to results/screening/41/plots.png
+All visualizations saved to results/screening/41
+Generating CSV report...
+CSV export failed: name 'export_to_csv' is not defined
+Generating PDF report...
+Saved PDF report to results/screening/41/report.pdf
+PDF report generated.
+Full report generated in results/screening/41
+Pipeline complete. Outputs in results/screening/41
