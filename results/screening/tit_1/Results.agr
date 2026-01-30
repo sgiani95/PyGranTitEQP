@@ -1,7 +1,7 @@
 # Grace project file
 #
 @version 50125
-@page size 792, 612
+@page size 1901, 1469
 @page scroll 5%
 @page inout 5%
 @link page off
@@ -123,7 +123,7 @@
 @timestamp rot 0
 @timestamp font 0
 @timestamp char size 1.000000
-@timestamp def "Thu Jan 29 22:42:51 2026"
+@timestamp def "Fri Jan 30 11:04:20 2026"
 @r0 off
 @link r0 to g0
 @r0 type above
@@ -288,57 +288,7 @@
 @    yaxis  ticklabel color 1
 @    yaxis  tick place both
 @    yaxis  tick spec type none
-@    altxaxis  on
-@    altxaxis  type zero false
-@    altxaxis  offset 0.000000 , 0.000000
-@    altxaxis  bar on
-@    altxaxis  bar color 1
-@    altxaxis  bar linestyle 1
-@    altxaxis  bar linewidth 1.0
-@    altxaxis  label "Volume [mL]\n "
-@    altxaxis  label layout para
-@    altxaxis  label place auto
-@    altxaxis  label char size 1.000000
-@    altxaxis  label font 0
-@    altxaxis  label color 1
-@    altxaxis  label place opposite
-@    altxaxis  tick on
-@    altxaxis  tick major 1
-@    altxaxis  tick minor ticks 1
-@    altxaxis  tick default 6
-@    altxaxis  tick place rounded true
-@    altxaxis  tick in
-@    altxaxis  tick major size 1.000000
-@    altxaxis  tick major color 1
-@    altxaxis  tick major linewidth 1.0
-@    altxaxis  tick major linestyle 1
-@    altxaxis  tick major grid off
-@    altxaxis  tick minor color 1
-@    altxaxis  tick minor linewidth 1.0
-@    altxaxis  tick minor linestyle 1
-@    altxaxis  tick minor grid off
-@    altxaxis  tick minor size 0.500000
-@    altxaxis  ticklabel on
-@    altxaxis  ticklabel format general
-@    altxaxis  ticklabel prec 5
-@    altxaxis  ticklabel formula ""
-@    altxaxis  ticklabel append ""
-@    altxaxis  ticklabel prepend ""
-@    altxaxis  ticklabel angle 0
-@    altxaxis  ticklabel skip 0
-@    altxaxis  ticklabel stagger 0
-@    altxaxis  ticklabel place opposite
-@    altxaxis  ticklabel offset auto
-@    altxaxis  ticklabel offset 0.000000 , 0.010000
-@    altxaxis  ticklabel start type auto
-@    altxaxis  ticklabel start 0.000000
-@    altxaxis  ticklabel stop type auto
-@    altxaxis  ticklabel stop 0.000000
-@    altxaxis  ticklabel char size 1.000000
-@    altxaxis  ticklabel font 0
-@    altxaxis  ticklabel color 1
-@    altxaxis  tick place both
-@    altxaxis  tick spec type none
+@    altxaxis  off
 @    altyaxis  off
 @    legend on
 @    legend loctype view
@@ -423,7 +373,7 @@
 @g1 fixedpoint format general general
 @g1 fixedpoint prec 6, 6
 @with g1
-@    world 0, 0, 44, 5
+@    world 0, 0, 5, 5
 @    stack world 0, 0, 0, 0
 @    znorm 1
 @    view 0.150000, 0.150000, 1.144118, 0.500000
@@ -446,7 +396,7 @@
 @    xaxis  bar color 1
 @    xaxis  bar linestyle 1
 @    xaxis  bar linewidth 1.0
-@    xaxis  label "\n Datapoints"
+@    xaxis  label "\n Volume [mL]"
 @    xaxis  label layout para
 @    xaxis  label place auto
 @    xaxis  label char size 1.000000
@@ -454,7 +404,7 @@
 @    xaxis  label color 1
 @    xaxis  label place normal
 @    xaxis  tick on
-@    xaxis  tick major 10
+@    xaxis  tick major 1
 @    xaxis  tick minor ticks 1
 @    xaxis  tick default 6
 @    xaxis  tick place rounded true
@@ -613,7 +563,7 @@
 @    s0 errorbar riser linestyle 1
 @    s0 errorbar riser clip off
 @    s0 errorbar riser clip length 0.100000
-@    s0 comment "/home/sgiani/repos/GranTED/results/screening/tit_1/results.dat"
+@    s0 comment "/home/sgiani/repos/GranTED/results/screening/tit_1/rresults.dat"
 @    s0 legend  ""
 @target G0.S0
 @type xy
@@ -661,41 +611,41 @@
 &
 @target G1.S0
 @type xy
-5 0.59
-6 1.142
-7 1.616
-8 1.97
-9 2.309
-10 0.833
-11 3.235
-12 3.871
-13 3.957
-14 4.545
-15 4.969
-16 4.413
-17 4.496
-18 4.323
-19 4.196
-20 4.44
-21 4.14
-22 4.108
-23 4.101
-24 4.101
-25 4.101
-26 4.095
-27 4.08
-28 4.085
-29 4.085
-30 4.085
-31 4.085
-32 4.085
-33 4.087
-34 4.089
-35 4.088
-36 4.086
-37 4.086
-38 4.086
-39 4.086
-40 4.087
-41 4.087
+0.215 0.59
+0.3825 1.142
+0.5825 1.616
+0.7825 1.97
+0.9825 2.309
+1.1825 0.833
+1.3825 3.235
+1.5825 3.871
+1.7825 3.957
+1.9825 4.545
+2.1825 4.969
+2.3825 4.413
+2.5825 4.496
+2.7825 4.323
+2.9825 4.196
+3.1825 4.44
+3.3825 4.14
+3.5825 4.108
+3.703 4.101
+3.8115 4.101
+3.879 4.101
+3.937 4.095
+3.969 4.08
+3.989 4.085
+4.039 4.085
+4.059 4.085
+4.079 4.085
+4.099 4.085
+4.119 4.087
+4.1415 4.089
+4.1645 4.088
+4.1995 4.086
+4.2385 4.086
+4.2965 4.086
+4.371 4.086
+4.4815 4.087
+4.6175 4.087
 &
