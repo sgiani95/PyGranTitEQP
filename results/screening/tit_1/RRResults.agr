@@ -127,7 +127,7 @@
 @with string
 @    string on
 @    string loctype view
-@    string 0.642156862745, 0.725490196078
+@    string 0.5, 0.7
 @    string color 1
 @    string rot 0
 @    string font 0
@@ -137,7 +137,7 @@
 @with string
 @    string on
 @    string loctype view
-@    string 0.666666666667, 0.738970588235
+@    string 0.5, 0.6
 @    string color 1
 @    string rot 0
 @    string font 0
