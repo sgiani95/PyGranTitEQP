@@ -5,7 +5,7 @@ PYTHON=/bin/python3
 SCRIPT=/home/sgiani/repos/GranTED/main.py
 ODS=rawdata.ods
 CSV=rawdata.csv
-BASE_OUT=/home/sgiani/repos/GranTED/results/mL/01mL
+BASE_OUT=/home/sgiani/repos/GranTED/results/mL/005mL
 
 # Convert ODS to CSV
 soffice --headless \

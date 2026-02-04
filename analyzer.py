@@ -45,7 +45,7 @@ def identify_linear_interval(
     vol_neg_idx = np.where(neg_mask)[0]
 
     candidates = []
-    win_sizes = range(max(3, min_points//2), min(66, len(dg1_neg)//2) + 1)
+    win_sizes = range(max(3, min_points//2), min(15, len(dg1_neg)//2) + 1)
     for win_len in win_sizes:
         for i in range(len(dg1_neg) - win_len + 1):
             seg_dg1 = dg1_neg[i:i+win_len]

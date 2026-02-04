@@ -1,3 +1,5 @@
+convert /home/sgiani/repos/GranTED/rawdata.ods -> /home/sgiani/repos/GranTED/rawdata.csv using filter : Text - txt - csv (StarCalc):44,34,UTF8
+Overwriting: /home/sgiani/repos/GranTED/rawdata.csv
 Found 6 triplets
 Processing triplet 1 → columns 1,2
 Loaded '/home/sgiani/repos/GranTED/results/mL/005mL/1/data.dat': 71 rows, skipped 0 header/comment/non-numeric lines.
@@ -50,10 +52,10 @@ DEBUG gran_functions: potential first 5: [4.3 4.4 3.9 3.4 2.8]
 DEBUG gran_functions: pH first 5: [6.92731575 6.92562542 6.93407708 6.94252874 6.95267072]
 Gran and Schwartz computed successfully.
 === ANALYZER NESTED RESULTS ===
-Gran Raw: V_eq = 5.231 mL, R² = 0.9755, k = 0.000, Zone = 34-67
-Gran Opt: V_eq = 5.177 mL, R² = 0.9873, k = -80.826, Zone = 34-67
-Schwartz Raw: V_eq = 5.231 mL, R² = 0.9755, k = 0.000, Zone = 34-67
-Schwartz Opt: V_eq = 5.177 mL, R² = 0.9873, k = -80.826, Zone = 34-67
+Gran Raw: V_eq = 5.886 mL, R² = 0.9948, k = 0.000, Zone = 31-46
+Gran Opt: V_eq = 5.282 mL, R² = 0.9999, k = 38.448, Zone = 31-46
+Schwartz Raw: V_eq = 5.886 mL, R² = 0.9948, k = 0.000, Zone = 31-46
+Schwartz Opt: V_eq = 5.282 mL, R² = 0.9999, k = 38.448, Zone = 31-46
 pH shape: (71,)
 === END ANALYZER NESTED ===
 Titration curve saved to /home/sgiani/repos/GranTED/results/mL/005mL/1/titration_curve.png
@@ -113,10 +115,10 @@ DEBUG gran_functions: potential first 5: [4.6 4.9 4.5 3.8 3.1]
 DEBUG gran_functions: pH first 5: [6.92224476 6.91717377 6.92393509 6.93576741 6.94759973]
 Gran and Schwartz computed successfully.
 === ANALYZER NESTED RESULTS ===
-Gran Raw: V_eq = 5.233 mL, R² = 0.9762, k = 0.000, Zone = 34-67
-Gran Opt: V_eq = 5.179 mL, R² = 0.9878, k = -94.562, Zone = 34-67
-Schwartz Raw: V_eq = 5.233 mL, R² = 0.9762, k = 0.000, Zone = 34-67
-Schwartz Opt: V_eq = 5.179 mL, R² = 0.9878, k = -94.562, Zone = 34-67
+Gran Raw: V_eq = 6.708 mL, R² = 0.9939, k = 0.000, Zone = 23-38
+Gran Opt: V_eq = 5.495 mL, R² = 0.9993, k = 7.152, Zone = 26-41
+Schwartz Raw: V_eq = 6.708 mL, R² = 0.9939, k = 0.000, Zone = 23-38
+Schwartz Opt: V_eq = 5.495 mL, R² = 0.9993, k = 7.152, Zone = 26-41
 pH shape: (71,)
 === END ANALYZER NESTED ===
 Titration curve saved to /home/sgiani/repos/GranTED/results/mL/005mL/2/titration_curve.png
@@ -176,10 +178,10 @@ DEBUG gran_functions: potential first 5: [4.6 4.8 4.4 3.6 2.8]
 DEBUG gran_functions: pH first 5: [6.92224476 6.9188641  6.92562542 6.93914807 6.95267072]
 Gran and Schwartz computed successfully.
 === ANALYZER NESTED RESULTS ===
-Gran Raw: V_eq = 5.234 mL, R² = 0.9747, k = 0.000, Zone = 34-67
-Gran Opt: V_eq = 5.178 mL, R² = 0.9874, k = -48.750, Zone = 34-67
-Schwartz Raw: V_eq = 5.234 mL, R² = 0.9747, k = 0.000, Zone = 34-67
-Schwartz Opt: V_eq = 5.178 mL, R² = 0.9874, k = -48.750, Zone = 34-67
+Gran Raw: V_eq = 5.754 mL, R² = 0.9936, k = 0.000, Zone = 33-48
+Gran Opt: V_eq = 5.219 mL, R² = 0.9997, k = -62.205, Zone = 33-48
+Schwartz Raw: V_eq = 5.754 mL, R² = 0.9936, k = 0.000, Zone = 33-48
+Schwartz Opt: V_eq = 5.219 mL, R² = 0.9997, k = -62.205, Zone = 33-48
 pH shape: (71,)
 === END ANALYZER NESTED ===
 Titration curve saved to /home/sgiani/repos/GranTED/results/mL/005mL/3/titration_curve.png
@@ -238,12 +240,12 @@ Computing Gran/Schwartz for type: acid_base
 DEBUG gran_functions: potential first 5: [3.1 5.3 4.9 3.9 3.7]
 DEBUG gran_functions: pH first 5: [6.94759973 6.91041244 6.91717377 6.93407708 6.93745774]
 Gran and Schwartz computed successfully.
-Warning: Low R²=0.570 for zone (np.int64(0), np.int64(2)) (k=-57.8328579629792)
+Warning: Low R²=0.557 for zone (np.int64(0), np.int64(2)) (k=-29.554060971163842)
 === ANALYZER NESTED RESULTS ===
-Gran Raw: V_eq = 5.234 mL, R² = 0.9751, k = 0.000, Zone = 34-67
-Gran Opt: V_eq = 5.178 mL, R² = 0.9874, k = -57.833, Zone = 34-67
-Schwartz Raw: V_eq = 5.234 mL, R² = 0.9751, k = 0.000, Zone = 34-67
-Schwartz Opt: V_eq = 5.178 mL, R² = 0.9874, k = -57.833, Zone = 34-67
+Gran Raw: V_eq = 5.566 mL, R² = 0.9938, k = 0.000, Zone = 36-51
+Gran Opt: V_eq = 5.188 mL, R² = 0.9997, k = -29.554, Zone = 36-51
+Schwartz Raw: V_eq = 5.566 mL, R² = 0.9938, k = 0.000, Zone = 36-51
+Schwartz Opt: V_eq = 5.188 mL, R² = 0.9997, k = -29.554, Zone = 36-51
 pH shape: (71,)
 === END ANALYZER NESTED ===
 Titration curve saved to /home/sgiani/repos/GranTED/results/mL/005mL/4/titration_curve.png
@@ -303,10 +305,10 @@ DEBUG gran_functions: potential first 5: [3.8 4.1 3.4 2.7 2.2]
 DEBUG gran_functions: pH first 5: [6.93576741 6.93069642 6.94252874 6.95436105 6.96281271]
 Gran and Schwartz computed successfully.
 === ANALYZER NESTED RESULTS ===
-Gran Raw: V_eq = 5.240 mL, R² = 0.9740, k = 0.000, Zone = 34-67
-Gran Opt: V_eq = 5.180 mL, R² = 0.9878, k = -35.777, Zone = 34-67
-Schwartz Raw: V_eq = 5.240 mL, R² = 0.9740, k = 0.000, Zone = 34-67
-Schwartz Opt: V_eq = 5.180 mL, R² = 0.9878, k = -35.777, Zone = 34-67
+Gran Raw: V_eq = 5.650 mL, R² = 0.9940, k = 0.000, Zone = 35-50
+Gran Opt: V_eq = 5.216 mL, R² = 0.9997, k = -41.243, Zone = 35-50
+Schwartz Raw: V_eq = 5.650 mL, R² = 0.9940, k = 0.000, Zone = 35-50
+Schwartz Opt: V_eq = 5.216 mL, R² = 0.9997, k = -41.243, Zone = 35-50
 pH shape: (71,)
 === END ANALYZER NESTED ===
 Titration curve saved to /home/sgiani/repos/GranTED/results/mL/005mL/5/titration_curve.png
@@ -366,10 +368,10 @@ DEBUG gran_functions: potential first 5: [2.9 3.1 2.4 1.8 1. ]
 DEBUG gran_functions: pH first 5: [6.95098039 6.94759973 6.95943205 6.96957404 6.98309669]
 Gran and Schwartz computed successfully.
 === ANALYZER NESTED RESULTS ===
-Gran Raw: V_eq = 5.240 mL, R² = 0.9731, k = 0.000, Zone = 34-67
-Gran Opt: V_eq = 5.179 mL, R² = 0.9876, k = -29.605, Zone = 34-67
-Schwartz Raw: V_eq = 5.240 mL, R² = 0.9731, k = 0.000, Zone = 34-67
-Schwartz Opt: V_eq = 5.179 mL, R² = 0.9876, k = -29.605, Zone = 34-67
+Gran Raw: V_eq = 6.510 mL, R² = 0.9957, k = 0.000, Zone = 27-40
+Gran Opt: V_eq = 5.505 mL, R² = 0.9994, k = 9.381, Zone = 23-38
+Schwartz Raw: V_eq = 6.510 mL, R² = 0.9957, k = 0.000, Zone = 27-40
+Schwartz Opt: V_eq = 5.505 mL, R² = 0.9994, k = 9.381, Zone = 23-38
 pH shape: (71,)
 === END ANALYZER NESTED ===
 Titration curve saved to /home/sgiani/repos/GranTED/results/mL/005mL/6/titration_curve.png
