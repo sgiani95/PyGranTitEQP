@@ -5,7 +5,7 @@ PYTHON=/bin/python3
 SCRIPT=/home/sgiani/repos/GranTED/main.py
 ODS=rawdata.ods
 CSV=rawdata.csv
-BASE_OUT=./results/weak_acid
+BASE_OUT=/home/sgiani/repos/GranTED/results/mL/01mL
 
 # Convert ODS to CSV
 soffice --headless \
@@ -38,7 +38,6 @@ awk -F',' -v c1="$col1" -v c2="$col2" '{
 
 
     "$PYTHON" "$SCRIPT" \
-        #--V 50 \
 	--data_file "$outfile" \
         --output_dir "$outdir"
 
