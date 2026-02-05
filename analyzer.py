@@ -45,7 +45,7 @@ def identify_linear_interval(
     vol_neg_idx = np.where(neg_mask)[0]
 
     candidates = []
-    win_sizes = range(max(3, min_points//2), min(15, len(dg1_neg)//2) + 1)
+    win_sizes = range(max(3, min_points//2), min(30, len(dg1_neg)//2) + 1)
     for win_len in win_sizes:
         for i in range(len(dg1_neg) - win_len + 1):
             seg_dg1 = dg1_neg[i:i+win_len]
@@ -91,7 +91,7 @@ def _compute_fit(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k:
     return {'r2': r2, 'fit': (slope, intercept), 'veq': veq}
 
 
-def _optimize_single_zone(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k_bounds: Tuple[float, float] = (-10000, 10000), pH_full: np.ndarray = None) -> Dict[str, Any]:
+def _optimize_single_zone(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k_bounds: Tuple[float, float] = (0, 1000000000), pH_full: np.ndarray = None) -> Dict[str, Any]:
     """Optimize k for a fixed zone using gran_func callable."""
     volume_slice = df['volume'].iloc[start:end+1].values
     pH_slice = pH_full[start:end+1]
@@ -179,7 +179,7 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
     raw_metrics = get_metrics({'r2': raw_zone['r2'], 'fit': raw_zone['fit']}, initial_interval, k=0.0)
 
     # Opt k on raw Zone
-    k_bounds = (-10000, 10000)
+    k_bounds = (0, 1000000000)
     opt_k_dict = _optimize_single_zone(df, start_idx, end_idx, schwartz_func, k_bounds, pH_full=pH_full)
     opt_k = opt_k_dict['best_k']
 
