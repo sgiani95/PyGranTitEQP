@@ -46,6 +46,7 @@ done
 echo ""; echo " read y"; read y
 
 cd ${BASE_OUT}
+rm -Rf 00_HCl_TRIS_01 00_HCl_TRIS_02 01_NaOH_KHP_02 M002_TiterNaOH_02 M003_TiterHCL_02 M011_TiterH2SO4_02 M400_2009 M140_Bro25 M120 M401_2006 M146_g084mwt_table M145mwt 70_Hcl_TRIS_Liquid_M003 80_Hcl_TRIS_Liquid_M003
 mkdir 00_HCl_TRIS_01; mv 1 2 3 4 5 6 7 8 00_HCl_TRIS_01
 mkdir 00_HCl_TRIS_02; mv 9 10 11 12 13 14 15 16 00_HCl_TRIS_02
 mkdir 01_NaOH_KHP_02; mv 17 18 19 20 01_NaOH_KHP_02
@@ -58,5 +59,6 @@ mkdir M120; mv 41 M120
 mkdir M401_2006; mv 42 M401_2006
 mkdir M146_g084mwt_table; mv 43 M146_g084mwt_table
 mkdir M145mwt; mv 44 M145mwt
-
+mkdir 70_Hcl_TRIS_Liquid_M003; mv 45 46 47 70_Hcl_TRIS_Liquid_M003
+mkdir 80_Hcl_TRIS_Liquid_M003; mv 48 49 50 80_Hcl_TRIS_Liquid_M003
 

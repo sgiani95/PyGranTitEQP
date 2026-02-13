@@ -1,4 +1,6 @@
-Found 44 triplets
+convert /home/sgiani/repos/GranTED/rawdata.ods -> /home/sgiani/repos/GranTED/rawdata.csv using filter : Text - txt - csv (StarCalc):44,34,UTF8
+Overwriting: /home/sgiani/repos/GranTED/rawdata.csv
+Found 50 triplets
 Processing triplet 1 → columns 1,2
 Loaded '/home/sgiani/repos/GranTED/results/1/data.dat': 63 rows, skipped 18 header/comment/non-numeric lines.
 Validation passed
@@ -3187,5 +3189,427 @@ Saved PDF report to /home/sgiani/repos/GranTED/results/44/report.pdf
 PDF report generated.
 Full report generated in /home/sgiani/repos/GranTED/results/44
 Pipeline complete. Outputs in /home/sgiani/repos/GranTED/results/44
+Processing triplet 45 → columns 133,134
+Loaded '/home/sgiani/repos/GranTED/results/45/data.dat': 28 rows, skipped 53 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [41.1 37.2 30.6 28.  21.6]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000       41.1
+1   0.0500       37.2
+2   0.1000       30.6
+3   0.1500       28.0
+4   0.2750       21.6
+5   0.4370       13.8
+6   0.6110        9.2
+7   1.0460        0.1
+8   1.5335       -4.7
+9   2.0335      -12.1
+10  2.5335      -17.6
+11  3.0335      -22.8
+12  3.5335      -29.7
+13  4.0335      -38.4
+14  4.4570      -49.5
+15  4.6620      -58.1
+16  4.7795      -64.2
+17  4.9035      -79.6
+18  4.9535      -87.1
+19  5.0035     -112.6
+20  5.0535     -172.5
+21  5.1035     -187.3
+22  5.2120     -200.4
+23  5.3760     -208.4
+24  5.7805     -218.2
+25  6.2805     -223.6
+26  6.7805     -227.1
+27  7.2805     -229.6
+DEBUG params: {'volume_array': array([0.    , 0.05  , 0.1   , 0.15  , 0.275 , 0.437 , 0.611 , 1.046 ,
+       1.5335, 2.0335, 2.5335, 3.0335, 3.5335, 4.0335, 4.457 , 4.662 ,
+       4.7795, 4.9035, 4.9535, 5.0035, 5.0535, 5.1035, 5.212 , 5.376 ,
+       5.7805, 6.2805, 6.7805, 7.2805]), 'potential_array': array([ 4.110e+01,  3.720e+01,  3.060e+01,  2.800e+01,  2.160e+01,
+        1.380e+01,  9.200e+00,  1.000e-01, -4.700e+00, -1.210e+01,
+       -1.760e+01, -2.280e+01, -2.970e+01, -3.840e+01, -4.950e+01,
+       -5.810e+01, -6.420e+01, -7.960e+01, -8.710e+01, -1.126e+02,
+       -1.725e+02, -1.873e+02, -2.004e+02, -2.084e+02, -2.182e+02,
+       -2.236e+02, -2.271e+02, -2.296e+02]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [41.1 37.2 30.6 28.  21.6]
+DEBUG gran_functions: pH first 5: [6.30527383 6.37119675 6.48275862 6.52670723 6.63488844]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [41.1 37.2 30.6 28.  21.6]
+DEBUG gran_functions: pH first 5: [6.30527383 6.37119675 6.48275862 6.52670723 6.63488844]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 5.058 mL, R² = 0.9937, k = 0.000, Zone = 16-20
+Gran Opt: V_eq = 5.225 mL, R² = 0.9998, k = 999885010.627, Zone = 11-15
+Schwartz Raw: V_eq = 5.058 mL, R² = 0.9937, k = 0.000, Zone = 16-20
+Schwartz Opt: V_eq = 5.225 mL, R² = 0.9998, k = 999885010.627, Zone = 11-15
+pH shape: (28,)
+=== END ANALYZER NESTED ===
+Titration curve saved to /home/sgiani/repos/GranTED/results/45/titration_curve.png
+Gran/Schwartz combined plot saved to /home/sgiani/repos/GranTED/results/45/gran_schwartz.png
+Combined overview plot saved to /home/sgiani/repos/GranTED/results/45/plots.png
+All visualizations saved to /home/sgiani/repos/GranTED/results/45
+Generating CSV report...
+Saved simple CSV report to /home/sgiani/repos/GranTED/results/45/report.csv
+CSV report generated.
+Generating PDF report...
+Saved PDF report to /home/sgiani/repos/GranTED/results/45/report.pdf
+PDF report generated.
+Full report generated in /home/sgiani/repos/GranTED/results/45
+Pipeline complete. Outputs in /home/sgiani/repos/GranTED/results/45
+Processing triplet 46 → columns 136,137
+Loaded '/home/sgiani/repos/GranTED/results/46/data.dat': 28 rows, skipped 53 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [48.2 41.6 36.  29.9 20.1]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000       48.2
+1   0.0500       41.6
+2   0.1000       36.0
+3   0.1830       29.9
+4   0.3550       20.1
+5   0.5300       14.8
+6   0.9675        5.7
+7   1.4675       -2.0
+8   1.9675       -7.6
+9   2.4675      -12.6
+10  2.9675      -18.4
+11  3.4675      -25.1
+12  3.9675      -33.7
+13  4.3995      -44.0
+14  4.6405      -52.9
+15  4.7800      -61.1
+16  4.8670      -69.5
+17  4.9170      -75.9
+18  4.9670      -89.0
+19  5.0170     -138.0
+20  5.0670     -174.9
+21  5.1170     -187.2
+22  5.2145     -197.3
+23  5.3985     -205.9
+24  5.7825     -215.1
+25  6.2825     -220.2
+26  6.7825     -224.0
+27  7.2825     -226.5
+DEBUG params: {'volume_array': array([0.    , 0.05  , 0.1   , 0.183 , 0.355 , 0.53  , 0.9675, 1.4675,
+       1.9675, 2.4675, 2.9675, 3.4675, 3.9675, 4.3995, 4.6405, 4.78  ,
+       4.867 , 4.917 , 4.967 , 5.017 , 5.067 , 5.117 , 5.2145, 5.3985,
+       5.7825, 6.2825, 6.7825, 7.2825]), 'potential_array': array([  48.2,   41.6,   36. ,   29.9,   20.1,   14.8,    5.7,   -2. ,
+         -7.6,  -12.6,  -18.4,  -25.1,  -33.7,  -44. ,  -52.9,  -61.1,
+        -69.5,  -75.9,  -89. , -138. , -174.9, -187.2, -197.3, -205.9,
+       -215.1, -220.2, -224. , -226.5]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [48.2 41.6 36.  29.9 20.1]
+DEBUG gran_functions: pH first 5: [6.18526031 6.29682218 6.39148073 6.49459094 6.66024341]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [48.2 41.6 36.  29.9 20.1]
+DEBUG gran_functions: pH first 5: [6.18526031 6.29682218 6.39148073 6.49459094 6.66024341]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 5.135 mL, R² = 0.9956, k = 0.000, Zone = 14-17
+Gran Opt: V_eq = 5.221 mL, R² = 0.9997, k = 999946517.921, Zone = 10-15
+Schwartz Raw: V_eq = 5.135 mL, R² = 0.9956, k = 0.000, Zone = 14-17
+Schwartz Opt: V_eq = 5.221 mL, R² = 0.9997, k = 999946517.921, Zone = 10-15
+pH shape: (28,)
+=== END ANALYZER NESTED ===
+Titration curve saved to /home/sgiani/repos/GranTED/results/46/titration_curve.png
+Gran/Schwartz combined plot saved to /home/sgiani/repos/GranTED/results/46/gran_schwartz.png
+Combined overview plot saved to /home/sgiani/repos/GranTED/results/46/plots.png
+All visualizations saved to /home/sgiani/repos/GranTED/results/46
+Generating CSV report...
+Saved simple CSV report to /home/sgiani/repos/GranTED/results/46/report.csv
+CSV report generated.
+Generating PDF report...
+Saved PDF report to /home/sgiani/repos/GranTED/results/46/report.pdf
+PDF report generated.
+Full report generated in /home/sgiani/repos/GranTED/results/46
+Pipeline complete. Outputs in /home/sgiani/repos/GranTED/results/46
+Processing triplet 47 → columns 139,140
+Loaded '/home/sgiani/repos/GranTED/results/47/data.dat': 27 rows, skipped 54 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [47.1 40.2 34.1 29.4 19.4]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000       47.1
+1   0.0500       40.2
+2   0.1000       34.1
+3   0.1755       29.4
+4   0.3645       19.4
+5   0.5425       15.5
+6   0.9875        6.2
+7   1.3865        0.9
+8   1.8865       -5.1
+9   2.3865      -10.5
+10  2.8865      -17.9
+11  3.3865      -23.9
+12  3.8865      -31.6
+13  4.3865      -44.3
+14  4.5865      -50.1
+15  4.8255      -65.2
+16  4.8840      -70.1
+17  4.9570      -82.9
+18  5.0070     -114.2
+19  5.0570     -170.4
+20  5.1070     -184.1
+21  5.2275     -197.1
+22  5.4150     -205.4
+23  5.8585     -214.2
+24  6.3585     -219.3
+25  6.8585     -222.3
+26  7.3585     -224.7
+DEBUG params: {'volume_array': array([0.    , 0.05  , 0.1   , 0.1755, 0.3645, 0.5425, 0.9875, 1.3865,
+       1.8865, 2.3865, 2.8865, 3.3865, 3.8865, 4.3865, 4.5865, 4.8255,
+       4.884 , 4.957 , 5.007 , 5.057 , 5.107 , 5.2275, 5.415 , 5.8585,
+       6.3585, 6.8585, 7.3585]), 'potential_array': array([  47.1,   40.2,   34.1,   29.4,   19.4,   15.5,    6.2,    0.9,
+         -5.1,  -10.5,  -17.9,  -23.9,  -31.6,  -44.3,  -50.1,  -65.2,
+        -70.1,  -82.9, -114.2, -170.4, -184.1, -197.1, -205.4, -214.2,
+       -219.3, -222.3, -224.7]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [47.1 40.2 34.1 29.4 19.4]
+DEBUG gran_functions: pH first 5: [6.20385396 6.32048682 6.42359703 6.5030426  6.67207573]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [47.1 40.2 34.1 29.4 19.4]
+DEBUG gran_functions: pH first 5: [6.20385396 6.32048682 6.42359703 6.5030426  6.67207573]
+Gran and Schwartz computed successfully.
+Warning: Low R²=0.886 for zone (np.int64(22), np.int64(25)) (k=999944824.6740508)
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 5.137 mL, R² = 0.9935, k = 0.000, Zone = 14-17
+Gran Opt: V_eq = 8.301 mL, R² = 0.8863, k = 999944824.674, Zone = 22-25
+Schwartz Raw: V_eq = 5.137 mL, R² = 0.9935, k = 0.000, Zone = 14-17
+Schwartz Opt: V_eq = 8.301 mL, R² = 0.8863, k = 999944824.674, Zone = 22-25
+pH shape: (27,)
+=== END ANALYZER NESTED ===
+Titration curve saved to /home/sgiani/repos/GranTED/results/47/titration_curve.png
+Gran/Schwartz combined plot saved to /home/sgiani/repos/GranTED/results/47/gran_schwartz.png
+Combined overview plot saved to /home/sgiani/repos/GranTED/results/47/plots.png
+All visualizations saved to /home/sgiani/repos/GranTED/results/47
+Generating CSV report...
+Saved simple CSV report to /home/sgiani/repos/GranTED/results/47/report.csv
+CSV report generated.
+Generating PDF report...
+Saved PDF report to /home/sgiani/repos/GranTED/results/47/report.pdf
+PDF report generated.
+Full report generated in /home/sgiani/repos/GranTED/results/47
+Pipeline complete. Outputs in /home/sgiani/repos/GranTED/results/47
+Processing triplet 48 → columns 142,143
+Loaded '/home/sgiani/repos/GranTED/results/48/data.dat': 28 rows, skipped 53 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [49.  41.6 36.6 27.5 21.2]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000       49.0
+1   0.0500       41.6
+2   0.1000       36.6
+3   0.2165       27.5
+4   0.3480       21.2
+5   0.6195       14.9
+6   1.1195        6.0
+7   1.6195        0.4
+8   2.1195       -5.0
+9   2.6195      -10.9
+10  3.1195      -16.4
+11  3.6195      -22.6
+12  4.1195      -31.3
+13  4.5480      -40.9
+14  4.8230      -50.9
+15  4.9575      -58.1
+16  5.0610      -67.1
+17  5.1165      -74.4
+18  5.1665      -87.7
+19  5.2165     -127.2
+20  5.2665     -175.3
+21  5.3165     -187.8
+22  5.4400     -200.0
+23  5.6435     -208.2
+24  6.1270     -217.6
+25  6.6270     -222.4
+26  7.1270     -225.0
+27  7.6270     -227.1
+DEBUG params: {'volume_array': array([0.    , 0.05  , 0.1   , 0.2165, 0.348 , 0.6195, 1.1195, 1.6195,
+       2.1195, 2.6195, 3.1195, 3.6195, 4.1195, 4.548 , 4.823 , 4.9575,
+       5.061 , 5.1165, 5.1665, 5.2165, 5.2665, 5.3165, 5.44  , 5.6435,
+       6.127 , 6.627 , 7.127 , 7.627 ]), 'potential_array': array([  49. ,   41.6,   36.6,   27.5,   21.2,   14.9,    6. ,    0.4,
+         -5. ,  -10.9,  -16.4,  -22.6,  -31.3,  -40.9,  -50.9,  -58.1,
+        -67.1,  -74.4,  -87.7, -127.2, -175.3, -187.8, -200. , -208.2,
+       -217.6, -222.4, -225. , -227.1]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [49.  41.6 36.6 27.5 21.2]
+DEBUG gran_functions: pH first 5: [6.17173766 6.29682218 6.38133874 6.53515889 6.64164976]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [49.  41.6 36.6 27.5 21.2]
+DEBUG gran_functions: pH first 5: [6.17173766 6.29682218 6.38133874 6.53515889 6.64164976]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 5.344 mL, R² = 0.9939, k = 0.000, Zone = 14-17
+Gran Opt: V_eq = 5.427 mL, R² = 0.9998, k = 999982607.890, Zone = 10-14
+Schwartz Raw: V_eq = 5.344 mL, R² = 0.9939, k = 0.000, Zone = 14-17
+Schwartz Opt: V_eq = 5.427 mL, R² = 0.9998, k = 999982607.890, Zone = 10-14
+pH shape: (28,)
+=== END ANALYZER NESTED ===
+Titration curve saved to /home/sgiani/repos/GranTED/results/48/titration_curve.png
+Gran/Schwartz combined plot saved to /home/sgiani/repos/GranTED/results/48/gran_schwartz.png
+Combined overview plot saved to /home/sgiani/repos/GranTED/results/48/plots.png
+All visualizations saved to /home/sgiani/repos/GranTED/results/48
+Generating CSV report...
+Saved simple CSV report to /home/sgiani/repos/GranTED/results/48/report.csv
+CSV report generated.
+Generating PDF report...
+Saved PDF report to /home/sgiani/repos/GranTED/results/48/report.pdf
+PDF report generated.
+Full report generated in /home/sgiani/repos/GranTED/results/48
+Pipeline complete. Outputs in /home/sgiani/repos/GranTED/results/48
+Processing triplet 49 → columns 145,146
+Loaded '/home/sgiani/repos/GranTED/results/49/data.dat': 28 rows, skipped 53 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [49.9 43.5 37.5 31.9 22.6]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000       49.9
+1   0.0500       43.5
+2   0.1000       37.5
+3   0.1715       31.9
+4   0.3275       22.6
+5   0.5065       17.7
+6   0.9540        9.8
+7   1.4540        3.0
+8   1.9540       -2.6
+9   2.4540       -7.9
+10  2.9540      -13.7
+11  3.4540      -19.8
+12  3.9540      -27.2
+13  4.4540      -37.4
+14  4.7600      -46.2
+15  4.9570      -56.3
+16  5.0460      -62.4
+17  5.1325      -73.2
+18  5.1825      -82.8
+19  5.2325     -106.6
+20  5.2825     -170.0
+21  5.3325     -185.0
+22  5.4455     -198.2
+23  5.6215     -206.2
+24  6.0615     -215.9
+25  6.5615     -220.7
+26  7.0615     -224.1
+27  7.5615     -226.4
+DEBUG params: {'volume_array': array([0.    , 0.05  , 0.1   , 0.1715, 0.3275, 0.5065, 0.954 , 1.454 ,
+       1.954 , 2.454 , 2.954 , 3.454 , 3.954 , 4.454 , 4.76  , 4.957 ,
+       5.046 , 5.1325, 5.1825, 5.2325, 5.2825, 5.3325, 5.4455, 5.6215,
+       6.0615, 6.5615, 7.0615, 7.5615]), 'potential_array': array([  49.9,   43.5,   37.5,   31.9,   22.6,   17.7,    9.8,    3. ,
+         -2.6,   -7.9,  -13.7,  -19.8,  -27.2,  -37.4,  -46.2,  -56.3,
+        -62.4,  -73.2,  -82.8, -106.6, -170. , -185. , -198.2, -206.2,
+       -215.9, -220.7, -224.1, -226.4]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [49.9 43.5 37.5 31.9 22.6]
+DEBUG gran_functions: pH first 5: [6.15652468 6.26470588 6.36612576 6.46078431 6.61798513]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [49.9 43.5 37.5 31.9 22.6]
+DEBUG gran_functions: pH first 5: [6.15652468 6.26470588 6.36612576 6.46078431 6.61798513]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 5.285 mL, R² = 0.9952, k = 0.000, Zone = 16-20
+Gran Opt: V_eq = 5.459 mL, R² = 0.9995, k = 999703071.997, Zone = 11-15
+Schwartz Raw: V_eq = 5.285 mL, R² = 0.9952, k = 0.000, Zone = 16-20
+Schwartz Opt: V_eq = 5.459 mL, R² = 0.9995, k = 999703071.997, Zone = 11-15
+pH shape: (28,)
+=== END ANALYZER NESTED ===
+Titration curve saved to /home/sgiani/repos/GranTED/results/49/titration_curve.png
+Gran/Schwartz combined plot saved to /home/sgiani/repos/GranTED/results/49/gran_schwartz.png
+Combined overview plot saved to /home/sgiani/repos/GranTED/results/49/plots.png
+All visualizations saved to /home/sgiani/repos/GranTED/results/49
+Generating CSV report...
+Saved simple CSV report to /home/sgiani/repos/GranTED/results/49/report.csv
+CSV report generated.
+Generating PDF report...
+Saved PDF report to /home/sgiani/repos/GranTED/results/49/report.pdf
+PDF report generated.
+Full report generated in /home/sgiani/repos/GranTED/results/49
+Pipeline complete. Outputs in /home/sgiani/repos/GranTED/results/49
+Processing triplet 50 → columns 148,149
+Loaded '/home/sgiani/repos/GranTED/results/50/data.dat': 28 rows, skipped 53 header/comment/non-numeric lines.
+Validation passed
+Final config: {'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95}
+DEBUG preprocess: potential first 5: [54.  46.7 40.5 34.9 25.4]
+Detected acid titration (negative slope). No flip.
+Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).
+DEBUG df:     volume  potential
+0   0.0000       54.0
+1   0.0500       46.7
+2   0.1000       40.5
+3   0.1775       34.9
+4   0.3645       25.4
+5   0.5920       17.7
+6   0.9440       12.2
+7   1.4440        6.8
+8   1.9440        0.5
+9   2.4440       -4.8
+10  2.9440      -10.8
+11  3.4440      -16.9
+12  3.9440      -24.5
+13  4.4440      -34.3
+14  4.7755      -43.5
+15  4.9795      -53.3
+16  5.0755      -60.2
+17  5.1500      -67.5
+18  5.2110      -77.5
+19  5.2610      -94.6
+20  5.3110     -166.0
+21  5.3610     -185.4
+22  5.4365     -196.4
+23  5.5825     -206.1
+24  5.8500     -214.3
+25  6.3500     -221.9
+26  6.8500     -226.4
+27  7.3500     -229.1
+DEBUG params: {'volume_array': array([0.    , 0.05  , 0.1   , 0.1775, 0.3645, 0.592 , 0.944 , 1.444 ,
+       1.944 , 2.444 , 2.944 , 3.444 , 3.944 , 4.444 , 4.7755, 4.9795,
+       5.0755, 5.15  , 5.211 , 5.261 , 5.311 , 5.361 , 5.4365, 5.5825,
+       5.85  , 6.35  , 6.85  , 7.35  ]), 'potential_array': array([  54. ,   46.7,   40.5,   34.9,   25.4,   17.7,   12.2,    6.8,
+          0.5,   -4.8,  -10.8,  -16.9,  -24.5,  -34.3,  -43.5,  -53.3,
+        -60.2,  -67.5,  -77.5,  -94.6, -166. , -185.4, -196.4, -206.1,
+       -214.3, -221.9, -226.4, -229.1]), 'V': 25.0, 'C_B': 0.1, 'titration_type': 'acid_base', 'r2_threshold': 0.95, 'is_base': False}
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [54.  46.7 40.5 34.9 25.4]
+DEBUG gran_functions: pH first 5: [6.0872211  6.21061528 6.31541582 6.41007437 6.57065585]
+Gran and Schwartz computed successfully.
+Computing Gran/Schwartz for type: acid_base
+DEBUG gran_functions: potential first 5: [54.  46.7 40.5 34.9 25.4]
+DEBUG gran_functions: pH first 5: [6.0872211  6.21061528 6.31541582 6.41007437 6.57065585]
+Gran and Schwartz computed successfully.
+=== ANALYZER NESTED RESULTS ===
+Gran Raw: V_eq = 5.436 mL, R² = 0.9974, k = 0.000, Zone = 14-17
+Gran Opt: V_eq = 5.365 mL, R² = 0.9978, k = 999809438.080, Zone = 15-18
+Schwartz Raw: V_eq = 5.436 mL, R² = 0.9974, k = 0.000, Zone = 14-17
+Schwartz Opt: V_eq = 5.365 mL, R² = 0.9978, k = 999809438.080, Zone = 15-18
+pH shape: (28,)
+=== END ANALYZER NESTED ===
+Titration curve saved to /home/sgiani/repos/GranTED/results/50/titration_curve.png
+Gran/Schwartz combined plot saved to /home/sgiani/repos/GranTED/results/50/gran_schwartz.png
+Combined overview plot saved to /home/sgiani/repos/GranTED/results/50/plots.png
+All visualizations saved to /home/sgiani/repos/GranTED/results/50
+Generating CSV report...
+Saved simple CSV report to /home/sgiani/repos/GranTED/results/50/report.csv
+CSV report generated.
+Generating PDF report...
+Saved PDF report to /home/sgiani/repos/GranTED/results/50/report.pdf
+PDF report generated.
+Full report generated in /home/sgiani/repos/GranTED/results/50
+Pipeline complete. Outputs in /home/sgiani/repos/GranTED/results/50
 
  read y
