@@ -225,6 +225,48 @@ def plot_all_combined(df: pd.DataFrame, params: Dict[str, Any], results: Dict[st
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
     print(f"Combined overview plot saved to {filename}")
+
+def dump_data_for_debug(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path = Path('output')):
+    """
+    Dump data for debugging:
+    - volume vs pH (from df['potential'])
+    - volume vs gran function (raw g1)
+    - volume vs schwartz function (optimized gs / g1_opt)
+    
+    Saves 3 separate tab-separated text files in output_dir/debug_dump/
+    """
+    debug_dir = output_dir / 'debug_dump'
+    debug_dir.mkdir(exist_ok=True)
+
+    volume = df['volume'].values
+
+    # 1. volume vs pH
+    potential = df['potential'].values
+    pH = 7.0 - potential / 59.16
+    pH_file = debug_dir / 'volume_vs_pH.txt'
+    with open(pH_file, 'w', encoding='utf-8') as f:
+        f.write("volume\tpH\n")
+        for v, ph in zip(volume, pH):
+            f.write(f"{v:.6f}\t{ph:.6f}\n")
+    print(f"Dumped volume vs pH to {pH_file}")
+
+    # 2. volume vs gran raw (g1)
+    g1_raw = results.get('g1', np.zeros(len(volume)))
+    gran_file = debug_dir / 'volume_vs_gran_raw.txt'
+    with open(gran_file, 'w', encoding='utf-8') as f:
+        f.write("volume\tgran_raw_g1\n")
+        for v, g in zip(volume, g1_raw):
+            f.write(f"{v:.6f}\t{g:.6f}\n")
+    print(f"Dumped volume vs gran_raw_g1 to {gran_file}")
+
+    # 3. volume vs schwartz optimized (gs_opt / g1_opt)
+    gs_opt = results.get('g1_opt', np.zeros(len(volume)))
+    schwartz_file = debug_dir / 'volume_vs_schwartz_opt.txt'
+    with open(schwartz_file, 'w', encoding='utf-8') as f:
+        f.write("volume\tschwartz_opt_gs\n")
+        for v, gs in zip(volume, gs_opt):
+            f.write(f"{v:.6f}\t{gs:.6f}\n")
+    print(f"Dumped volume vs schwartz_opt_gs to {schwartz_file}")
     
 def visualize_all(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: str = 'output'):
     output_dir = Path(output_dir)
@@ -232,3 +274,4 @@ def visualize_all(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, A
     plot_gran_schwartz(results, params, output_dir)  # Keep if you want both
     plot_all_combined(df, params, results, output_dir)  # New combined vertical plot
     print(f"All visualizations saved to {output_dir}")
+    dump_data_for_debug(df, params, results, output_dir)
