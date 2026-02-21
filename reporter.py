@@ -115,7 +115,7 @@ def generate_pdf_report(results: Dict[str, Any], df: pd.DataFrame, params: Dict[
     # Add timestamp
     from datetime import datetime
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S %Z")
-    footer_text += f"\n / / \ Generated on: {timestamp}"
+    footer_text += f"\n / / \ GranTED version {__version__} | Generated on: {timestamp}"
 
     # Add as preformatted text (monospace, small font)
 # Footer style: Helvetica, small size, left-aligned
