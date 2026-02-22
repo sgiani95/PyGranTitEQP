@@ -12,7 +12,10 @@ Dependencies: argparse, sys, json, pathlib + core modules.
 """
 
 __version__ = "0.9.2"  # change manually on each significant update
-# pride versioning: proud_version(bump when you are proud of the release).default_version(just normal/okay releases).shame_version(bump when fixing things too embarrassing to admit)
+# pride versioning: X.Y.Z
+# X = proud_version(bump when you are proud of the release)
+# Y = default_version(just normal/okay releases)
+# Z = shame_version(bump when fixing things too embarrassing to admit)
 
 import argparse
 import sys

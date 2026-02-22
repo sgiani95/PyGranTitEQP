@@ -71,6 +71,7 @@ def identify_linear_interval(
     scored = []
     for cand in candidates:
         r2, slope, intercept = _compute_r2(g1_smooth, volume, cand['orig_start'], cand['orig_end'])
+        # score = r2 * 100 + (cand['length'] / len(g1)) * 10 + abs(cand['mean_dg']) * 0.1
         score = r2 * 100 + (cand['length'] / len(g1)) * 10 + abs(cand['mean_dg']) * 0.1
         scored.append((cand, score, r2))
 
