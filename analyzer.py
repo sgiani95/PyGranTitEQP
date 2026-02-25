@@ -232,10 +232,9 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
         'opt_schwartz_diagnostics': opt_diagnostics,              # will use V_lower_ml for plot
     }
 
-    if verbose:
-        print("Gran analysis complete with separate raw/opt Zones.")
-        print(f"Raw: V_eq={raw_metrics['V_eq']:.3f}, R²={raw_metrics['r2']:.4f}, zone {raw_metrics['zone_start']}-{raw_metrics['zone_end']}")
-        print(f"Opt: V_eq={opt_metrics['V_eq']:.3f}, R²={opt_metrics['r2']:.4f}, k={opt_metrics['k']:.3f}, zone {opt_metrics['zone_start']}-{opt_metrics['zone_end']}")
+    print("RETURNING from analyze_gran_original – keys:", list(results.keys()))
+    print("  → has initial_diagnostics?", 'initial_gran_diagnostics' in results)
+    print("  → len R2 initial:", len(results.get('initial_gran_diagnostics', {}).get('R2_values', [])))
 
     return results
 
