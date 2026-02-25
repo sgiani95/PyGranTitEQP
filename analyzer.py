@@ -20,14 +20,14 @@ def _compute_r2(g1_smooth: np.ndarray, volume: np.ndarray, start: int, end: int)
     slope, intercept, r_value, _, _ = linregress(volume[start:end+1], g1_smooth[start:end+1])
     return r_value**2, slope, intercept
 
-
 def identify_linear_interval(
     g1: np.ndarray, volume: np.ndarray, min_points: int = 5, window_size: int = 5,
     noise_threshold: float = 0.001, var_threshold_rel: float = 0.1, min_r2: float = 0.95
-) -> Tuple[int, int, float]:
+) -> Tuple[int, int, float, Dict[str, list]]:
     """
     Identify linear zone using derivative-based segmentation and ranking.
     Handles Cases 1-3 via plateau detection in negative dg1.
+    NOW RETURNS ALSO: diagnostics dict with V_upper_ml and R2_values for all candidates.
     """
     dg1_raw = np.gradient(g1, volume)
     std_dg1 = np.std(dg1_raw)
@@ -40,11 +40,18 @@ def identify_linear_interval(
 
     neg_mask = dg1 < 0
     if not np.any(neg_mask):
-        return 0, len(g1) - 1, 0.0
+        return 0, len(g1) - 1, 0.0, {'V_upper_ml': [], 'R2_values': []}
+
     dg1_neg = dg1[neg_mask]
     vol_neg_idx = np.where(neg_mask)[0]
 
     candidates = []
+    diagnostics = {
+        'V_lower_ml': [],
+        'V_upper_ml': [],
+        'R2_values': []
+    }
+
     win_sizes = range(max(3, min_points//2), min(30, len(dg1_neg)//2) + 1)
     for win_len in win_sizes:
         for i in range(len(dg1_neg) - win_len + 1):
@@ -53,7 +60,7 @@ def identify_linear_interval(
             var_dg = np.var(seg_dg1)
             if mean_dg < 0 and var_dg < var_threshold_rel * abs(mean_dg):
                 orig_start = vol_neg_idx[i]
-                orig_end = vol_neg_idx[i + win_len - 1] + 1
+                orig_end = vol_neg_idx[i + win_len - 1] + 1   # +1 because slice end is exclusive
                 candidates.append({
                     'orig_start': orig_start,
                     'orig_end': orig_end,
@@ -62,24 +69,34 @@ def identify_linear_interval(
                     'var_dg': var_dg
                 })
 
+                # NEW: compute R² for this candidate right here (same as later)
+                r2, _, _ = _compute_r2(g1_smooth, volume, orig_start, orig_end)
+                # Collect BOTH bounds
+                diagnostics['V_lower_ml'].append(float(volume[orig_start]))     # first point of interval
+                diagnostics['V_upper_ml'].append(float(volume[orig_end - 1]))   # last point of interval
+                diagnostics['R2_values'].append(r2)
+
     if not candidates:
         full_start = vol_neg_idx[0]
         full_end = vol_neg_idx[-1] + 1
         _, _, r2_full = _compute_r2(g1_smooth, volume, full_start, full_end)
-        return full_start, full_end, r2_full
+        diagnostics = {
+            'V_lower_ml': [float(volume[full_start])],
+            'V_upper_ml': [float(volume[full_end-1])],
+            'R2_values': [r2_full]
+        }
+        return full_start, full_end, r2_full, {'V_upper_ml': [float(volume[full_end-1])], 'R2_values': [r2_full]}
 
     scored = []
     for cand in candidates:
         r2, slope, intercept = _compute_r2(g1_smooth, volume, cand['orig_start'], cand['orig_end'])
-        # score = r2 * 100 + (cand['length'] / len(g1)) * 10 + abs(cand['mean_dg']) * 0.1
         score = r2 * 100 + (cand['length'] / len(g1)) * 10 + abs(cand['mean_dg']) * 0.1
         scored.append((cand, score, r2))
 
     best_cand, best_score, best_r2 = max(scored, key=lambda x: x[1])
     start_idx, end_idx = best_cand['orig_start'], best_cand['orig_end']
 
-    return start_idx, end_idx, best_r2
-
+    return start_idx, end_idx, best_r2, diagnostics
 
 def _compute_fit(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k: float = 0.0, pH_full: np.ndarray = None) -> Dict[str, Any]:
     """Compute fit, R², and V_eq for a zone with given k."""
@@ -169,9 +186,10 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
 
     # Identify initial interval (on raw g1)
     if use_segmented:
-        start_idx, end_idx, _ = identify_linear_interval(g1, volume)
+        start_idx, end_idx, raw_interval_r2, initial_diagnostics = identify_linear_interval(g1, volume)
     else:
-        start_idx, end_idx, _ = _identify_linear_original(g1, volume)
+        start_idx, end_idx, raw_interval_r2 = _identify_linear_original(g1, volume)
+        initial_diagnostics = {'V_lower_ml': [], 'V_upper_ml': [], 'R2_values': []}
     initial_interval = (start_idx, end_idx)
 
     # Raw Zone: Fit on initial interval (k=0)
@@ -186,11 +204,12 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
 
     # Recompute gs_opt and re-detect Zone on it
     gs_opt = schwartz_func(volume, pH_full, opt_k)
+
     if use_segmented:
-        opt_start, opt_end, opt_interval_r2 = identify_linear_interval(gs_opt, volume)
+        opt_start, opt_end, opt_interval_r2, opt_diagnostics = identify_linear_interval(gs_opt, volume)
     else:
         opt_start, opt_end, opt_interval_r2 = _identify_linear_original(gs_opt, volume)
-
+        opt_diagnostics = {'V_lower_ml': [], 'V_upper_ml': [], 'R2_values': []}
     # Opt fit on re-detected Zone
     opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k=opt_k, pH_full=pH_full)
     opt_zone.update({'k': opt_k, 'start': opt_start, 'end': opt_end, 'num_points': opt_end - opt_start + 1})
@@ -209,6 +228,8 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
         'g1': g1,
         'g1_opt': gs_opt,
         'interval_r2': raw_metrics['r2'],
+        'initial_gran_diagnostics': initial_diagnostics,          # will use V_upper_ml for plot
+        'opt_schwartz_diagnostics': opt_diagnostics,              # will use V_lower_ml for plot
     }
 
     if verbose:

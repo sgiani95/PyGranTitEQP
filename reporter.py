@@ -11,7 +11,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
 import numpy as np
 from typing import Dict, Any
-
+from main import __version__
 
 def generate_pdf_report(results: Dict[str, Any], df: pd.DataFrame, params: Dict[str, Any], output_dir: Path) -> str:
     """
