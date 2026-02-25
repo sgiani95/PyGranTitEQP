@@ -227,6 +227,30 @@ def plot_all_combined(df: pd.DataFrame, params: Dict[str, Any], results: Dict[st
     plt.close(fig)
     print(f"Combined overview plot saved to {filename}")
 
+def plot_r2_vs_upper_bound(r2_vs_upper: list[tuple[float, float]], output_dir: Path = Path('output')):
+    """
+    Plot R2 at every trial step as function of the upper bound volume (raw Gran scouting).
+    """
+    if not r2_vs_upper:
+        print("No R2 history available for plotting.")
+        return
+
+    upper_volumes, r2_values = zip(*r2_vs_upper)  # Unpack list of tuples
+
+    plt.figure(figsize=(8, 6))
+    plt.plot(upper_volumes, r2_values, 'b-o', linewidth=1.5, markersize=4, label='Candidate R2')
+    plt.xlabel('Upper Bound Volume (mL)')
+    plt.ylabel('R2')
+    plt.title('R2 vs Upper Bound Volume (Raw Gran Trial Search)')
+    plt.grid(True, alpha=0.3)
+    plt.legend()
+    plt.tight_layout()
+
+    filename = output_dir / 'r2_vs_upper_bound.png'
+    plt.savefig(filename, dpi=300, bbox_inches='tight')
+    plt.close()
+    print(f"R2 vs upper bound plot saved to {filename}")
+    
 def visualize_all(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: str = 'output'):
     output_dir = Path(output_dir)
     plot_titration_curve(df, params, output_dir)

@@ -4,6 +4,7 @@ Algorithm preserved: Smoothing → deriv → candidates → rank/eval → shrink
 Outputs nested metrics for downstream (gran/schwartz raw/opt with V_eq, r2, k, zones).
 """
 
+from networkx import volume
 import numpy as np
 import pandas as pd
 from scipy.stats import linregress
@@ -24,11 +25,11 @@ def _compute_r2(g1_smooth: np.ndarray, volume: np.ndarray, start: int, end: int)
 def identify_linear_interval(
     g1: np.ndarray, volume: np.ndarray, min_points: int = 5, window_size: int = 5,
     noise_threshold: float = 0.001, var_threshold_rel: float = 0.1, min_r2: float = 0.95
-) -> Tuple[int, int, float, Dict[str, list]]:
+) -> Tuple[int, int, float, list[tuple[float, float]]]:
     """
-    Identify linear zone + collect R² vs upper bound for debugging plot.
-    Returns (start, end, best_r2, r2_history)
-    r2_history = {'end_volume': [...], 'r2': [...]} for candidates
+    Identify linear zone using derivative-based segmentation and ranking.
+    Handles Cases 1-3 via plateau detection in negative dg1.
+    Returns (start, end, best_r2, r2_vs_upper: list of (upper_volume, r2) for candidates).
     """
     dg1_raw = np.gradient(g1, volume)
     std_dg1 = np.std(dg1_raw)
@@ -41,13 +42,13 @@ def identify_linear_interval(
 
     neg_mask = dg1 < 0
     if not np.any(neg_mask):
-        return 0, len(g1) - 1, 0.0, {'end_volume': [], 'r2': []}
+        return 0, len(g1) - 1, 0.0, []
 
     dg1_neg = dg1[neg_mask]
     vol_neg_idx = np.where(neg_mask)[0]
 
     candidates = []
-    r2_history = {'end_volume': [], 'r2': []}  # Collect for plot
+    r2_vs_upper = []  # Collect (upper_volume, r2) for plot
 
     win_sizes = range(max(3, min_points//2), min(15, len(dg1_neg)//2) + 1)
     for win_len in win_sizes:
@@ -66,29 +67,24 @@ def identify_linear_interval(
                     'var_dg': var_dg
                 })
 
-                # Compute R² and record for history
-                r2, _, _ = _compute_r2(g1_smooth, volume, orig_start, orig_end)
-                r2_history['end_volume'].append(volume[orig_end - 1])  # upper bound volume
-                r2_history['r2'].append(r2)
-
     if not candidates:
         full_start = vol_neg_idx[0]
         full_end = vol_neg_idx[-1] + 1
         _, _, r2_full = _compute_r2(g1_smooth, volume, full_start, full_end)
-        r2_history['end_volume'].append(volume[full_end - 1])
-        r2_history['r2'].append(r2_full)
-        return full_start, full_end, r2_full, r2_history
+        r2_vs_upper.append((volume[full_end - 1], r2_full))  # Record upper bound and R2
+        return full_start, full_end, r2_full, r2_vs_upper
 
     scored = []
     for cand in candidates:
         r2, slope, intercept = _compute_r2(g1_smooth, volume, cand['orig_start'], cand['orig_end'])
+        r2_vs_upper.append((volume[cand['orig_end'] - 1], r2))  # Record upper bound and R2 for each candidate
         score = r2 * 100 + (cand['length'] / len(g1)) * 10 + abs(cand['mean_dg']) * 0.1
         scored.append((cand, score, r2))
 
     best_cand, best_score, best_r2 = max(scored, key=lambda x: x[1])
     start_idx, end_idx = best_cand['orig_start'], best_cand['orig_end']
 
-    return start_idx, end_idx, best_r2, r2_history
+    return start_idx, end_idx, best_r2, r2_vs_upper
 
 def _compute_fit(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k: float = 0.0, pH_full: np.ndarray = None) -> Dict[str, Any]:
     """Compute fit, R², and V_eq for a zone with given k."""
@@ -119,70 +115,33 @@ def _optimize_single_zone(df: pd.DataFrame, start: int, end: int, gran_func: Cal
     return {'best_k': best_k, 'best_r2': max_r2, 'fit': (slope, intercept)}
 
 
-def refine_zone(
-    volume: np.ndarray, g_values: np.ndarray, initial_zone: Tuple[int, int],
-    max_iter: int = 10, min_points: int = 5, max_points: int = None,
-    r2_gain_threshold: float = 1.05
+def shrink_zone(
+    volume: np.ndarray, g_values: np.ndarray, initial_zone: Tuple[int, int], max_iter: int = 10
 ) -> Tuple[int, int]:
-    """
-    Refine zone by trying to grow (left/right) or shrink (left/right) for >5% R² gain.
-    Prioritizes growth left (pre-eq stability), then trim right (post-eq noise).
-    """
-    if max_points is None:
-        max_points = len(volume) - 1
-
+    """Binary trim edges for max R² (>5% gain; validated Case 3 refinement)."""
     start, end = initial_zone
     current_r2, _, _ = _compute_r2(g_values, volume, start, end)
     iter_count = 0
     improved = True
-
-    while improved and iter_count < max_iter and end - start > min_points and end - start < max_points:
+    while improved and iter_count < max_iter and end - start > 2:
         improved = False
-
-        # Priority 1: Grow left (extend to lower volumes)
-        if start > 0:
-            new_start = max(0, start - 1)  # Try one step left
-            left_r2, _, _ = _compute_r2(g_values, volume, new_start, end)
-            if left_r2 > current_r2 * r2_gain_threshold:
-                start = new_start
+        left_mid = (start + end) // 2
+        if left_mid - start > 0:
+            left_r2, _, _ = _compute_r2(g_values, volume, left_mid, end)
+            if left_r2 > current_r2 * 1.05:
+                start = left_mid
                 current_r2 = left_r2
                 improved = True
                 iter_count = 0
-
-        # Priority 2: Grow right (extend to higher volumes)
-        if end < len(volume) - 1:
-            new_end = min(len(volume) - 1, end + 1)
-            right_r2, _, _ = _compute_r2(g_values, volume, start, new_end)
-            if right_r2 > current_r2 * r2_gain_threshold:
-                end = new_end
+        right_mid = (start + end) // 2
+        if end - right_mid > 0:
+            right_r2, _, _ = _compute_r2(g_values, volume, start, right_mid)
+            if right_r2 > current_r2 * 1.05:
+                end = right_mid
                 current_r2 = right_r2
                 improved = True
                 iter_count = 0
-
-        # Priority 3: Shrink left (trim from left if no growth)
-        if not improved and start + 1 < end:
-            left_mid = (start + end) // 2
-            if left_mid > start:
-                left_r2, _, _ = _compute_r2(g_values, volume, left_mid, end)
-                if left_r2 > current_r2 * r2_gain_threshold:
-                    start = left_mid
-                    current_r2 = left_r2
-                    improved = True
-                    iter_count = 0
-
-        # Priority 4: Shrink right (trim from right)
-        if not improved and start < end - 1:
-            right_mid = (start + end) // 2
-            if right_mid < end:
-                right_r2, _, _ = _compute_r2(g_values, volume, start, right_mid)
-                if right_r2 > current_r2 * r2_gain_threshold:
-                    end = right_mid
-                    current_r2 = right_r2
-                    improved = True
-                    iter_count = 0
-
         iter_count += 1
-
     return (start, end)
 
 def get_metrics(fit: Any, zone: Tuple[int, int], k: float = 0.0, r2_threshold: float = 0.95) -> Dict[str, Any]:
@@ -205,72 +164,57 @@ def get_metrics(fit: Any, zone: Tuple[int, int], k: float = 0.0, r2_threshold: f
     }
 
 def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmented: bool = True, verbose: bool = False) -> Dict[str, Any]:
-    """
-    Main analysis: Compute Gran, identify raw interval, fit raw, then optimize k and refine for Schwartz.
-    Uses precomputed pH from gran_results (flipped if base).
-    """
+    """Main analysis: Compute Gran, identify raw interval, fit raw, then optimize for Schwartz opt Zone."""
     gran_results = compute_gran_functions(df, params)
     g1 = gran_results['gran']['g1']
     gran_func = gran_results['gran']['gran_func']
     schwartz_func = gran_results['schwartz']['gran_func']
     volume = params['volume_array']
-    pH_full = gran_results['pH']  # Precomputed, flipped if base
+    pH_full = gran_results['pH']  # Use precomputed pH (flipped if base)
 
-    # Step 1: Identify initial raw zone on g1 (k=0)
+    # Identify initial interval (on raw g1)
     if use_segmented:
-        start_idx, end_idx, _ = identify_linear_interval(g1, volume)
+        start_idx, end_idx, _, r2_vs_upper = identify_linear_interval(g1, volume)
     else:
-        start_idx, end_idx, _ = _identify_linear_original(g1, volume)
+        start_idx, end_idx, _, r2_vs_upper = _identify_linear_original(g1, volume)
     initial_interval = (start_idx, end_idx)
 
-    # Step 2: Fit raw zone
+    # Raw Zone: Fit on initial interval (k=0)
     raw_zone = _compute_fit(df, start_idx, end_idx, gran_func, k=0.0, pH_full=pH_full)
     raw_zone.update({'start': start_idx, 'end': end_idx, 'num_points': end_idx - start_idx + 1})
-    raw_metrics = get_metrics({'r2': raw_zone['r2'], 'fit': raw_zone['fit']}, initial_interval, volume, k=0.0)
+    raw_metrics = get_metrics({'r2': raw_zone['r2'], 'fit': raw_zone['fit']}, initial_interval, k=0.0)
 
-    # Step 3: Optimize k on raw zone
-    k_bounds = (-10, 10)
+    # Opt k on raw Zone
+    k_bounds = (0, 1000000000)
     opt_k_dict = _optimize_single_zone(df, start_idx, end_idx, schwartz_func, k_bounds, pH_full=pH_full)
     opt_k = opt_k_dict['best_k']
 
-    # Step 4: Recompute gs_opt on full data
+    # Recompute gs_opt and re-detect Zone on it
     gs_opt = schwartz_func(volume, pH_full, opt_k)
-
-    # Step 5: Re-identify zone on gs_opt
     if use_segmented:
         opt_start, opt_end, opt_interval_r2 = identify_linear_interval(gs_opt, volume)
     else:
         opt_start, opt_end, opt_interval_r2 = _identify_linear_original(gs_opt, volume)
 
-    # Step 6: Fit the re-detected zone
+    # Opt fit on re-detected Zone
     opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k=opt_k, pH_full=pH_full)
     opt_zone.update({'k': opt_k, 'start': opt_start, 'end': opt_end, 'num_points': opt_end - opt_start + 1})
-    opt_metrics = get_metrics({'r2': opt_zone['r2'], 'fit': opt_zone['fit']}, (opt_start, opt_end), volume, k=opt_k)
+    opt_metrics = get_metrics({'r2': opt_zone['r2'], 'fit': opt_zone['fit']}, (opt_start, opt_end), k=opt_k)
 
-    # Step 7: Refine zone (grow left priority, trim right, fallback symmetric)
-    refined_zone = refine_zone(volume, gs_opt, (opt_start, opt_end), max_iter=10, min_points=5, max_points=len(volume)-1)
-    opt_start, opt_end = refined_zone
-
-    # Refit on refined zone
-    opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k=opt_k, pH_full=pH_full)
-    opt_zone.update({'k': opt_k, 'start': opt_start, 'end': opt_end, 'num_points': opt_end - opt_start + 1})
-    opt_metrics = get_metrics({'r2': opt_zone['r2'], 'fit': opt_zone['fit']}, (opt_start, opt_end), volume, k=opt_k)
-
-    # Fallback if refined opt zone smaller than raw
+    # Fallback if opt Zone smaller than raw
     if opt_metrics['zone_end'] - opt_metrics['zone_start'] < raw_metrics['zone_end'] - raw_metrics['zone_start']:
         opt_start, opt_end = raw_metrics['zone_start'], raw_metrics['zone_end']
         opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k=opt_k, pH_full=pH_full)
         opt_zone.update({'k': opt_k, 'start': opt_start, 'end': opt_end, 'num_points': opt_end - opt_start + 1})
-        opt_metrics = get_metrics({'r2': opt_zone['r2'], 'fit': opt_zone['fit']}, (opt_start, opt_end), volume, k=opt_k)
+        opt_metrics = get_metrics({'r2': opt_zone['r2'], 'fit': opt_zone['fit']}, (opt_start, opt_end), k=opt_k)
 
-    # Final results
     results = {
         'raw_zone': raw_metrics,
         'opt_zone': opt_metrics,
         'g1': g1,
         'g1_opt': gs_opt,
         'interval_r2': raw_metrics['r2'],
-        'raw_r2_history': raw_r2_history
+        'r2_vs_upper': r2_vs_upper
     }
 
     if verbose:
