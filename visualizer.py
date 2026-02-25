@@ -254,10 +254,20 @@ def plot_r2_vs_upper_bound(r2_vs_upper: list[tuple[float, float]], output_dir: P
     plt.close()
     print(f"R2 vs upper bound plot saved to {filename}")
 
-def plot_diagnostics(results: Dict[str, Any], params: Dict[str, Any], output_dir: Path = Path('output')):
+def plot_diagnostics(
+    results: Dict[str, Any],
+    params: Dict[str, Any],
+    output_dir: Path = Path('output')
+) -> None:
+    """
+    Creates a two-panel diagnostic plot:
+      - Upper: Initial Gran search → R² vs upper bound of tested intervals (sorted)
+      - Lower: Optimized Schwartz search → R² vs lower bound of tested intervals (sorted)
+    """
     setup_plot_style()
     output_dir.mkdir(exist_ok=True)
 
+    # ─── Extract diagnostic data ───
     init_diag = results.get('initial_gran_diagnostics', {})
     opt_diag  = results.get('opt_schwartz_diagnostics', {})
 
@@ -265,45 +275,82 @@ def plot_diagnostics(results: Dict[str, Any], params: Dict[str, Any], output_dir
         print("Warning: No diagnostic data available for R² search plots.")
         return
 
-    # ─── Use iteration as x-axis ───
-    iterations_init = np.array(init_diag.get('iteration', range(len(init_diag['R2_values']))))
-    R2_init         = np.array(init_diag['R2_values'])
+    # Volume array (needed to locate selected bounds)
+    volume = params.get('volume_array', np.arange(41))  # fallback consistent with other plots
 
-    iterations_opt  = np.array(opt_diag.get('iteration', range(len(opt_diag['R2_values']))))
-    R2_opt          = np.array(opt_diag['R2_values'])
+    # ─── Gran (initial, raw, k=0) ───
+    v_upper_init = np.array(init_diag.get('V_upper_ml', []))
+    r2_init      = np.array(init_diag.get('R2_values', []))
 
-    # Find which iteration was actually selected (best R²)
-    best_iter_init = np.argmax(R2_init) if len(R2_init) > 0 else None
-    best_iter_opt  = np.argmax(R2_opt)  if len(R2_opt)  > 0 else None
+    # Sort by upper volume → much smoother curve
+    if len(v_upper_init) > 0:
+        sort_idx_init = np.argsort(v_upper_init)
+        sorted_v_upper_init = v_upper_init[sort_idx_init]
+        sorted_r2_init      = r2_init[sort_idx_init]
+    else:
+        sorted_v_upper_init = np.array([])
+        sorted_r2_init      = np.array([])
 
+    # Selected upper bound (from the final raw zone)
+    raw_zone = results.get('raw_zone', {})  # or results['gran']['raw'] if nested
+    selected_upper = volume[raw_zone.get('zone_end', 0)] if 'zone_end' in raw_zone else None
+
+    # ─── Schwartz (optimized) ───
+    v_lower_opt = np.array(opt_diag.get('V_lower_ml', []))
+    r2_opt      = np.array(opt_diag.get('R2_values', []))
+
+    # Sort by lower volume → smooth curve
+    if len(v_lower_opt) > 0:
+        sort_idx_opt = np.argsort(v_lower_opt)
+        sorted_v_lower_opt = v_lower_opt[sort_idx_opt]
+        sorted_r2_opt      = r2_opt[sort_idx_opt]
+    else:
+        sorted_v_lower_opt = np.array([])
+        sorted_r2_opt      = np.array([])
+
+    # Selected lower bound (from the final optimized zone)
+    opt_zone = results.get('opt_zone', {})  # or results['schwartz']['opt']
+    selected_lower = volume[opt_zone.get('zone_start', 0)] if 'zone_start' in opt_zone else None
+
+    # ─── Create figure ───
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10), sharex=False)
 
-    # Upper: Initial Gran
-    ax1.plot(iterations_init, R2_init, 'b-o', lw=1.5, ms=4, label='Candidate intervals')
-    if best_iter_init is not None:
-        ax1.axvline(best_iter_init, color='red', ls='--', lw=1.8, label='Selected (best R²)')
-    ax1.set_title('Initial Gran search (k=0) – R² vs evaluation order')
-    ax1.set_xlabel('Candidate evaluation order (iteration)')
+    # Upper panel – Initial Gran
+    if len(sorted_v_upper_init) > 0:
+        ax1.plot(sorted_v_upper_init, sorted_r2_init, 'b-o',
+                 linewidth=1.5, markersize=4, alpha=0.8,
+                 label='Candidates (sorted by upper volume)')
+        if selected_upper is not None:
+            ax1.axvline(selected_upper, color='red', ls='--', lw=1.8,
+                        label='Selected upper bound')
+    ax1.set_title('Initial Gran search (k=0) – R² vs right boundary')
+    ax1.set_xlabel('Upper bound of tested interval [mL]')
     ax1.set_ylabel('R²')
     ax1.grid(True, alpha=0.3)
     ax1.legend()
 
-    # Lower: Optimized Schwartz
-    ax2.plot(iterations_opt, R2_opt, 'g-o', lw=1.5, ms=4, label='Candidate intervals')
-    if best_iter_opt is not None:
-        ax2.axvline(best_iter_opt, color='red', ls='--', lw=1.8, label='Selected (best R²)')
-    ax2.set_title('Optimized Schwartz search – R² vs evaluation order')
-    ax2.set_xlabel('Candidate evaluation order (iteration)')
+    # Lower panel – Optimized Schwartz
+    if len(sorted_v_lower_opt) > 0:
+        ax2.plot(sorted_v_lower_opt, sorted_r2_opt, 'g-o',
+                 linewidth=1.5, markersize=4, alpha=0.8,
+                 label='Candidates (sorted by lower volume)')
+        if selected_lower is not None:
+            ax2.axvline(selected_lower, color='red', ls='--', lw=1.8,
+                        label='Selected lower bound')
+    ax2.set_title('Optimized Schwartz search – R² vs left boundary')
+    ax2.set_xlabel('Lower bound of tested interval [mL]')
     ax2.set_ylabel('R²')
     ax2.grid(True, alpha=0.3)
     ax2.legend()
 
-    fig.suptitle('Linear Region Search Diagnostics – by iteration', fontsize=14)
+    fig.suptitle('Linear Region Search Diagnostics', fontsize=14)
     fig.tight_layout()
-    filename = output_dir / 'search_diagnostics_by_iteration.png'
+
+    filename = output_dir / 'search_diagnostics_sorted.png'
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
-    print(f"Diagnostics plot (by iteration) saved to {filename}")
+
+    print(f"Search diagnostics plot (sorted by volume) saved to {filename}")
 
 def visualize_all(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: str = 'output'):
     output_dir = Path(output_dir)
