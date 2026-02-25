@@ -21,16 +21,22 @@ def _compute_r2(g1_smooth: np.ndarray, volume: np.ndarray, start: int, end: int)
     return r_value**2, slope, intercept
 
 def identify_linear_interval(
-    g1: np.ndarray, volume: np.ndarray, min_points: int = 5, window_size: int = 5,
-    noise_threshold: float = 0.001, var_threshold_rel: float = 0.1, min_r2: float = 0.95
+    g1: np.ndarray,
+    volume: np.ndarray,
+    min_points: int = 5,
+    window_size: int = 5,
+    noise_threshold: float = 0.001,
+    var_threshold_rel: float = 0.1,
+    min_r2: float = 0.95
 ) -> Tuple[int, int, float, Dict[str, list]]:
     """
     Identify linear zone using derivative-based segmentation and ranking.
     Handles Cases 1-3 via plateau detection in negative dg1.
-    NOW RETURNS ALSO: diagnostics dict with V_upper_ml and R2_values for all candidates.
+    Returns: (start_idx, end_idx, best_r2, diagnostics_dict)
     """
     dg1_raw = np.gradient(g1, volume)
     std_dg1 = np.std(dg1_raw)
+
     if std_dg1 > noise_threshold:
         g1_smooth = savgol_filter(g1, window_length=window_size, polyorder=2)
         dg1 = np.gradient(g1_smooth, volume)
@@ -40,17 +46,15 @@ def identify_linear_interval(
 
     neg_mask = dg1 < 0
     if not np.any(neg_mask):
-        return 0, len(g1) - 1, 0.0, {'V_upper_ml': [], 'R2_values': []}
+        empty_diag = {'iteration': [], 'V_lower_ml': [], 'V_upper_ml': [], 'R2_values': []}
+        return 0, len(g1) - 1, 0.0, empty_diag
 
     dg1_neg = dg1[neg_mask]
     vol_neg_idx = np.where(neg_mask)[0]
 
     candidates = []
-    diagnostics = {
-        'V_lower_ml': [],
-        'V_upper_ml': [],
-        'R2_values': []
-    }
+    diagnostics = {'iteration': [], 'V_lower_ml': [], 'V_upper_ml': [], 'R2_values': []}
+    candidate_counter = 0
 
     win_sizes = range(max(3, min_points//2), min(30, len(dg1_neg)//2) + 1)
     for win_len in win_sizes:
@@ -58,9 +62,18 @@ def identify_linear_interval(
             seg_dg1 = dg1_neg[i:i+win_len]
             mean_dg = np.mean(seg_dg1)
             var_dg = np.var(seg_dg1)
+
             if mean_dg < 0 and var_dg < var_threshold_rel * abs(mean_dg):
                 orig_start = vol_neg_idx[i]
-                orig_end = vol_neg_idx[i + win_len - 1] + 1   # +1 because slice end is exclusive
+                orig_end   = vol_neg_idx[i + win_len - 1] + 1
+
+                r2, slope, intercept = _compute_r2(g1_smooth, volume, orig_start, orig_end)
+
+                diagnostics['iteration'].append(candidate_counter)
+                diagnostics['V_lower_ml'].append(float(volume[orig_start]))
+                diagnostics['V_upper_ml'].append(float(volume[orig_end - 1]))
+                diagnostics['R2_values'].append(r2)
+
                 candidates.append({
                     'orig_start': orig_start,
                     'orig_end': orig_end,
@@ -69,23 +82,21 @@ def identify_linear_interval(
                     'var_dg': var_dg
                 })
 
-                # NEW: compute R² for this candidate right here (same as later)
-                r2, _, _ = _compute_r2(g1_smooth, volume, orig_start, orig_end)
-                # Collect BOTH bounds
-                diagnostics['V_lower_ml'].append(float(volume[orig_start]))     # first point of interval
-                diagnostics['V_upper_ml'].append(float(volume[orig_end - 1]))   # last point of interval
-                diagnostics['R2_values'].append(r2)
+                candidate_counter += 1
 
     if not candidates:
-        full_start = vol_neg_idx[0]
-        full_end = vol_neg_idx[-1] + 1
-        _, _, r2_full = _compute_r2(g1_smooth, volume, full_start, full_end)
-        diagnostics = {
-            'V_lower_ml': [float(volume[full_start])],
-            'V_upper_ml': [float(volume[full_end-1])],
-            'R2_values': [r2_full]
-        }
-        return full_start, full_end, r2_full, {'V_upper_ml': [float(volume[full_end-1])], 'R2_values': [r2_full]}
+        full_start = vol_neg_idx[0] if len(vol_neg_idx) > 0 else 0
+        full_end   = vol_neg_idx[-1] + 1 if len(vol_neg_idx) > 0 else len(g1)
+        if full_end - full_start >= min_points:
+            r2, _, _ = _compute_r2(g1_smooth, volume, full_start, full_end)
+            diagnostics['iteration'].append(0)
+            diagnostics['V_lower_ml'].append(float(volume[full_start]))
+            diagnostics['V_upper_ml'].append(float(volume[full_end - 1]))
+            diagnostics['R2_values'].append(r2)
+            return full_start, full_end, r2, diagnostics
+        else:
+            empty_diag = {'iteration': [], 'V_lower_ml': [], 'V_upper_ml': [], 'R2_values': []}
+            return 0, len(g1)-1, 0.0, empty_diag
 
     scored = []
     for cand in candidates:
@@ -97,7 +108,6 @@ def identify_linear_interval(
     start_idx, end_idx = best_cand['orig_start'], best_cand['orig_end']
 
     return start_idx, end_idx, best_r2, diagnostics
-
 def _compute_fit(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k: float = 0.0, pH_full: np.ndarray = None) -> Dict[str, Any]:
     """Compute fit, R², and V_eq for a zone with given k."""
     volume_slice = df['volume'].iloc[start:end+1].values
@@ -175,7 +185,12 @@ def get_metrics(fit: Any, zone: Tuple[int, int], k: float = 0.0, r2_threshold: f
         'fit': fit['fit']  # Pass (slope, intercept) for visualizer dashed line
     }
 
-def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmented: bool = True, verbose: bool = False) -> Dict[str, Any]:
+def analyze_gran_original(
+    df: pd.DataFrame,
+    params: Dict[str, Any],
+    use_segmented: bool = True,
+    verbose: bool = False
+) -> Dict[str, Any]:
     """Main analysis: Compute Gran, identify raw interval, fit raw, then optimize for Schwartz opt Zone."""
     gran_results = compute_gran_functions(df, params)
     g1 = gran_results['gran']['g1']
@@ -189,7 +204,8 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
         start_idx, end_idx, raw_interval_r2, initial_diagnostics = identify_linear_interval(g1, volume)
     else:
         start_idx, end_idx, raw_interval_r2 = _identify_linear_original(g1, volume)
-        initial_diagnostics = {'V_lower_ml': [], 'V_upper_ml': [], 'R2_values': []}
+        initial_diagnostics = {'iteration': [], 'V_lower_ml': [], 'V_upper_ml': [], 'R2_values': []}
+
     initial_interval = (start_idx, end_idx)
 
     # Raw Zone: Fit on initial interval (k=0)
@@ -204,19 +220,19 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
 
     # Recompute gs_opt and re-detect Zone on it
     gs_opt = schwartz_func(volume, pH_full, opt_k)
-
     if use_segmented:
         opt_start, opt_end, opt_interval_r2, opt_diagnostics = identify_linear_interval(gs_opt, volume)
     else:
         opt_start, opt_end, opt_interval_r2 = _identify_linear_original(gs_opt, volume)
-        opt_diagnostics = {'V_lower_ml': [], 'V_upper_ml': [], 'R2_values': []}
+        opt_diagnostics = {'iteration': [], 'V_lower_ml': [], 'V_upper_ml': [], 'R2_values': []}
+
     # Opt fit on re-detected Zone
     opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k=opt_k, pH_full=pH_full)
     opt_zone.update({'k': opt_k, 'start': opt_start, 'end': opt_end, 'num_points': opt_end - opt_start + 1})
     opt_metrics = get_metrics({'r2': opt_zone['r2'], 'fit': opt_zone['fit']}, (opt_start, opt_end), k=opt_k)
 
     # Fallback if opt Zone smaller than raw
-    if opt_metrics['zone_end'] - opt_metrics['zone_start'] < raw_metrics['zone_end'] - raw_metrics['zone_start']:
+    if (opt_metrics['zone_end'] - opt_metrics['zone_start']) < (raw_metrics['zone_end'] - raw_metrics['zone_start']):
         opt_start, opt_end = raw_metrics['zone_start'], raw_metrics['zone_end']
         opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k=opt_k, pH_full=pH_full)
         opt_zone.update({'k': opt_k, 'start': opt_start, 'end': opt_end, 'num_points': opt_end - opt_start + 1})
@@ -228,13 +244,17 @@ def analyze_gran_original(df: pd.DataFrame, params: Dict[str, Any], use_segmente
         'g1': g1,
         'g1_opt': gs_opt,
         'interval_r2': raw_metrics['r2'],
-        'initial_gran_diagnostics': initial_diagnostics,          # will use V_upper_ml for plot
-        'opt_schwartz_diagnostics': opt_diagnostics,              # will use V_lower_ml for plot
+
+        # Forward diagnostics
+        'initial_gran_diagnostics': initial_diagnostics,
+        'opt_schwartz_diagnostics': opt_diagnostics,
     }
 
-    print("RETURNING from analyze_gran_original – keys:", list(results.keys()))
-    print("  → has initial_diagnostics?", 'initial_gran_diagnostics' in results)
-    print("  → len R2 initial:", len(results.get('initial_gran_diagnostics', {}).get('R2_values', [])))
+    if verbose:
+        print("Gran analysis complete with separate raw/opt Zones.")
+        print(f"Raw: V_eq={raw_metrics['V_eq']:.3f}, R²={raw_metrics['r2']:.4f}, zone {raw_metrics['zone_start']}-{raw_metrics['zone_end']}")
+        print(f"Opt: V_eq={opt_metrics['V_eq']:.3f}, R²={opt_metrics['r2']:.4f}, k={opt_metrics['k']:.3f}, zone {opt_metrics['zone_start']}-{opt_metrics['zone_end']}")
+        print(f"Diagnostics collected: initial={len(initial_diagnostics.get('R2_values', []))}, opt={len(opt_diagnostics.get('R2_values', []))}")
 
     return results
 
@@ -271,8 +291,6 @@ def _identify_linear_original(g1: np.ndarray, volume: np.ndarray, min_points: in
 
     return best_start, best_end, best_r2
 
-
-# Compatibility Wrapper for Downstream (Gran/Schwartz Nest)
 def analyze_gran(gran_results: Dict[str, Any], params: Dict[str, Any], verbose: bool = False) -> Dict[str, Any]:
     """Compatibility wrapper: Run original analyze_gran_original, nest original output for visualizer/reporter."""
     # Run original
@@ -285,7 +303,7 @@ def analyze_gran(gran_results: Dict[str, Any], params: Dict[str, Any], verbose: 
     except Exception as e:
         print(f"Warning: analyze_gran_original failed: {e}—using fallback metrics.")
         original_results = None
-    
+
     # Defensive mapping (handle None)
     if original_results is None:
         n = len(params['volume_array'])
@@ -310,18 +328,23 @@ def analyze_gran(gran_results: Dict[str, Any], params: Dict[str, Any], verbose: 
             'zone_end': opt_original.get('zone_end', len(params['volume_array']) - 1),
             'fit': opt_original.get('fit', None)
         }
-    
+
     # Nest for dual (gran from original, schwartz copy for stub)
     analysis_results = {
         'gran': {'raw': raw_metrics, 'opt': opt_metrics},
-        'schwartz': {'raw': raw_metrics, 'opt': opt_metrics},  # Copy; extend later for true Schwartz opt
+        'schwartz': {'raw': raw_metrics, 'opt': opt_metrics},
         'pH': gran_results.get('pH', np.array([])),
-        'g1': original_results.get('g1', np.array([])) if original_results is not None else np.array([]),  # For plots
-        'g1_opt': original_results.get('g1_opt', np.array([])) if original_results is not None else np.array([])  # For plots
+        'g1': original_results.get('g1', np.array([])) if original_results is not None else np.array([]),
+        'g1_opt': original_results.get('g1_opt', np.array([])) if original_results is not None else np.array([]),
+
+        # ─── ADD THESE TWO LINES ───
+        'initial_gran_diagnostics': original_results.get('initial_gran_diagnostics', {}) if original_results is not None else {},
+        'opt_schwartz_diagnostics': original_results.get('opt_schwartz_diagnostics', {}) if original_results is not None else {},
     }
-    
-    if verbose:
-        print("Analysis wrapped: Original → nested gran/schwartz for downstream.")
+
+    print(f"Diagnostics forwarded: "
+        f"initial = {len(analysis_results['initial_gran_diagnostics'].get('R2_values', []))} "
+        f"opt = {len(analysis_results['opt_schwartz_diagnostics'].get('R2_values', []))}")
     # Print nested results for debugging
     print("=== ANALYZER NESTED RESULTS ===")
     for method in ['gran', 'schwartz']:
