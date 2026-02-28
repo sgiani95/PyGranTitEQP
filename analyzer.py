@@ -108,6 +108,7 @@ def identify_linear_interval(
     start_idx, end_idx = best_cand['orig_start'], best_cand['orig_end']
 
     return start_idx, end_idx, best_r2, diagnostics
+
 def _compute_fit(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k: float = 0.0, pH_full: np.ndarray = None) -> Dict[str, Any]:
     """Compute fit, R², and V_eq for a zone with given k."""
     volume_slice = df['volume'].iloc[start:end+1].values
