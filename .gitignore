@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.swp
+output/*.png
+output/*.pdf
+output/*.csv
