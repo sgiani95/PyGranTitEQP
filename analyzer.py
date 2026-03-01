@@ -109,27 +109,43 @@ def identify_linear_interval(
 
     return start_idx, end_idx, best_r2, diagnostics
 
-def _compute_fit(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k: float = 0.0, pH_full: np.ndarray = None) -> Dict[str, Any]:
-    """Compute fit, R², and V_eq for a zone with given k. V_eq = intercept after axis swap."""
+def _compute_fit(
+    df: pd.DataFrame,
+    start: int,
+    end: int,
+    gran_func: Callable,
+    k: float = 0.0,
+    pH_full: np.ndarray = None
+) -> Dict[str, Any]:
+    """Compute fit, R², V_eq (=intercept) and standard error on V_eq."""
     volume_slice = df['volume'].iloc[start:end+1].values
     pH_slice = pH_full[start:end+1] if pH_full is not None else None
     x = gran_func(volume_slice, pH_slice, k)  # Gran values = x
 
-    # Debug print to see why fit might fail
-    print(f"\n _compute_fit called: zone {start}-{end}, n={len(volume_slice)}, k={k:.2e}")
-
     if len(volume_slice) < 3:
-        print("  → too few points, returning NaN")
-        return {'r2': 0.0, 'fit': (np.nan, np.nan), 'veq': np.nan}
+        return {
+            'r2': 0.0,
+            'fit': (np.nan, np.nan),
+            'veq': np.nan,
+            'V_eq_unc': np.nan
+        }
 
-    slope, intercept, r_value, _, _ = linregress(x, volume_slice)
-    r2 = r_value**2
+    result = linregress(x, volume_slice)
+    slope = result.slope
+    intercept = result.intercept
+    r2 = result.rvalue ** 2
     veq = intercept if slope != 0 else np.nan
 
-    # Debug print for diagnosis
-    print(f"  → slope={slope:.4e}, intercept={intercept:.4f}, r2={r2:.4f}, veq={veq:.4f}")
+    # Standard error on intercept = standard error on V_eq
+    se_intercept = result.intercept_stderr
+    V_eq_unc = se_intercept if not np.isnan(se_intercept) else np.nan
 
-    return {'r2': r2, 'fit': (slope, intercept), 'veq': veq}
+    return {
+        'r2': r2,
+        'fit': (slope, intercept),
+        'veq': veq,
+        'V_eq_unc': V_eq_unc   # ← standard error (1σ) on V_eq
+    }
 
 def _optimize_single_zone(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k_bounds: Tuple[float, float] = (0, 1000000000), pH_full: np.ndarray = None) -> Dict[str, Any]:
     """Optimize k for a fixed zone using gran_func callable."""
@@ -186,18 +202,9 @@ def get_metrics(
 ) -> Dict[str, Any]:
     """Extract V_eq, r2 from fit/zone (centralized). Warn on low R². Includes 'fit' for plotting."""
     start, end = zone
-    
     if fit is None or end - start < 2:
-        return {
-            'V_eq': np.nan,
-            'r2': 0.0,
-            'k': k,
-            'zone_start': start,
-            'zone_end': end,
-            'fit': None
-        }
+        return {'V_eq': np.nan, 'r2': 0.0, 'k': k, 'zone_start': start, 'zone_end': end, 'fit': None}
 
-    # Take V_eq directly from the fit dict (set by _compute_fit as intercept)
     v_eq = fit.get('veq', np.nan)
     r2 = fit.get('r2', 0.0)
 
@@ -210,8 +217,9 @@ def get_metrics(
         'k': k,
         'zone_start': start,
         'zone_end': end,
-        'fit': fit.get('fit', (np.nan, np.nan))  # (slope, intercept) for visualizer dashed line
-    }
+        'fit': fit.get('fit', (np.nan, np.nan)),
+        'V_eq_unc': fit.get('V_eq_unc', np.nan)   # ← ADD ONLY THIS LINE
+}   
 
 def analyze_gran_original(
     df: pd.DataFrame,
@@ -335,27 +343,21 @@ def analyze_gran(gran_results: Dict[str, Any], params: Dict[str, Any], verbose: 
     # Defensive mapping (handle None)
     if original_results is None:
         n = len(params['volume_array'])
-        raw_metrics = {'V_eq': np.nan, 'r2': 0.0, 'k': 0.0, 'zone_start': 0, 'zone_end': n - 1, 'fit': None}
-        opt_metrics = raw_metrics.copy()
-    else:
-        raw_original = original_results.get('raw_zone', {})
-        raw_metrics = {
-            'V_eq': raw_original.get('V_eq', np.nan),  # If you have 'V_eq' here
-            'r2': raw_original.get('r2', 0.0),
+        fallback = {
+            'V_eq': np.nan,
+            'r2': 0.0,
             'k': 0.0,
-            'zone_start': raw_original.get('zone_start', 0),
-            'zone_end': raw_original.get('zone_end', len(params['volume_array']) - 1),
-            'fit': raw_original.get('fit', None)  # ← Add this line!
+            'zone_start': 0,
+            'zone_end': n - 1,
+            'fit': None,
+            'V_eq_unc': np.nan   # also fallback for unc
         }
-        opt_original = original_results.get('opt_zone', {})
-        opt_metrics = {
-            'V_eq': opt_original.get('V_eq', np.nan),
-            'r2': opt_original.get('r2', 0.0),
-            'k': opt_original.get('k', 0.0),
-            'zone_start': opt_original.get('zone_start', 0),
-            'zone_end': opt_original.get('zone_end', len(params['volume_array']) - 1),
-            'fit': opt_original.get('fit', None)
-        }
+        raw_metrics = fallback.copy()
+        opt_metrics = fallback.copy()
+    else:
+        # Use the full dicts directly (they already contain V_eq, r2, V_eq_unc, etc.)
+        raw_metrics = original_results.get('raw_zone', {})
+        opt_metrics = original_results.get('opt_zone', {})
 
     # Nest for dual (gran from original, schwartz copy for stub)
     analysis_results = {
