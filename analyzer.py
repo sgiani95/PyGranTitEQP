@@ -109,16 +109,75 @@ def identify_linear_interval(
 
     return start_idx, end_idx, best_r2, diagnostics
 
-def _compute_fit(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k: float = 0.0, pH_full: np.ndarray = None) -> Dict[str, Any]:
-    """Compute fit, R², and V_eq for a zone with given k."""
+def _compute_fit(
+    df: pd.DataFrame,
+    start: int,
+    end: int,
+    gran_func: Callable,
+    k: float = 0.0,
+    pH_full: np.ndarray = None
+) -> Dict[str, Any]:
+    """
+    Compute linear fit with swapped axes: volume = f(Gran function)
+    → V_eq is directly the intercept (when Gran = 0).
+    Returns V_eq, R², uncertainty on V_eq (from intercept SE), and 95% CI.
+    """
     volume_slice = df['volume'].iloc[start:end+1].values
-    pH_slice = pH_full[start:end+1]
-    y = gran_func(volume_slice, pH_slice, k)
-    slope, intercept, r_value, _, _ = linregress(volume_slice, y)
-    r2 = r_value**2
-    veq = -intercept / slope if slope != 0 else np.nan
-    return {'r2': r2, 'fit': (slope, intercept), 'veq': veq}
+    pH_slice = pH_full[start:end+1] if pH_full is not None else None
+    gran_values = gran_func(volume_slice, pH_slice, k)  # this is now x
 
+    n = len(volume_slice)
+    if n < 3:
+        return {
+            'r2': 0.0,
+            'slope': np.nan,
+            'intercept': np.nan,        # = V_eq
+            'veq': np.nan,
+            'V_eq_unc': np.nan,
+            'V_eq_ci95': (np.nan, np.nan),
+            'df_fit': np.nan,
+            'n_points_used': n,
+            'se_slope': np.nan,
+            'se_intercept': np.nan
+        }
+
+    # Swap: x = gran_values, y = volume_slice
+    result = linregress(gran_values, volume_slice)
+
+    slope = result.slope             # dV/dGran
+    intercept = result.intercept     # V when Gran=0 → directly V_eq
+    r_value = result.rvalue
+    r2 = r_value**2
+    se_slope = result.stderr
+    se_intercept = result.intercept_stderr
+    df_fit = n - 2
+
+    veq = intercept
+
+    # Uncertainty on V_eq = uncertainty on intercept (much simpler!)
+    u_veq = se_intercept
+
+    # 95% confidence interval using t-distribution
+    if df_fit > 0 and not np.isnan(u_veq):
+        t_crit = t.ppf(0.975, df_fit)          # two-tailed 95%
+        ci_half = t_crit * u_veq
+        ci_low = veq - ci_half
+        ci_high = veq + ci_half
+    else:
+        ci_low = ci_high = np.nan
+
+    return {
+        'r2': r2,
+        'slope': slope,                     # now dV/dGran
+        'intercept': intercept,             # directly V_eq
+        'veq': veq,
+        'V_eq_unc': u_veq,                  # standard uncertainty (1σ) from intercept
+        'V_eq_ci95': (ci_low, ci_high),     # 95% CI
+        'df_fit': df_fit,
+        'n_points_used': n,
+        'se_slope': se_slope,
+        'se_intercept': se_intercept
+    }
 
 def _optimize_single_zone(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k_bounds: Tuple[float, float] = (0, 1000000000), pH_full: np.ndarray = None) -> Dict[str, Any]:
     """Optimize k for a fixed zone using gran_func callable."""
