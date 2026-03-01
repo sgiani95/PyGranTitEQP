@@ -6,7 +6,7 @@ Outputs nested metrics for downstream (gran/schwartz raw/opt with V_eq, r2, k, z
 
 import numpy as np
 import pandas as pd
-from scipy.stats import linregress
+from scipy.stats import linregress, t
 from scipy.signal import savgol_filter
 from scipy.optimize import minimize_scalar
 from gran_functions import compute_gran_functions
@@ -110,15 +110,26 @@ def identify_linear_interval(
     return start_idx, end_idx, best_r2, diagnostics
 
 def _compute_fit(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k: float = 0.0, pH_full: np.ndarray = None) -> Dict[str, Any]:
-    """Compute fit, R², and V_eq for a zone with given k."""
+    """Compute fit, R², and V_eq for a zone with given k. V_eq = intercept after axis swap."""
     volume_slice = df['volume'].iloc[start:end+1].values
-    pH_slice = pH_full[start:end+1]
-    y = gran_func(volume_slice, pH_slice, k)
-    slope, intercept, r_value, _, _ = linregress(volume_slice, y)
-    r2 = r_value**2
-    veq = -intercept / slope if slope != 0 else np.nan
-    return {'r2': r2, 'fit': (slope, intercept), 'veq': veq}
+    pH_slice = pH_full[start:end+1] if pH_full is not None else None
+    x = gran_func(volume_slice, pH_slice, k)  # Gran values = x
 
+    # Debug print to see why fit might fail
+    print(f"\n _compute_fit called: zone {start}-{end}, n={len(volume_slice)}, k={k:.2e}")
+
+    if len(volume_slice) < 3:
+        print("  → too few points, returning NaN")
+        return {'r2': 0.0, 'fit': (np.nan, np.nan), 'veq': np.nan}
+
+    slope, intercept, r_value, _, _ = linregress(x, volume_slice)
+    r2 = r_value**2
+    veq = intercept if slope != 0 else np.nan
+
+    # Debug print for diagnosis
+    print(f"  → slope={slope:.4e}, intercept={intercept:.4f}, r2={r2:.4f}, veq={veq:.4f}")
+
+    return {'r2': r2, 'fit': (slope, intercept), 'veq': veq}
 
 def _optimize_single_zone(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k_bounds: Tuple[float, float] = (0, 1000000000), pH_full: np.ndarray = None) -> Dict[str, Any]:
     """Optimize k for a fixed zone using gran_func callable."""
@@ -167,23 +178,39 @@ def shrink_zone(
         iter_count += 1
     return (start, end)
 
-def get_metrics(fit: Any, zone: Tuple[int, int], k: float = 0.0, r2_threshold: float = 0.95) -> Dict[str, Any]:
+def get_metrics(
+    fit: Any,
+    zone: Tuple[int, int],
+    k: float = 0.0,
+    r2_threshold: float = 0.95
+) -> Dict[str, Any]:
     """Extract V_eq, r2 from fit/zone (centralized). Warn on low R². Includes 'fit' for plotting."""
     start, end = zone
+    
     if fit is None or end - start < 2:
-        return {'V_eq': np.nan, 'r2': 0.0, 'k': k, 'zone_start': start, 'zone_end': end, 'fit': None}
-    slope, intercept = fit['fit']
-    r2 = fit['r2']
-    v_eq = -intercept / slope if slope != 0 else np.nan
+        return {
+            'V_eq': np.nan,
+            'r2': 0.0,
+            'k': k,
+            'zone_start': start,
+            'zone_end': end,
+            'fit': None
+        }
+
+    # Take V_eq directly from the fit dict (set by _compute_fit as intercept)
+    v_eq = fit.get('veq', np.nan)
+    r2 = fit.get('r2', 0.0)
+
     if r2 < r2_threshold:
         print(f"Warning: Low R²={r2:.3f} for zone {zone} (k={k})")
+
     return {
         'V_eq': v_eq,
         'r2': r2,
         'k': k,
         'zone_start': start,
         'zone_end': end,
-        'fit': fit['fit']  # Pass (slope, intercept) for visualizer dashed line
+        'fit': fit.get('fit', (np.nan, np.nan))  # (slope, intercept) for visualizer dashed line
     }
 
 def analyze_gran_original(
@@ -212,7 +239,7 @@ def analyze_gran_original(
     # Raw Zone: Fit on initial interval (k=0)
     raw_zone = _compute_fit(df, start_idx, end_idx, gran_func, k=0.0, pH_full=pH_full)
     raw_zone.update({'start': start_idx, 'end': end_idx, 'num_points': end_idx - start_idx + 1})
-    raw_metrics = get_metrics({'r2': raw_zone['r2'], 'fit': raw_zone['fit']}, initial_interval, k=0.0)
+    raw_metrics = get_metrics(raw_zone, initial_interval, k=0.0)
 
     # Opt k on raw Zone
     k_bounds = (0, 1000000000)
@@ -230,7 +257,7 @@ def analyze_gran_original(
     # Opt fit on re-detected Zone
     opt_zone = _compute_fit(df, opt_start, opt_end, schwartz_func, k=opt_k, pH_full=pH_full)
     opt_zone.update({'k': opt_k, 'start': opt_start, 'end': opt_end, 'num_points': opt_end - opt_start + 1})
-    opt_metrics = get_metrics({'r2': opt_zone['r2'], 'fit': opt_zone['fit']}, (opt_start, opt_end), k=opt_k)
+    opt_metrics = get_metrics(opt_zone, (opt_start, opt_end), k=opt_k)
 
     # Fallback if opt Zone smaller than raw
     if (opt_metrics['zone_end'] - opt_metrics['zone_start']) < (raw_metrics['zone_end'] - raw_metrics['zone_start']):

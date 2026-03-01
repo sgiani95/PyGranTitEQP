@@ -164,14 +164,14 @@ def generate_csv_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[
             'Gran Raw',
             safe_float(gran_raw.get('V_eq'), 3),
             safe_float(gran_raw.get('r2'), 4),
-            safe_float(gran_raw.get('V_eq_unc', -9.999), 3),   # real value when present, else placeholder
+            #### safe_float(gran_raw.get('V_eq_unc', -9.999), 3),   # real value when present, else placeholder
             raw_zone
         ],
         [
             'Schwartz Optimized',
             safe_float(sch_opt.get('V_eq'), 3),
             safe_float(sch_opt.get('r2'), 4),
-            safe_float(sch_opt.get('V_eq_unc', -9.999), 3),   # real value when present, else placeholder
+            #### safe_float(sch_opt.get('V_eq_unc', -9.999), 3),   # real value when present, else placeholder
             opt_zone
         ]
     ]
