@@ -6,7 +6,7 @@ Outputs nested metrics for downstream (gran/schwartz raw/opt with V_eq, r2, k, z
 
 import numpy as np
 import pandas as pd
-from scipy.stats import linregress
+from scipy.stats import linregress, t
 from scipy.signal import savgol_filter
 from scipy.optimize import minimize_scalar
 from gran_functions import compute_gran_functions
@@ -167,23 +167,70 @@ def shrink_zone(
         iter_count += 1
     return (start, end)
 
-def get_metrics(fit: Any, zone: Tuple[int, int], k: float = 0.0, r2_threshold: float = 0.95) -> Dict[str, Any]:
-    """Extract V_eq, r2 from fit/zone (centralized). Warn on low R². Includes 'fit' for plotting."""
+def get_metrics(
+    fit: Dict[str, Any],
+    zone: Tuple[int, int],
+    k: float = 0.0,
+    r2_threshold: float = 0.95
+) -> Dict[str, Any]:
+    """
+    Extract V_eq, r2, k, zone info, and now also uncertainty / CI from the fit result.
+    Adapted for swapped-axes fit: V_eq = intercept, u(V_eq) = se_intercept.
+    Warns on low R² or high relative uncertainty.
+    """
     start, end = zone
+
+    # Early fallback if invalid fit or too few points
     if fit is None or end - start < 2:
-        return {'V_eq': np.nan, 'r2': 0.0, 'k': k, 'zone_start': start, 'zone_end': end, 'fit': None}
-    slope, intercept = fit['fit']
-    r2 = fit['r2']
-    v_eq = -intercept / slope if slope != 0 else np.nan
+        return {
+            'V_eq': np.nan,
+            'r2': 0.0,
+            'k': k,
+            'zone_start': start,
+            'zone_end': end,
+            'fit': None,
+            'V_eq_unc': np.nan,
+            'V_eq_ci95': (np.nan, np.nan),
+            'df_fit': np.nan,
+            'n_points_used': end - start + 1,
+            'se_slope': np.nan,
+            'se_intercept': np.nan
+        }
+
+    # Extract from fit dict (produced by _compute_fit after axis swap)
+    r2 = fit.get('r2', 0.0)
+    veq = fit.get('veq', np.nan)              # now directly the intercept
+    u_veq = fit.get('V_eq_unc', np.nan)       # standard uncertainty (se_intercept)
+    ci95 = fit.get('V_eq_ci95', (np.nan, np.nan))
+    df_fit = fit.get('df_fit', np.nan)
+    n_used = fit.get('n_points_used', end - start + 1)
+    se_slope = fit.get('se_slope', np.nan)
+    se_intercept = fit.get('se_intercept', np.nan)
+
+    # Warnings / diagnostics
     if r2 < r2_threshold:
-        print(f"Warning: Low R²={r2:.3f} for zone {zone} (k={k})")
+        print(f"Warning: Low R² = {r2:.3f} for zone {zone} (k={k:.3f})")
+
+    if not np.isnan(u_veq) and not np.isnan(veq) and abs(veq) > 0:
+        rel_unc = abs(u_veq / veq)
+        if rel_unc > 0.05:  # arbitrary threshold — adjust as needed
+            print(f"Note: High relative uncertainty on V_eq = {rel_unc:.1%} "
+                  f"(±{u_veq:.4f} mL around {veq:.3f})")
+
+    # Return everything needed downstream
     return {
-        'V_eq': v_eq,
+        'V_eq': veq,
         'r2': r2,
         'k': k,
         'zone_start': start,
         'zone_end': end,
-        'fit': fit['fit']  # Pass (slope, intercept) for visualizer dashed line
+        'fit': fit.get('fit', (np.nan, np.nan)),  # (slope, intercept) for dashed line
+        'V_eq_unc': u_veq,                        # 1σ standard uncertainty
+        'V_eq_ci95': ci95,                        # tuple (low, high)
+        'df_fit': df_fit,
+        'n_points_used': n_used,
+        'se_slope': se_slope,
+        'se_intercept': se_intercept
     }
 
 def analyze_gran_original(

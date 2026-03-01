@@ -159,19 +159,21 @@ def generate_csv_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[
         return str(value)  # 'N/A' or other string
 
     csv_data = [
-        ['Method', 'V_eq [mL]', 'R²', 'Zones (start-end)'],
+        ['Method', 'V_eq [mL]', 'V_eq_unc [mL]', 'R²', 'Zones (start-end)'],
         [
             'Gran Raw',
             safe_float(gran_raw.get('V_eq'), 3),
             safe_float(gran_raw.get('r2'), 4),
+            safe_float(gran_raw.get('V_eq_unc', -9.999), 3),   # real value when present, else placeholder
             raw_zone
         ],
         [
             'Schwartz Optimized',
             safe_float(sch_opt.get('V_eq'), 3),
             safe_float(sch_opt.get('r2'), 4),
+            safe_float(sch_opt.get('V_eq_unc', -9.999), 3),   # real value when present, else placeholder
             opt_zone
-        ],
+        ]
     ]
 
     import csv
