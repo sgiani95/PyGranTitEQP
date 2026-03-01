@@ -117,34 +117,38 @@ def _compute_fit(
     k: float = 0.0,
     pH_full: np.ndarray = None
 ) -> Dict[str, Any]:
-    """Compute fit, R², V_eq (=intercept) and standard error on V_eq."""
+    """Compute fit, R², V_eq (=intercept in swapped), standard error, and original fit for plotting."""
     volume_slice = df['volume'].iloc[start:end+1].values
     pH_slice = pH_full[start:end+1] if pH_full is not None else None
-    x = gran_func(volume_slice, pH_slice, k)  # Gran values = x
+    gran_values = gran_func(volume_slice, pH_slice, k)
 
     if len(volume_slice) < 3:
         return {
             'r2': 0.0,
-            'fit': (np.nan, np.nan),
+            'fit': (np.nan, np.nan),           # original fit (for plotting) ← keep this key
+            'fit_swap': (np.nan, np.nan),      # swapped fit (for calculation)
             'veq': np.nan,
             'V_eq_unc': np.nan
         }
 
-    result = linregress(x, volume_slice)
-    slope = result.slope
-    intercept = result.intercept
-    r2 = result.rvalue ** 2
-    veq = intercept if slope != 0 else np.nan
+    # Original fit: Gran vs Volume — used for plotting the dashed line
+    result_orig = linregress(volume_slice, gran_values)
+    slope_orig = result_orig.slope
+    intercept_orig = result_orig.intercept
+    r2 = result_orig.rvalue ** 2
 
-    # Standard error on intercept = standard error on V_eq
-    se_intercept = result.intercept_stderr
-    V_eq_unc = se_intercept if not np.isnan(se_intercept) else np.nan
+    # Swapped fit: Volume vs Gran — for V_eq and uncertainty
+    result_swap = linregress(gran_values, volume_slice)
+    intercept_swap = result_swap.intercept
+    veq = intercept_swap if result_swap.slope != 0 else np.nan
+    V_eq_unc = result_swap.intercept_stderr if not np.isnan(result_swap.intercept_stderr) else np.nan
 
     return {
         'r2': r2,
-        'fit': (slope, intercept),
+        'fit': (slope_orig, intercept_orig),     # ← visualizer uses this (unchanged key!)
+        'fit_swap': (result_swap.slope, intercept_swap),  # optional – for debugging
         'veq': veq,
-        'V_eq_unc': V_eq_unc   # ← standard error (1σ) on V_eq
+        'V_eq_unc': V_eq_unc
     }
 
 def _optimize_single_zone(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k_bounds: Tuple[float, float] = (0, 1000000000), pH_full: np.ndarray = None) -> Dict[str, Any]:

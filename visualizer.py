@@ -254,107 +254,159 @@ def plot_r2_vs_upper_bound(r2_vs_upper: list[tuple[float, float]], output_dir: P
     plt.close()
     print(f"R2 vs upper bound plot saved to {filename}")
 
-def plot_diagnostics(
+def plot_gran_raw_with_search_diagnostic(results: Dict[str, Any], params: Dict[str, Any], output_dir: Path = Path('output')):
+    """
+    2-panel plot with line-point style:
+    1. Upper: Gran raw g1 ('b-o') + raw fit dashed line + raw zone shade (exact same as original upper panel)
+    2. Lower: Initial Gran linear region search (R² vs upper volume bound, sorted)
+    """
+    setup_plot_style()
+    output_dir.mkdir(exist_ok=True)
+    volume = params.get('volume_array', np.arange(41)) # Fallback
+
+    # Safe extraction from nested results
+    gran_raw = results.get('gran', {}).get('raw', {})
+    g1_raw = results.get('g1', np.zeros(len(volume)))
+    raw_zone_start = gran_raw.get('zone_start', 0)
+    raw_zone_end = gran_raw.get('zone_end', len(volume) - 1)
+    raw_fit = gran_raw.get('fit', None)
+    raw_r2 = gran_raw.get('r2', 'N/A')
+    raw_veq = gran_raw.get('V_eq', 'N/A')
+
+    # ─── Diagnostic data for lower panel ───
+    init_diag = results.get('initial_gran_diagnostics', {})
+    v_upper = np.array(init_diag.get('V_upper_ml', []))
+    r2_vals = np.array(init_diag.get('R2_values', []))
+    selected_upper = volume[raw_zone_end] if raw_zone_end < len(volume) else None
+
+    # Sort by upper volume for smooth curve
+    if len(v_upper) > 0:
+        sort_idx = np.argsort(v_upper)
+        v_upper = v_upper[sort_idx]
+        r2_vals = r2_vals[sort_idx]
+
+    # ─── Figure ───
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10), sharex=False, height_ratios=[2, 1])
+
+    # ─── Upper panel: exact same as original Gran raw ───
+    ax1.plot(volume, g1_raw, 'b-o', linewidth=1.5, markersize=4, label='Gran raw g1')
+    ax1.axvspan(volume[raw_zone_start], volume[raw_zone_end], alpha=0.25, color='red', label='Raw Zone')
+    if raw_fit:
+        slope, intercept = raw_fit
+        x_fit = np.linspace(volume.min(), volume.max(), 100)
+        y_fit = slope * x_fit + intercept
+        ax1.plot(x_fit, y_fit, 'k--', label=f'Raw fit (R²={raw_r2:.4f})')
+    ax1.axvline(raw_veq, color='green', ls='-', lw=1.5, label=f'V_eq = {raw_veq:.3f} mL')
+    ax1.set_ylabel('Gran g1 (raw)')
+    ax1.set_title(f'Gran Raw – V_eq = {raw_veq:.3f} mL')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+
+    # ─── Lower panel: Initial Gran search diagnostic ───
+    if len(v_upper) > 0:
+        ax2.plot(v_upper, r2_vals, 'b-o', linewidth=1.5, markersize=4, label='Candidates (sorted)')
+        if selected_upper is not None:
+            ax2.axvline(selected_upper, color='red', ls='--', lw=1.8, label='Selected upper bound')
+    else:
+        ax2.text(0.5, 0.5, 'No diagnostic data', ha='center', va='center', transform=ax2.transAxes)
+
+    ax2.set_title('Initial Gran linear region search')
+    ax2.set_xlabel('Upper bound of tested interval [mL]')
+    ax2.set_ylabel('R²')
+    ax2.grid(True, alpha=0.3)
+    ax2.legend()
+
+    fig.suptitle('Gran Analysis + Linear Region Search', fontsize=14)
+    fig.tight_layout()
+    filename = output_dir / 'gran_raw_with_search_diagnostic.png'
+    fig.savefig(filename, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"Gran raw + search diagnostic plot saved to {filename}")
+
+def plot_schwartz_opt_with_search_diagnostic(
     results: Dict[str, Any],
     params: Dict[str, Any],
     output_dir: Path = Path('output')
 ) -> None:
     """
-    Creates a two-panel diagnostic plot:
-      - Upper: Initial Gran search → R² vs upper bound of tested intervals (sorted)
-      - Lower: Optimized Schwartz search → R² vs lower bound of tested intervals (sorted)
+    Two-panel plot for Schwartz Optimized:
+      - Upper: Schwartz opt gs ('g-o') + opt fit dashed line + opt zone shade (exact same as original Schwartz panel)
+      - Lower: Optimized Schwartz linear region search (R² vs lower volume bound, sorted)
     """
     setup_plot_style()
     output_dir.mkdir(exist_ok=True)
+    volume = params.get('volume_array', np.arange(41))  # fallback
 
-    # ─── Extract diagnostic data ───
-    init_diag = results.get('initial_gran_diagnostics', {})
-    opt_diag  = results.get('opt_schwartz_diagnostics', {})
+    # Safe extraction
+    sch_opt = results.get('schwartz', {}).get('opt', {})
+    gs_opt = results.get('g1_opt', np.zeros(len(volume)))  # gs_opt
+    opt_zone_start = sch_opt.get('zone_start', 0)
+    opt_zone_end = sch_opt.get('zone_end', len(volume) - 1)
+    opt_fit = sch_opt.get('fit', None)
+    opt_r2 = sch_opt.get('r2', 'N/A')
+    opt_veq = sch_opt.get('V_eq', 'N/A')
+    opt_k = sch_opt.get('k', 0.0)
 
-    if not init_diag.get('R2_values') or not opt_diag.get('R2_values'):
-        print("Warning: No diagnostic data available for R² search plots.")
-        return
-
-    # Volume array (needed to locate selected bounds)
-    volume = params.get('volume_array', np.arange(41))  # fallback consistent with other plots
-
-    # ─── Gran (initial, raw, k=0) ───
-    v_upper_init = np.array(init_diag.get('V_upper_ml', []))
-    r2_init      = np.array(init_diag.get('R2_values', []))
-
-    # Sort by upper volume → much smoother curve
-    if len(v_upper_init) > 0:
-        sort_idx_init = np.argsort(v_upper_init)
-        sorted_v_upper_init = v_upper_init[sort_idx_init]
-        sorted_r2_init      = r2_init[sort_idx_init]
+    # ─── Diagnostic data for lower panel ───
+    opt_diag = results.get('opt_schwartz_diagnostics', {})
+    if not opt_diag.get('R2_values'):
+        print("Warning: No optimized Schwartz diagnostics available → skipping lower panel.")
+        v_lower = r2_vals = np.array([])
+        selected_lower = None
     else:
-        sorted_v_upper_init = np.array([])
-        sorted_r2_init      = np.array([])
+        v_lower = np.array(opt_diag.get('V_lower_ml', []))
+        r2_vals = np.array(opt_diag.get('R2_values', []))
+        # Sort by lower volume (ascending)
+        if len(v_lower) > 0:
+            sort_idx = np.argsort(v_lower)
+            v_lower = v_lower[sort_idx]
+            r2_vals = r2_vals[sort_idx]
+        selected_lower = volume[opt_zone_start] if opt_zone_start < len(volume) else None
 
-    # Selected upper bound (from the final raw zone)
-    raw_zone = results.get('raw_zone', {})  # or results['gran']['raw'] if nested
-    selected_upper = volume[raw_zone.get('zone_end', 0)] if 'zone_end' in raw_zone else None
+    # ─── Figure ───
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10), sharex=False, height_ratios=[2, 1])
 
-    # ─── Schwartz (optimized) ───
-    v_lower_opt = np.array(opt_diag.get('V_lower_ml', []))
-    r2_opt      = np.array(opt_diag.get('R2_values', []))
-
-    # Sort by lower volume → smooth curve
-    if len(v_lower_opt) > 0:
-        sort_idx_opt = np.argsort(v_lower_opt)
-        sorted_v_lower_opt = v_lower_opt[sort_idx_opt]
-        sorted_r2_opt      = r2_opt[sort_idx_opt]
-    else:
-        sorted_v_lower_opt = np.array([])
-        sorted_r2_opt      = np.array([])
-
-    # Selected lower bound (from the final optimized zone)
-    opt_zone = results.get('opt_zone', {})  # or results['schwartz']['opt']
-    selected_lower = volume[opt_zone.get('zone_start', 0)] if 'zone_start' in opt_zone else None
-
-    # ─── Create figure ───
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10), sharex=False)
-
-    # Upper panel – Initial Gran
-    if len(sorted_v_upper_init) > 0:
-        ax1.plot(sorted_v_upper_init, sorted_r2_init, 'b-o',
-                 linewidth=1.5, markersize=4, alpha=0.8,
-                 label='Candidates (sorted by upper volume)')
-        if selected_upper is not None:
-            ax1.axvline(selected_upper, color='red', ls='--', lw=1.8,
-                        label='Selected upper bound')
-    ax1.set_title('Initial Gran search (k=0) – R² vs right boundary')
-    ax1.set_xlabel('Upper bound of tested interval [mL]')
-    ax1.set_ylabel('R²')
-    ax1.grid(True, alpha=0.3)
+    # ─── Upper panel: exact same as original Schwartz optimized ───
+    ax1.plot(volume, gs_opt, 'g-o', linewidth=1.5, markersize=4, label='Schwartz opt gs')
+    ax1.axvspan(volume[opt_zone_start], volume[opt_zone_end], alpha=0.25, color='orange', label='Opt Zone')
+    if opt_fit:
+        slope, intercept = opt_fit
+        x_fit = np.linspace(volume.min(), volume.max(), 100)
+        y_fit = slope * x_fit + intercept
+        ax1.plot(x_fit, y_fit, 'k--', label=f'Opt fit (R²={opt_r2:.4f})')
+    ax1.axvline(opt_veq, color='green', ls='-', lw=1.5, label=f'V_eq = {opt_veq:.3f} mL')
+    ax1.set_ylabel('Schwartz gs (opt)')
+    ax1.set_title(f'Schwartz Optimized – V_eq = {opt_veq:.3f} mL, k = {opt_k:.3f}')
     ax1.legend()
+    ax1.grid(True, alpha=0.3)
 
-    # Lower panel – Optimized Schwartz
-    if len(sorted_v_lower_opt) > 0:
-        ax2.plot(sorted_v_lower_opt, sorted_r2_opt, 'g-o',
-                 linewidth=1.5, markersize=4, alpha=0.8,
-                 label='Candidates (sorted by lower volume)')
+    # ─── Lower panel: Optimized Schwartz search diagnostic ───
+    if len(v_lower) > 0:
+        ax2.plot(v_lower, r2_vals, 'g-o', linewidth=1.5, markersize=4, label='Candidates (sorted by lower bound)')
         if selected_lower is not None:
-            ax2.axvline(selected_lower, color='red', ls='--', lw=1.8,
-                        label='Selected lower bound')
-    ax2.set_title('Optimized Schwartz search – R² vs left boundary')
+            ax2.axvline(selected_lower, color='red', ls='--', lw=1.8, label='Selected lower bound')
+    else:
+        ax2.text(0.5, 0.5, 'No diagnostic data', ha='center', va='center', transform=ax2.transAxes)
+
+    ax2.set_title('Optimized Schwartz linear region search')
     ax2.set_xlabel('Lower bound of tested interval [mL]')
     ax2.set_ylabel('R²')
     ax2.grid(True, alpha=0.3)
     ax2.legend()
 
-    fig.suptitle('Linear Region Search Diagnostics', fontsize=14)
+    fig.suptitle('Schwartz Optimized + Linear Region Search Diagnostic', fontsize=14)
     fig.tight_layout()
 
-    filename = output_dir / 'search_diagnostics_sorted.png'
+    filename = output_dir / 'schwartz_opt_with_search_diagnostic.png'
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
-
-    print(f"Search diagnostics plot (sorted by volume) saved to {filename}")
+    print(f"Schwartz opt + search diagnostic plot saved to {filename}")
 
 def visualize_all(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: str = 'output'):
     output_dir = Path(output_dir)
     plot_titration_curve(df, params, output_dir)
     plot_gran_schwartz(results, params, output_dir)
     plot_all_combined(df, params, results, output_dir)
-    plot_diagnostics(results, params, output_dir)
+    plot_gran_raw_with_search_diagnostic(results, params, output_dir)
+    plot_schwartz_opt_with_search_diagnostic(results, params, output_dir)
+
