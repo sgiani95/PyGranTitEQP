@@ -83,7 +83,6 @@ def get_config_from_cli_or_file_or_prompt(
         )
         config['titration_type'] = 'acid_base'
 
-    print(f"Final config: {config}")
     return config
 
 
@@ -115,22 +114,16 @@ def preprocess_pipeline(
 
         # Linear interpolation: slope from linregress
         slope, intercept, r_value, _, _ = linregress(volume, potential)
-        print(f"DEBUG preprocess: potential first 5: {potential[:5]}")
         if slope >= 0:  # Increasing potential → base titration
-            print("Detected base titration (positive slope). Flipping sign and setting type.")
             df['potential'] = -df['potential']  # Safe assignment
             params['potential_array'] = -params['potential_array']  # Safe assignment            params['is_base'] = True
         else:  # Decreasing potential → acid titration
-            print("Detected acid titration (negative slope). No flip.")
             params['is_base'] = False
 
     else:
         # Placeholder for other types (no detection/flip)
         print(f"Titration type '{params['titration_type']}' — no auto-detection/flip (placeholder).")
         params['is_base'] = False  # Default
-    print("Preprocessing complete: Arrays extracted, params merged, type auto-detected (if acid_base).")
-    print(f"DEBUG df: {df}")
-    print(f"DEBUG params: {params}")
     return df, params
 
 

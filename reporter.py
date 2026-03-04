@@ -132,7 +132,6 @@ def generate_pdf_report(results: Dict[str, Any], df: pd.DataFrame, params: Dict[
     story.append(Paragraph("<pre>" + footer_text + "</pre>", footer_style))
 
     doc.build(story)
-    print(f"Saved PDF report to {pdf_filename}")
     return str(pdf_filename)
 
 def generate_csv_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path) -> str:
@@ -181,7 +180,6 @@ def generate_csv_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[
         writer = csv.writer(f)
         writer.writerows(csv_data)
 
-    print(f"Saved simple CSV report to {csv_filename}")
     return str(csv_filename)
 
 def generate_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: str) -> None:
@@ -189,17 +187,11 @@ def generate_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str,
     output_dir.mkdir(exist_ok=True)
 
     try:
-        print("Generating CSV report...")
         generate_csv_report(df, params, results, output_dir)
-        print("CSV report generated.")
     except Exception as e:
         print(f"CSV export failed: {e}")
 
     try:
-        print("Generating PDF report...")
         generate_pdf_report(results, df, params, output_dir)
-        print("PDF report generated.")
     except Exception as e:
         print(f"PDF export failed: {e}")
-
-    print(f"Full report generated in {output_dir}")

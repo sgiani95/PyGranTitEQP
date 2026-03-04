@@ -105,7 +105,6 @@ def load_single_file(path: str | Path) -> pd.DataFrame | None:
             print(f"Warning: No valid numeric data after cleaning in {path}")
             return None
 
-        print(f"Loaded '{path}': {len(df)} rows, skipped {skipped} header/comment/non-numeric lines.")
         return df
 
     except Exception as e:
@@ -152,7 +151,6 @@ def validate_data(df: pd.DataFrame) -> bool:
         print("Validation failed: Contains NaN values")
         return False
 
-    print("Validation passed")
     return True
 
 if __name__ == "__main__":

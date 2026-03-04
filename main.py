@@ -156,9 +156,6 @@ def main():
         print(f"Report error: {e}")
         # Non-fatal
     
-    print(f"Pipeline complete. Outputs in {output_dir}")
-
-
 if __name__ == "__main__":
     from pycallgraph2 import PyCallGraph, Config
     from pycallgraph2.output import GraphvizOutput

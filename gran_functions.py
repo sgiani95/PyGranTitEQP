@@ -16,7 +16,6 @@ def compute_gran_functions(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str
     Uses preprocessed volume and potential (flipped if base).
     """
     titration_type = params.get('titration_type', 'acid_base')
-    print(f"Computing Gran/Schwartz for type: {titration_type}")
 
     # Extract preprocessed arrays
     volume = params['volume_array']
@@ -65,10 +64,6 @@ def compute_gran_functions(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str
         'pH': pH
     }
     
-    print(f"DEBUG gran_functions: potential first 5: {potential[:5]}")
-    print(f"DEBUG gran_functions: pH first 5: {pH[:5]}")
-    
-    print("Gran and Schwartz computed successfully.")
     return results
 
 

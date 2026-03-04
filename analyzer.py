@@ -376,16 +376,10 @@ def analyze_gran(gran_results: Dict[str, Any], params: Dict[str, Any], verbose: 
         'opt_schwartz_diagnostics': original_results.get('opt_schwartz_diagnostics', {}) if original_results is not None else {},
     }
 
-    print(f"Diagnostics forwarded: "
-        f"initial = {len(analysis_results['initial_gran_diagnostics'].get('R2_values', []))} "
-        f"opt = {len(analysis_results['opt_schwartz_diagnostics'].get('R2_values', []))}")
     # Print nested results for debugging
-    print("=== ANALYZER NESTED RESULTS ===")
-    for method in ['gran', 'schwartz']:
+    for method in ['schwartz']:
         for mode in ['raw', 'opt']:
             m_data = analysis_results[method][mode]
             print(f"{method.capitalize()} {mode.capitalize()}: V_eq = {m_data['V_eq']:.3f} mL, R² = {m_data['r2']:.4f}, k = {m_data['k']:.3f}, Zone = {m_data['zone_start']}-{m_data['zone_end']}")
-    print(f"pH shape: {analysis_results['pH'].shape}")
-    print("=== END ANALYZER NESTED ===")
 
     return analysis_results

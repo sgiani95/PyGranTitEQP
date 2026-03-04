@@ -61,8 +61,6 @@ def plot_titration_curve(df: pd.DataFrame, params: Dict[str, Any], output_dir: P
     filename = output_dir / 'titration_curve.png'
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
-    print(f"Titration curve saved to {filename}")
-
 
 def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_dir: Path = Path('output')):
     """
@@ -154,7 +152,6 @@ def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_d
     filename = output_dir / 'gran_schwartz.png'
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
-    print(f"Gran/Schwartz combined plot saved to {filename}")
 
 def plot_all_combined(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path = Path('output')):
     """
@@ -228,7 +225,6 @@ def plot_all_combined(df: pd.DataFrame, params: Dict[str, Any], results: Dict[st
     filename = output_dir / 'plots.png'
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
-    print(f"Combined overview plot saved to {filename}")
 
 def plot_r2_vs_upper_bound(r2_vs_upper: list[tuple[float, float]], output_dir: Path = Path('output')):
     """
@@ -252,7 +248,6 @@ def plot_r2_vs_upper_bound(r2_vs_upper: list[tuple[float, float]], output_dir: P
     filename = output_dir / 'r2_vs_upper_bound.png'
     plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close()
-    print(f"R2 vs upper bound plot saved to {filename}")
 
 def plot_gran_raw_with_search_diagnostic(results: Dict[str, Any], params: Dict[str, Any], output_dir: Path = Path('output')):
     """
@@ -321,7 +316,6 @@ def plot_gran_raw_with_search_diagnostic(results: Dict[str, Any], params: Dict[s
     filename = output_dir / 'gran_raw_with_search_diagnostic.png'
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
-    print(f"Gran raw + search diagnostic plot saved to {filename}")
 
 def plot_schwartz_opt_with_search_diagnostic(
     results: Dict[str, Any],
@@ -400,7 +394,6 @@ def plot_schwartz_opt_with_search_diagnostic(
     filename = output_dir / 'schwartz_opt_with_search_diagnostic.png'
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
-    print(f"Schwartz opt + search diagnostic plot saved to {filename}")
 
 def visualize_all(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: str = 'output'):
     output_dir = Path(output_dir)
