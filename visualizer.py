@@ -98,8 +98,10 @@ def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_d
     fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
 
     # Panel 1: Gran raw g1 + fit + zone
-    ax1.plot(volume, g1_raw, 'b-o', linewidth=1.5, markersize=4, label='Gran raw g1')
-    ax1.axvspan(volume[raw_zone_start], volume[raw_zone_end], alpha=0.25, color='red', label='Raw Zone')
+    #ax1.plot(volume, g1_raw, 'b-o', linewidth=1.5, markersize=4, label='Gran raw g1')
+    #ax1.axvspan(volume[raw_zone_start], volume[raw_zone_end], alpha=0.25, color='red', label='Raw Zone')
+    ax1.plot(volume, g1_raw, color='C0', marker='o', linewidth=1.5, markersize=4, label='Gran raw g1')
+    ax1.axvspan(volume[raw_zone_start], volume[raw_zone_end], alpha=0.25, color='C0', label='Raw Zone')
     if raw_fit:
         slope, intercept = raw_fit
         x_fit = np.linspace(volume.min(), volume.max(), 100)
@@ -111,8 +113,9 @@ def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_d
     ax1.grid(True, alpha=0.3)
 
     # Panel 2: Schwartz optimized gs + fit + zone
-    ax2.plot(volume, gs_opt, 'g-o', linewidth=1.5, markersize=4, label='Schwartz opt gs')
-    ax2.axvspan(volume[opt_zone_start], volume[opt_zone_end], alpha=0.25, color='orange', label='Opt Zone')
+    #     ax2.plot(volume, gs_opt, color='C1', marker='s', linewidth=2.5, markersize=7, markerfacecolor='white', markeredgecolor='C1', label='Schwartz opt gs')
+    ax2.plot(volume, gs_opt, color='C1', marker='o', linewidth=1.5, markersize=4, label='Schwartz opt gs')
+    ax2.axvspan(volume[opt_zone_start], volume[opt_zone_end], alpha=0.25, color='C1', label='Opt Zone')
     if opt_fit:
         slope, intercept = opt_fit
         y_fit = slope * x_fit + intercept
@@ -130,13 +133,13 @@ def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_d
     if np.any(neg_mask):
         neg_vol = volume[neg_mask]
         neg_deriv = deriv[neg_mask]
-        ax3.plot(neg_vol, neg_deriv, 'purple', linewidth=1.5, label='Negative d g1 / dv')
+        ax3.plot(neg_vol, neg_deriv, 'C4', linewidth=1.5, label='Negative d g1 / dv')
 
         # Shade **RAW zone** on negative deriv (changed from opt)
         zone_neg_mask = (neg_vol >= volume[raw_zone_start]) & (neg_vol <= volume[raw_zone_end])
         if np.any(zone_neg_mask):
             neg_vol_zone = neg_vol[zone_neg_mask]
-            ax3.axvspan(neg_vol_zone[0], neg_vol_zone[-1], alpha=0.3, color='red', label='Raw Zone')
+            ax3.axvspan(neg_vol_zone[0], neg_vol_zone[-1], alpha=0.3, color='C0', label='Raw Zone')
     else:
         ax3.text(0.5, 0.5, 'No negative derivative', ha='center', va='center', transform=ax3.transAxes)
 
@@ -157,68 +160,49 @@ def plot_all_combined(df: pd.DataFrame, params: Dict[str, Any], results: Dict[st
     """
     Combined vertical plot saved as 'plots.png':
     - Top: Titration curve (pH vs volume)
-    - Middle: Gran raw g1 + fit + raw zone shade
     - Bottom: Schwartz optimized gs + fit + opt zone shade
+    (Middle Gran raw g1 panel removed)
     """
     setup_plot_style()
     output_dir.mkdir(exist_ok=True)
-
     volume = df['volume'].values
     potential = df['potential'].values
     pH = 7.0 - potential / 59.16
 
-    # Extract Gran/Schwartz data
-    g1_raw = results.get('g1', np.zeros(len(volume)))
+    # Extract Schwartz data
     gs_opt = results.get('g1_opt', np.zeros(len(volume)))
-
-    gran_raw = results.get('gran', {}).get('raw', {})
     sch_opt = results.get('schwartz', {}).get('opt', {})
-
-    raw_zone_start = gran_raw.get('zone_start', 0)
-    raw_zone_end = gran_raw.get('zone_end', len(volume) - 1)
-    opt_zone_start = sch_opt.get('zone_start', raw_zone_start)
-    opt_zone_end = sch_opt.get('zone_end', raw_zone_end)
-
-    raw_fit = gran_raw.get('fit', None)
+    opt_zone_start = sch_opt.get('zone_start', 0)
+    opt_zone_end = sch_opt.get('zone_end', len(volume) - 1)
     opt_fit = sch_opt.get('fit', None)
+    opt_r2 = sch_opt.get('r2', 'N/A')
+    opt_veq = sch_opt.get('V_eq', 'N/A')
+    opt_k = sch_opt.get('k', 0.0)
 
-    opt_k5 = sch_opt.get('k5', 0.0)
+    # Only two panels now
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10), sharex=True)
 
-    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 15), sharex=True)
-
-    # Top: Titration curve
+    # Top: Titration curve (unchanged)
     ax1.plot(volume, pH, 'k-o', linewidth=1.5, markersize=4, label='Titration Curve (pH)')
     ax1.set_ylabel('pH')
     ax1.set_title('Titration Curve')
     ax1.grid(True, alpha=0.3)
     ax1.legend()
 
-    # Middle: Gran raw g1 + fit + zone
-    ax2.plot(volume, g1_raw, 'b-o', linewidth=1.5, markersize=4, label='Gran raw g1')
-    ax2.axvspan(volume[raw_zone_start], volume[raw_zone_end], alpha=0.25, color='red', label='Raw Zone')
-    if raw_fit:
-        slope, intercept = raw_fit
-        x_fit = np.linspace(volume.min(), volume.max(), 100)
-        y_fit = slope * x_fit + intercept
-        ax2.plot(x_fit, y_fit, 'k--', label=f'Raw fit (R²={gran_raw.get("r2", "N/A"):.4f})')
-    ax2.set_ylabel('Gran g1 (raw)')
-    ax2.set_title(f'Gran Raw – V_eq = {gran_raw.get("V_eq", "N/A"):.3f} mL')
-    ax2.legend()
-    ax2.grid(True, alpha=0.3)
-
-    # Bottom: Schwartz optimized gs + fit + zone
-    ax3.plot(volume, gs_opt, 'g-o', linewidth=1.5, markersize=4, label='Schwartz opt gs')
-    ax3.axvspan(volume[opt_zone_start], volume[opt_zone_end], alpha=0.25, color='orange', label='Opt Zone')
+    # Bottom: Schwartz optimized gs + fit + zone (moved from old bottom)
+    ax2.plot(volume, gs_opt, color='C1', marker='o', linewidth=1.5, markersize=4, label='Schwartz opt gs')
+    ax2.axvspan(volume[opt_zone_start], volume[opt_zone_end], alpha=0.25, color='C1', label='Opt Zone')
     if opt_fit:
         slope, intercept = opt_fit
+        x_fit = np.linspace(volume.min(), volume.max(), 100)
         y_fit = slope * x_fit + intercept
-        ax3.plot(x_fit, y_fit, 'k--', label=f'Opt fit (R²={sch_opt.get("r2", "N/A"):.4f})')
-    ax3.set_ylabel('Schwartz gs (opt)')
-    opt_k = sch_opt.get('k', 0.0)  # Use the renamed 'k' from metrics
-    ax3.set_title(f'Schwartz Optimized – V_eq = {sch_opt.get("V_eq", "N/A"):.3f} mL, k = {opt_k:.3f}')
-    ax3.set_xlabel('Titrant Volume (mL)')
-    ax3.legend()
-    ax3.grid(True, alpha=0.3)
+        ax2.plot(x_fit, y_fit, 'k--', label=f'Opt fit (R²={opt_r2:.4f})')
+    ax2.axvline(opt_veq, color='green', ls='-', lw=1.5, label=f'V_eq = {opt_veq:.3f} mL')
+    ax2.set_ylabel('Schwartz gs (opt)')
+    ax2.set_title(f'Schwartz Optimized – V_eq = {opt_veq:.3f} mL, k = {opt_k:.3f}')
+    ax2.set_xlabel('Titrant Volume (mL)')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
 
     fig.suptitle('GranTED Analysis Overview', fontsize=16)
     fig.tight_layout()
