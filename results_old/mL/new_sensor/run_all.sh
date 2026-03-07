@@ -32,7 +32,7 @@ for ((i=1; i<=ntriplets; i++)); do
 #        '{print $c1, $c2}' "$CSV" > "$outfile"
 awk -F',' -v c1="$col1" -v c2="$col2" '{
     val1 = $c1
-    val2 = ($c2 != "") ? -$c2 : ""
+    val2 = ($c2 != "") ? $c2 : ""
     print val1, val2
 }' "$CSV" > "$outfile"
 

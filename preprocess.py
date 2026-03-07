@@ -111,6 +111,7 @@ def preprocess_pipeline(
     if params['titration_type'] == 'acid_base':
         volume = params['volume_array']
         potential = df['potential'].values  # Modify df in-place
+        df['potential_original'] = df['potential'].copy()
 
         # Linear interpolation: slope from linregress
         slope, intercept, r_value, _, _ = linregress(volume, potential)

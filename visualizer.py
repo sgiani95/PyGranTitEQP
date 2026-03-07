@@ -39,7 +39,12 @@ def _get_labels(titration_type: str = 'weak_acid') -> Dict[str, str]:
     }
 
 
-def plot_titration_curve(df: pd.DataFrame, params: Dict[str, Any], output_dir: Path = Path('output')):
+def plot_titration_curve(
+    df: pd.DataFrame,
+    params: Dict[str, Any],
+    output_dir: Path = Path('output'),
+    potential_original: np.ndarray | None = None
+):
     """
     Plot simple titration curve: pH vs volume (black line with points).
     """
@@ -47,8 +52,8 @@ def plot_titration_curve(df: pd.DataFrame, params: Dict[str, Any], output_dir: P
     output_dir.mkdir(exist_ok=True)
 
     volume = df['volume'].to_numpy()
-    potential = df['potential'].to_numpy()
-    pH = 7.0 - potential / 59.16
+    potential_plot = df.get('potential_original', df['potential']).values
+    pH = 7.0 - potential_plot / 59.16
 
     fig, ax = plt.subplots(figsize=(8, 6))
     ax.plot(volume, pH, 'k-o', linewidth=1.2, markersize=4, label='Titration Curve (pH)')
@@ -156,7 +161,13 @@ def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_d
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
 
-def plot_all_combined(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path = Path('output')):
+def plot_all_combined(
+    df: pd.DataFrame,
+    params: Dict[str, Any],
+    results: Dict[str, Any],
+    output_dir: Path = Path('output'),
+    potential_original: np.ndarray | None = None
+):
     """
     Combined vertical plot saved as 'plots.png':
     - Top: Titration curve (pH vs volume)
@@ -166,8 +177,8 @@ def plot_all_combined(df: pd.DataFrame, params: Dict[str, Any], results: Dict[st
     setup_plot_style()
     output_dir.mkdir(exist_ok=True)
     volume = df['volume'].values
-    potential = df['potential'].values
-    pH = 7.0 - potential / 59.16
+    potential_plot = df.get('potential_original', df['potential']).values
+    pH = 7.0 - potential_plot / 59.16
 
     # Extract Schwartz data
     gs_opt = results.get('g1_opt', np.zeros(len(volume)))

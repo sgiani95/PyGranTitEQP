@@ -7,7 +7,7 @@ set -euo pipefail  # exit on error, undefined variables, pipe errors
 OUTPUT_FILE="all_last_lines_report.csv"
 > "$OUTPUT_FILE"   # empty the file first (or remove this line if you want to append)
 
-for dir in {1..72}; do
+for dir in {5..111}; do
     csv_file="${dir}/report.csv"
     
     if [[ -f "$csv_file" ]]; then

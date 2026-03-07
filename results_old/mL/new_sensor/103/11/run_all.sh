@@ -3,9 +3,9 @@ set -euo pipefail
 
 PYTHON=/bin/python3
 SCRIPT=/home/sgiani/repos/GranTED/main.py
-BASE_OUT=./results/
+BASE_OUT=./results
 
-for ((i=1; i<=111; i++)); do
+for ((i=5; i<=111; i++)); do
     echo "$i"
     head -$i data.dat > data_$i.dat
 
