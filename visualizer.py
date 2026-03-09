@@ -202,7 +202,7 @@ def plot_all_combined(
     # Top: Titration curve (unchanged)
     ax1.plot(volume, pH, 'k-o', linewidth=1.5, markersize=4, label='Titration Curve (pH)')
     ax1.set_ylabel('pH')
-    ax1.set_title('\nc) Titration Curve\n')
+    ax1.set_title('\nTitration Curve\n')
     ax1.grid(True, alpha=0.3)
     ax1.legend()
 
@@ -216,14 +216,14 @@ def plot_all_combined(
         ax2.plot(x_fit, y_fit, 'k--', label=f'Opt fit (R²={opt_r2:.4f})')
     # ax2.axvline(opt_veq, color='green', ls='-', lw=1.5, label=f'V_eq = {opt_veq:.3f} mL')
     ax2.set_ylabel('Opt Schwartz gs')
-    ax2.set_title(f'\nd) Opt Schwartz EQP = {opt_veq:.3f} mL, k = {opt_k:.3f}\n')
+    ax2.set_title(f'\nOpt Schwartz EQP = {opt_veq:.3f} mL, k = {opt_k:.3f}\n')
     ax2.set_xlabel('Titrant Volume (mL)')
     ax2.legend()
     ax2.grid(True, alpha=0.3)
 
-    ax1.set_ylim(2.5, 10.5)
-    ax2.set_xlim(-0.25, 6.75)
-    ax2.set_ylim(-0.0000010, 0.000013)
+    ### ax1.set_ylim(2.5, 10.5)
+    ### ax2.set_xlim(-0.25, 6.75)
+    ### ax2.set_ylim(-0.0000010, 0.000013)
 
     fig.suptitle('GranTED Analysis Overview', fontsize=16)
     fig.tight_layout()

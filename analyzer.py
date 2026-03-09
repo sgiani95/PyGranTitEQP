@@ -56,7 +56,7 @@ def identify_linear_interval(
     diagnostics = {'iteration': [], 'V_lower_ml': [], 'V_upper_ml': [], 'R2_values': []}
     candidate_counter = 0
 
-    win_sizes = range(max(3, min_points//2), min(50, len(dg1_neg)//2) + 1)
+    win_sizes = range(max(3, min_points//2), min(100, len(dg1_neg)//2) + 1)
     for win_len in win_sizes:
         for i in range(len(dg1_neg) - win_len + 1):
             seg_dg1 = dg1_neg[i:i+win_len]

@@ -1,0 +1,3 @@
+Method,V_eq [mL],V_eq_unc [mL],R²,Zones (start-end)
+Gran Raw,5.234,0.015,0.9995,15-28
+Schwartz Optimized,5.120,0.013,0.9996,15-28
