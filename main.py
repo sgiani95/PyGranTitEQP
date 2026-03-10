@@ -11,7 +11,7 @@ Profiling via PyCallGraph if --profile.
 Dependencies: argparse, sys, json, pathlib + core modules.
 """
 
-__version__ = "0.9.2"  # change manually on each significant update
+__version__ = "0.9.3"  # change manually on each significant update
 # pride versioning: X.Y.Z
 # X = proud_version(bump when you are proud of the release)
 # Y = default_version(just normal/okay releases)
