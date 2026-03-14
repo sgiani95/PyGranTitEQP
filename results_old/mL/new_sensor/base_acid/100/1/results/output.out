@@ -1,0 +1,113 @@
+5
+Warning: Low R²=0.851 for zone (0, 4) (k=0.0)
+Schwartz Raw: V_eq = -0.022 mL, R² = 0.8505, k = 0.000, Zone = 0-4
+Schwartz Opt: V_eq = 0.666 mL, R² = 0.9840, k = 0.187, Zone = 0-5
+Visualize error: index 5 is out of bounds for axis 0 with size 5
+6
+Warning: Low R²=0.741 for zone (0, 5) (k=0.0)
+Schwartz Raw: V_eq = -0.045 mL, R² = 0.7412, k = 0.000, Zone = 0-5
+Schwartz Opt: V_eq = nan mL, R² = 0.9527, k = 0.153, Zone = 0-5
+7
+Warning: Low R²=0.648 for zone (0, 6) (k=0.0)
+Schwartz Raw: V_eq = -0.071 mL, R² = 0.6482, k = 0.000, Zone = 0-6
+Schwartz Opt: V_eq = nan mL, R² = 0.9534, k = 0.138, Zone = 0-6
+8
+Warning: Low R²=0.543 for zone (0, 7) (k=0.0)
+Schwartz Raw: V_eq = -0.096 mL, R² = 0.5427, k = 0.000, Zone = 0-7
+Schwartz Opt: V_eq = nan mL, R² = 0.9585, k = 0.129, Zone = 0-7
+9
+Warning: Low R²=0.441 for zone (0, 8) (k=0.0)
+Schwartz Raw: V_eq = -0.115 mL, R² = 0.4406, k = 0.000, Zone = 0-8
+Schwartz Opt: V_eq = nan mL, R² = 0.9567, k = 0.122, Zone = 0-8
+10
+Warning: Low R²=0.332 for zone (0, 9) (k=0.0)
+Warning: Low R²=0.946 for zone (0, 9) (k=0.11533045077686616)
+Schwartz Raw: V_eq = -0.120 mL, R² = 0.3319, k = 0.000, Zone = 0-9
+Schwartz Opt: V_eq = nan mL, R² = 0.9460, k = 0.115, Zone = 0-9
+11
+Schwartz Raw: V_eq = 5.782 mL, R² = 0.9869, k = 0.000, Zone = 6-11
+Schwartz Opt: V_eq = 4.904 mL, R² = 0.9942, k = 0.032, Zone = 6-11
+Visualize error: index 11 is out of bounds for axis 0 with size 11
+12
+Schwartz Raw: V_eq = 6.698 mL, R² = 0.9970, k = 0.000, Zone = 6-9
+Schwartz Opt: V_eq = 6.698 mL, R² = 0.9970, k = 0.000, Zone = 6-9
+13
+Schwartz Raw: V_eq = 6.698 mL, R² = 0.9970, k = 0.000, Zone = 6-9
+Schwartz Opt: V_eq = 6.698 mL, R² = 0.9970, k = 0.000, Zone = 6-9
+14
+Schwartz Raw: V_eq = 5.132 mL, R² = 0.9979, k = 0.000, Zone = 9-13
+Schwartz Opt: V_eq = 5.051 mL, R² = 0.9980, k = 0.020, Zone = 9-13
+15
+Schwartz Raw: V_eq = 5.131 mL, R² = 0.9982, k = 0.000, Zone = 11-15
+Schwartz Opt: V_eq = 5.131 mL, R² = 0.9982, k = 0.000, Zone = 11-15
+Visualize error: index 15 is out of bounds for axis 0 with size 15
+16
+Schwartz Raw: V_eq = 5.131 mL, R² = 0.9991, k = 0.000, Zone = 11-16
+Schwartz Opt: V_eq = 5.131 mL, R² = 0.9991, k = 0.000, Zone = 11-16
+Visualize error: index 16 is out of bounds for axis 0 with size 16
+17
+Schwartz Raw: V_eq = 5.122 mL, R² = 0.9995, k = 0.000, Zone = 11-16
+Schwartz Opt: V_eq = 5.122 mL, R² = 0.9995, k = 0.000, Zone = 11-16
+18
+Schwartz Raw: V_eq = 5.108 mL, R² = 0.9996, k = 0.000, Zone = 11-17
+Schwartz Opt: V_eq = 5.108 mL, R² = 0.9996, k = 0.000, Zone = 11-17
+19
+Schwartz Raw: V_eq = 5.108 mL, R² = 0.9996, k = 0.000, Zone = 11-17
+Schwartz Opt: V_eq = 5.108 mL, R² = 0.9996, k = 0.000, Zone = 11-17
+20
+Schwartz Raw: V_eq = 5.089 mL, R² = 0.9996, k = 0.000, Zone = 11-18
+Schwartz Opt: V_eq = 5.074 mL, R² = 0.9996, k = 0.028, Zone = 11-18
+21
+Schwartz Raw: V_eq = 5.027 mL, R² = 0.9998, k = 0.000, Zone = 14-21
+Schwartz Opt: V_eq = 4.973 mL, R² = 0.9986, k = 0.293, Zone = 11-21
+Visualize error: index 21 is out of bounds for axis 0 with size 21
+22
+Schwartz Raw: V_eq = 5.025 mL, R² = 0.9998, k = 0.000, Zone = 14-22
+Schwartz Opt: V_eq = 4.991 mL, R² = 0.9991, k = 0.245, Zone = 11-22
+Visualize error: index 22 is out of bounds for axis 0 with size 22
+23
+Schwartz Raw: V_eq = 5.018 mL, R² = 0.9997, k = 0.000, Zone = 14-22
+Schwartz Opt: V_eq = 5.000 mL, R² = 0.9999, k = 0.310, Zone = 12-23
+Visualize error: index 23 is out of bounds for axis 0 with size 23
+24
+Schwartz Raw: V_eq = 5.016 mL, R² = 0.9998, k = 0.000, Zone = 14-23
+Schwartz Opt: V_eq = 5.002 mL, R² = 0.9999, k = 0.298, Zone = 12-24
+Visualize error: index 24 is out of bounds for axis 0 with size 24
+25
+Schwartz Raw: V_eq = 5.003 mL, R² = 0.9998, k = 0.000, Zone = 16-25
+Schwartz Opt: V_eq = 4.994 mL, R² = 0.9999, k = 0.454, Zone = 13-25
+Visualize error: index 25 is out of bounds for axis 0 with size 25
+26
+Schwartz Raw: V_eq = 5.001 mL, R² = 0.9998, k = 0.000, Zone = 16-26
+Schwartz Opt: V_eq = 4.992 mL, R² = 0.9999, k = 0.495, Zone = 13-26
+Visualize error: index 26 is out of bounds for axis 0 with size 26
+27
+Schwartz Raw: V_eq = 5.003 mL, R² = 0.9998, k = 0.000, Zone = 16-26
+Schwartz Opt: V_eq = 5.002 mL, R² = 0.9999, k = 0.269, Zone = 12-25
+28
+Schwartz Raw: V_eq = 5.006 mL, R² = 0.9997, k = 0.000, Zone = 15-26
+Schwartz Opt: V_eq = 4.994 mL, R² = 0.9998, k = 0.418, Zone = 12-26
+29
+Schwartz Raw: V_eq = 5.006 mL, R² = 0.9997, k = 0.000, Zone = 15-26
+Schwartz Opt: V_eq = 4.994 mL, R² = 0.9998, k = 0.418, Zone = 12-26
+30
+Schwartz Raw: V_eq = 5.010 mL, R² = 0.9997, k = 0.000, Zone = 14-26
+Schwartz Opt: V_eq = 5.008 mL, R² = 0.9997, k = 0.294, Zone = 12-27
+31
+Schwartz Raw: V_eq = 5.010 mL, R² = 0.9997, k = 0.000, Zone = 14-26
+Schwartz Opt: V_eq = 5.008 mL, R² = 0.9997, k = 0.294, Zone = 12-27
+32
+Schwartz Raw: V_eq = 5.016 mL, R² = 0.9995, k = 0.000, Zone = 14-27
+Schwartz Opt: V_eq = 5.002 mL, R² = 0.9997, k = 0.169, Zone = 10-26
+33
+Schwartz Raw: V_eq = 5.016 mL, R² = 0.9995, k = 0.000, Zone = 14-27
+Schwartz Opt: V_eq = 5.002 mL, R² = 0.9997, k = 0.169, Zone = 10-26
+34
+Schwartz Raw: V_eq = 5.027 mL, R² = 0.9994, k = 0.000, Zone = 11-25
+Schwartz Opt: V_eq = 5.011 mL, R² = 0.9998, k = 0.114, Zone = 10-26
+35
+Schwartz Raw: V_eq = 5.027 mL, R² = 0.9994, k = 0.000, Zone = 11-25
+Schwartz Opt: V_eq = 5.011 mL, R² = 0.9998, k = 0.114, Zone = 10-26
+36
+Schwartz Raw: V_eq = 5.025 mL, R² = 0.9995, k = 0.000, Zone = 11-26
+Schwartz Opt: V_eq = 5.016 mL, R² = 0.9997, k = 0.113, Zone = 10-27

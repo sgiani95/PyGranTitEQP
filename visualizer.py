@@ -400,11 +400,3 @@ def plot_schwartz_opt_with_search_diagnostic(
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
 
-def visualize_all(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: str = 'output'):
-    output_dir = Path(output_dir)
-    plot_titration_curve(df, params, output_dir)
-    plot_gran_schwartz(results, params, output_dir)
-    plot_all_combined(df, params, results, output_dir)
-    plot_gran_raw_with_search_diagnostic(results, params, output_dir)
-    plot_schwartz_opt_with_search_diagnostic(results, params, output_dir)
-

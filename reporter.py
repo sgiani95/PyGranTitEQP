@@ -134,7 +134,7 @@ def generate_pdf_report(results: Dict[str, Any], df: pd.DataFrame, params: Dict[
     doc.build(story)
     return str(pdf_filename)
 
-def generate_csv_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path) -> str:
+def generate_csv_report1(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path) -> str:
     """
     Generate simple CSV report with the requested format:
     Method,V_eq [mL],R²,Zones (start-end)
@@ -182,16 +182,147 @@ def generate_csv_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[
 
     return str(csv_filename)
 
-def generate_report(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: str) -> None:
-    output_dir = Path(output_dir)
-    output_dir.mkdir(exist_ok=True)
+def generate_csv_report2(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path) -> str:
+    """
+    Generate simple CSV report with the requested format:
+    Method,V_eq [mL],R²,Zones (start-end)
+    Gran Raw,4.096,0.9995,15-30
+    Schwartz Optimized,4.086,0.9999,12-27
+    """
+    Path(output_dir).mkdir(exist_ok=True)
+    csv_filename = output_dir / 'report.csv'
 
-    try:
-        generate_csv_report(df, params, results, output_dir)
-    except Exception as e:
-        print(f"CSV export failed: {e}")
+    gran_raw = results.get('gran', {}).get('raw', {})
+    sch_opt = results.get('schwartz', {}).get('opt', {})
 
-    try:
-        generate_pdf_report(results, df, params, output_dir)
-    except Exception as e:
-        print(f"PDF export failed: {e}")
+    # Format zones as start-end
+    raw_zone = f"{gran_raw.get('zone_start', 'N/A')}-{gran_raw.get('zone_end', 'N/A')}"
+    opt_zone = f"{sch_opt.get('zone_start', 'N/A')}-{sch_opt.get('zone_end', 'N/A')}"
+
+    # Safe formatting function
+    def safe_float(value, decimals):
+        if isinstance(value, (int, float)):
+            return f"{value:.{decimals}f}"
+        return str(value)  # 'N/A' or other string
+
+    csv_data = [
+    ['Method', 'V_eq [mL]', 'V_eq_unc [mL]', 'R²', 'Zones (start-end)'],
+    [
+        'Gran Raw',
+        safe_float(gran_raw.get('V_eq'), 3),
+        safe_float(gran_raw.get('V_eq_unc'), 3),
+        safe_float(gran_raw.get('r2'), 4),
+        raw_zone
+    ],
+    [
+        'Schwartz Optimized',
+        safe_float(sch_opt.get('V_eq'), 3),
+        safe_float(sch_opt.get('V_eq_unc'), 3),
+        safe_float(sch_opt.get('r2'), 4),
+        opt_zone
+    ]
+]
+
+    import csv
+    with open(csv_filename, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerows(csv_data)
+
+    return str(csv_filename)
+
+def generate_csv_report3(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path) -> str:
+    """
+    Generate simple CSV report with the requested format:
+    Method,V_eq [mL],R²,Zones (start-end)
+    Gran Raw,4.096,0.9995,15-30
+    Schwartz Optimized,4.086,0.9999,12-27
+    """
+    Path(output_dir).mkdir(exist_ok=True)
+    csv_filename = output_dir / 'report.csv'
+
+    gran_raw = results.get('gran', {}).get('raw', {})
+    sch_opt = results.get('schwartz', {}).get('opt', {})
+
+    # Format zones as start-end
+    raw_zone = f"{gran_raw.get('zone_start', 'N/A')}-{gran_raw.get('zone_end', 'N/A')}"
+    opt_zone = f"{sch_opt.get('zone_start', 'N/A')}-{sch_opt.get('zone_end', 'N/A')}"
+
+    # Safe formatting function
+    def safe_float(value, decimals):
+        if isinstance(value, (int, float)):
+            return f"{value:.{decimals}f}"
+        return str(value)  # 'N/A' or other string
+
+    csv_data = [
+    ['Method', 'V_eq [mL]', 'V_eq_unc [mL]', 'R²', 'Zones (start-end)'],
+    [
+        'Gran Raw',
+        safe_float(gran_raw.get('V_eq'), 3),
+        safe_float(gran_raw.get('V_eq_unc'), 3),
+        safe_float(gran_raw.get('r2'), 4),
+        raw_zone
+    ],
+    [
+        'Schwartz Optimized',
+        safe_float(sch_opt.get('V_eq'), 3),
+        safe_float(sch_opt.get('V_eq_unc'), 3),
+        safe_float(sch_opt.get('r2'), 4),
+        opt_zone
+    ]
+]
+
+    import csv
+    with open(csv_filename, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerows(csv_data)
+
+    return str(csv_filename)
+
+def generate_csv_report4(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path) -> str:
+    """
+    Generate simple CSV report with the requested format:
+    Method,V_eq [mL],R²,Zones (start-end)
+    Gran Raw,4.096,0.9995,15-30
+    Schwartz Optimized,4.086,0.9999,12-27
+    """
+    Path(output_dir).mkdir(exist_ok=True)
+    csv_filename = output_dir / 'report.csv'
+
+    gran_raw = results.get('gran', {}).get('raw', {})
+    sch_opt = results.get('schwartz', {}).get('opt', {})
+
+    # Format zones as start-end
+    raw_zone = f"{gran_raw.get('zone_start', 'N/A')}-{gran_raw.get('zone_end', 'N/A')}"
+    opt_zone = f"{sch_opt.get('zone_start', 'N/A')}-{sch_opt.get('zone_end', 'N/A')}"
+
+    # Safe formatting function
+    def safe_float(value, decimals):
+        if isinstance(value, (int, float)):
+            return f"{value:.{decimals}f}"
+        return str(value)  # 'N/A' or other string
+
+    csv_data = [
+    ['Method', 'V_eq [mL]', 'V_eq_unc [mL]', 'R²', 'Zones (start-end)'],
+    [
+        'Gran Raw',
+        safe_float(gran_raw.get('V_eq'), 3),
+        safe_float(gran_raw.get('V_eq_unc'), 3),
+        safe_float(gran_raw.get('r2'), 4),
+        raw_zone
+    ],
+    [
+        'Schwartz Optimized',
+        safe_float(sch_opt.get('V_eq'), 3),
+        safe_float(sch_opt.get('V_eq_unc'), 3),
+        safe_float(sch_opt.get('r2'), 4),
+        opt_zone
+    ]
+]
+
+    import csv
+    with open(csv_filename, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerows(csv_data)
+
+    return str(csv_filename)
+
