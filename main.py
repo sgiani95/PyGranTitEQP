@@ -26,6 +26,7 @@ from gran_functions import compute_gran_functions
 import analyzer # Optional
 import visualizer
 import reporter
+import numpy as np
 
 def parse_args():
     """Parse CLI arguments."""
@@ -142,9 +143,54 @@ def main():
     mode = args.mode
     print(f"Generating plots for mode: {mode}")
 
-    if mode == 'method_development':
+    if args.mode == 'method_development':
+        # Normal full-data plots
         visualizer.plot_titration_curve(df, params, output_dir=output_dir)
         visualizer.plot_gran_schwartz(analysis_results, params, output_dir=output_dir)
+
+        # Iterative trimming analysis
+        print("Development mode: iterative analysis (first 5 → full)")
+        n_total = len(df)
+        collected = {
+            'n_points': [],
+            'max_volume': [],
+            'V_eq': [],
+            'V_eq_unc': [],
+            'optimal_k': [],
+            'zone_points': [],
+            'R2': []  # added
+        }
+
+        for n in range(5, n_total + 1):
+            df_trim = df.iloc[:n].copy()
+            params_trim = params.copy()
+            params_trim['volume_array'] = df_trim['volume'].values
+            params_trim['potential_array'] = df_trim['potential'].values
+
+            try:
+                results_trim = analyzer.analyze_gran(df_trim, params_trim, verbose=False)
+                opt_zone = results_trim.get('schwartz', {}).get('opt', results_trim.get('gran', {}).get('opt', {}))
+                collected['n_points'].append(n)
+                collected['max_volume'].append(df_trim['volume'].max())
+                collected['V_eq'].append(opt_zone.get('V_eq', np.nan))
+                collected['V_eq_unc'].append(opt_zone.get('V_eq_unc', np.nan))
+                collected['optimal_k'].append(opt_zone.get('k', np.nan))
+                collected['zone_points'].append(
+                    opt_zone.get('zone_end', 0) - opt_zone.get('zone_start', 0) + 1
+                )
+                collected['R2'].append(opt_zone.get('r2', np.nan))
+
+                veq = opt_zone.get('V_eq', np.nan)
+                unc = opt_zone.get('V_eq_unc', np.nan)
+                print(f"  Trimmed to {n} points → V_eq = {veq if not np.isnan(veq) else 'nan'} ± "
+                      f"{unc if not np.isnan(unc) else 'nan'}")
+            except Exception as e:
+                print(f"  Analysis failed for n={n}: {e}")
+                for key in collected:
+                    collected[key].append(np.nan)
+
+        # Generate summary plot
+        visualizer.plot_development_summary(collected, output_dir=output_dir, full_volume=params['volume_array'])
 
     elif mode == 'method_validation':
         visualizer.plot_all_combined(df, params, analysis_results, output_dir=output_dir)
