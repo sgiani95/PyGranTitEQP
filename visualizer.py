@@ -451,14 +451,16 @@ def plot_development_summary(
     ax3.set_ylabel('R²')
     ax3.grid(True, alpha=0.3)
     ax3.legend()
-
+    
     # Set x-limits to match full dataset (same as other plots)
     if full_volume is not None and len(full_volume) > 0:
         x_min = full_volume.min()
         x_max = full_volume.max()
         for ax in (ax1, ax2, ax3):
             ax.set_xlim(x_min, x_max)
-
+    
+    ax3.set_ylim(0.99, 1.005)
+    
     plt.tight_layout()
     filename = output_dir / 'development_convergence_volume.png'
     fig.savefig(filename, dpi=300, bbox_inches='tight')

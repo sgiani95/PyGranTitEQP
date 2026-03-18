@@ -161,7 +161,7 @@ def main():
             'R2': []  # added
         }
 
-        for n in range(5, n_total + 1):
+        for n in range(6, n_total + 1):
             df_trim = df.iloc[:n].copy()
             params_trim = params.copy()
             params_trim['volume_array'] = df_trim['volume'].values
@@ -182,8 +182,7 @@ def main():
 
                 veq = opt_zone.get('V_eq', np.nan)
                 unc = opt_zone.get('V_eq_unc', np.nan)
-                print(f"  Trimmed to {n} points → V_eq = {veq if not np.isnan(veq) else 'nan'} ± "
-                      f"{unc if not np.isnan(unc) else 'nan'}")
+                print(f"  Trimmed to {n} points → V_eq = {veq:.3f} ± {unc:.3f}")
             except Exception as e:
                 print(f"  Analysis failed for n={n}: {e}")
                 for key in collected:
