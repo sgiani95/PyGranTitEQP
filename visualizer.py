@@ -437,13 +437,15 @@ def plot_development_summary(
     ax2.grid(True, alpha=0.3)
     ax2.legend()
 
-    # Bottom: R² with lower limit 0.9
+    # Bottom: R²
     ax3.plot(max_volumes[valid], R2[valid], 'o-', color='C2', label='R²')
     ax3.set_xlabel('Maximum titrant volume used [mL]')
     ax3.set_ylabel('R²')
-    ax3.set_ylim(bottom=0.9)
     ax3.grid(True, alpha=0.3)
     ax3.legend()
+
+    # Ghost point: invisible but forces scaling
+    ax3.scatter([0], [1.0], color='white', alpha=0.0, zorder=1)   # transparent ghost point
 
     # Mark earliest acceptable point with volume in mL
     if earliest_n is not None and earliest_n in collected['n_points']:
@@ -456,10 +458,9 @@ def plot_development_summary(
 
         ax1.legend()
 
-    # Consistent x-limits from full dataset
-    if full_volume is not None and len(full_volume) > 0:
-        for ax in (ax1, ax2, ax3):
-            ax.set_xlim(full_volume.min(), full_volume.max())
+    ax1.set_ylim(4.97 , 5.03 )
+    ax2.set_ylim(0.0, 0.02 )
+    ax3.set_ylim(0.9994, 1.0 )
 
     plt.tight_layout()
     filename = output_dir / 'development_convergence_volume.png'

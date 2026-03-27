@@ -180,7 +180,7 @@ def _trimming_analysis(
 
                 # Trigger as soon as ANY condition fails for stability_window consecutive steps
                 if consecutive_bad >= stability_window and earliest_n is None:
-                    earliest_n = n + stability_window - 1   # last good point before the bad streak
+                    earliest_n = n + stability_window  # last good point before the bad streak
                     if verbose:
                         print(f"→ Earliest acceptable point detected at n={earliest_n} "
                               f"(V_eq ≈ {reference_veq:.3f}, bad streak of {stability_window} started)")
