@@ -3,33 +3,27 @@ main.py: CLI orchestrator for GranTED pipeline.
 Supports --verbose for tracing; merges CLI > JSON > defaults for config.
 Optional --skip-analysis (uses raw gran_results for visuals/report).
 Defaults to 'data.dat' if no --data_file; graceful exit if missing.
-Weak_acid focus—no type/method args (auto-detected in preprocess).
-Full flow: load → preprocess → gran_functions → [analyzer] → visualizer → reporter.
-Profiling via PyCallGraph if --profile.
-Dependencies: argparse, sys, json, pathlib + core modules.
 """
-__version__ = "0.9.3" # change manually on each significant update
-# pride versioning: X.Y.Z
-# X = proud_version(bump when you are proud of the release)
-# Y = default_version(just normal/okay releases)
-# Z = shame_version(bump when fixing things too embarrassing to admit)
+__version__ = "0.9.2"
 
 import argparse
 import sys
 import json
 from pathlib import Path
+import numpy as np
 
 # Core imports
 import data_io
 import preprocess
 from gran_functions import compute_gran_functions
-import analyzer  # Optional
+import analyzer
 import visualizer
 import reporter
 
 def parse_args():
     """Parse CLI arguments."""
     parser = argparse.ArgumentParser(description='GranTED: Gran/Schwartz Titration Analysis')
+    
     parser.add_argument('--data_file', default='data.dat', help='Path to titration data file (default: data.dat)')
     parser.add_argument('--V', type=float, default=25.0, help='Initial volume (mL)')
     parser.add_argument('--C_B', type=float, default=0.1, help='Titrant concentration (M)')
@@ -45,20 +39,31 @@ def parse_args():
         type=str,
         choices=['method_development', 'method_validation', 'method_application', 'method_debug'],
         default='method_development',
-        help='Operation mode: method_development | method_validation | method_application | method_debug'
+        help='Operation mode'
     )
+
+    # Thresholds for earliest acceptable point detection
+    parser.add_argument('--r2-min', type=float, default=0.9995,
+                        help='Minimum R² for acceptable fit (default: 0.9959)')
+    parser.add_argument('--unc-max', type=float, default=0.01,
+                        help='Maximum allowed uncertainty on V_eq in mL (default: 0.01)')
+    parser.add_argument('--veq-tolerance', type=float, default=0.01,
+                        help='Maximum allowed deviation from final V_eq in mL (default: 0.01)')
+    parser.add_argument('--stability-window', type=int, default=3,
+                        help='Number of consecutive points that must satisfy criteria (default: 3)')
+    parser.add_argument('--trim-forward', action='store_true',
+                        help='Use forward trimming instead of backward (default is backward)')
 
     args = parser.parse_args()
 
-    # Structural: Merge CLI > JSON > defaults (if config_file)
+    # Merge CLI > JSON > defaults
     if args.config_file:
         try:
             with open(args.config_file, 'r') as f:
                 config = json.load(f)
-            # Override args with JSON (CLI takes precedence)
             for key, value in config.items():
                 if hasattr(args, key) and getattr(args, key) is not None:
-                    continue  # CLI wins
+                    continue
                 if key in ['V', 'C_B'] and isinstance(value, (int, float)):
                     setattr(args, key, value)
             if args.verbose:
@@ -70,7 +75,7 @@ def parse_args():
 
 
 def main():
-    """Orchestrate pipeline with error chaining (Quick Win)."""
+    """Orchestrate pipeline."""
     args = parse_args()
     output_dir = Path(args.output_dir)
     output_dir.mkdir(exist_ok=True)
@@ -80,7 +85,6 @@ def main():
 
     df = None
     params = None
-    gran_results = None
     analysis_results = None
 
     # Step 1: Load data
@@ -101,18 +105,18 @@ def main():
         print(f"Load error: {e}")
         sys.exit(1)
 
-    # Step 2: Preprocess (auto-detects weak_acid/weak_base)
+    # Step 2: Preprocess
     try:
         if args.verbose:
             print("Preprocessing...")
         _, params = preprocess.preprocess_pipeline(df, config_overrides=vars(args), interactive=False)
         if args.verbose:
-            print(f"Params: V={params['V']}, C_B={params['C_B']}, type={params['titration_type']}")
+            print(f"Params: V={params.get('V')}, C_B={params.get('C_B')}, type={params.get('titration_type')}")
     except Exception as e:
         print(f"Preprocess error: {e}")
         sys.exit(1)
 
-    # Step 3: Compute Gran/Schwartz (weak_acid focus)
+    # Step 3: Compute Gran/Schwartz
     try:
         if args.verbose:
             print("Computing functions...")
@@ -123,23 +127,23 @@ def main():
         print(f"Compute error: {e}")
         sys.exit(1)
 
-    # Step 4: Analyze (optional, with fallback)
+    # Step 4: Analyze
     try:
         if not args.skip_analysis:
             if args.verbose:
                 print("Analyzing...")
-            analysis_results = analyzer.analyze_gran(gran_results, params)  # Will raise if not implemented
+            analysis_results = analyzer.analyze_gran(gran_results, params)
         else:
             if args.verbose:
                 print("Skipping analysis (raw mode).")
-            analysis_results = gran_results  # Direct pass; downstream fallbacks handle raw
+            analysis_results = gran_results
         if args.verbose:
             print("Analysis complete.")
     except Exception as e:
         print(f"Analyze error: {e} (falling back to raw)")
-        analysis_results = gran_results  # Graceful raw fallback
+        analysis_results = gran_results
 
-    # Step 5: Orchestrator - mode-specific visualization & reporting
+    # Step 5: Mode orchestration
     from modes import run_mode
 
     mode_results = run_mode(
@@ -147,13 +151,16 @@ def main():
         df=df,
         params=params,
         output_dir=output_dir,
-        verbose=args.verbose
+        verbose=args.verbose,
+        r2_min=args.r2_min,
+        unc_max=args.unc_max,
+        veq_tolerance=args.veq_tolerance,
+        stability_window=args.stability_window,
+        trim_forward=args.trim_forward
     )
 
-    # Optional: print summary
     if args.verbose:
-        print(f"Generated plots: {mode_results['generated_plots']}")
-        print(f"Report: {mode_results['csv_report']}")
+        print(f"Mode '{args.mode}' complete.")
 
 if __name__ == "__main__":
     from pycallgraph2 import PyCallGraph, Config

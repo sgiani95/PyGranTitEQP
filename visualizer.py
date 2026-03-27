@@ -403,11 +403,12 @@ def plot_schwartz_opt_with_search_diagnostic(
 def plot_development_summary(
     collected: Dict[str, list],
     output_dir: Path,
-    full_volume: np.ndarray | None = None
+    full_volume: np.ndarray | None = None,
+    earliest_n: int | None = None
 ):
     """
-    Summary plot for method_development mode.
-    Bottom R² subplot has a ghost point at (0, 1) to force clean scaling.
+    Summary plot for method_development mode with volume-based x-axis.
+    Shows earliest acceptable point with its corresponding volume in mL.
     """
     setup_plot_style()
     output_dir.mkdir(exist_ok=True)
@@ -421,7 +422,7 @@ def plot_development_summary(
 
     fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
 
-    # Top: V_eq ± unc
+    # Top: V_eq with error bars
     ax1.errorbar(max_volumes[valid], V_eq[valid], yerr=V_eq_unc[valid],
                  fmt='o-', capsize=5, color='C0', label='V_eq ± unc', zorder=3)
     ax1.plot(max_volumes[valid], V_eq[valid], '-', color='C0', alpha=0.5, zorder=2)
@@ -436,17 +437,29 @@ def plot_development_summary(
     ax2.grid(True, alpha=0.3)
     ax2.legend()
 
-    # Bottom: R² with ghost point at (0, 1)
+    # Bottom: R² with lower limit 0.9
     ax3.plot(max_volumes[valid], R2[valid], 'o-', color='C2', label='R²')
-
-    # Ghost point: invisible but forces scaling
-    ax3.scatter([0], [1.0], color='white', alpha=0.0, zorder=1)   # transparent ghost point
-
     ax3.set_xlabel('Maximum titrant volume used [mL]')
     ax3.set_ylabel('R²')
-    ax3.set_ylim(bottom=0.9, top=None)
+    ax3.set_ylim(bottom=0.9)
     ax3.grid(True, alpha=0.3)
     ax3.legend()
+
+    # Mark earliest acceptable point with volume in mL
+    if earliest_n is not None and earliest_n in collected['n_points']:
+        idx = collected['n_points'].index(earliest_n)
+        earliest_volume = collected['max_volume'][idx]
+
+        for ax in (ax1, ax2, ax3):
+            ax.axvline(earliest_volume, color='red', ls='--', lw=1.8,
+                       label=f'Earliest acceptable (vol = {earliest_volume:.2f} mL)')
+
+        ax1.legend()
+
+    # Consistent x-limits from full dataset
+    if full_volume is not None and len(full_volume) > 0:
+        for ax in (ax1, ax2, ax3):
+            ax.set_xlim(full_volume.min(), full_volume.max())
 
     plt.tight_layout()
     filename = output_dir / 'development_convergence_volume.png'
