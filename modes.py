@@ -48,7 +48,7 @@ def run_mode(
 
         # Iterative trimming + detection
         print("Development mode: performing backward trimming analysis...")
-        collected, earliest_n = _trimming_analysis(
+        collected, earliest_n, reference_veq = _trimming_analysis(
             df, params,
             r2_min=r2_min,
             unc_max=unc_max,
@@ -62,7 +62,11 @@ def run_mode(
             collected, 
             output_dir=output_dir, 
             full_volume=params['volume_array'],
-            earliest_n=earliest_n
+            earliest_n=earliest_n,
+            reference_veq=reference_veq,      # now properly passed
+            r2_min=r2_min,
+            unc_max=unc_max,
+            veq_tolerance=veq_tolerance
         )
         generated_files.append(output_dir / 'development_convergence_volume.png')
 
@@ -116,7 +120,7 @@ def _trimming_analysis(
     stability_window: int,
     trim_forward: bool,
     verbose: bool
-) -> Tuple[Dict[str, list], int | None]:
+) -> Tuple[Dict[str, list], int | None, float | None]:
     """
     Performs trimming analysis and detects earliest acceptable point.
     Backward trimming is default.
@@ -193,4 +197,4 @@ def _trimming_analysis(
             for key in collected:
                 collected[key].append(np.nan)
 
-    return collected, earliest_n
+    return collected, earliest_n, reference_veq

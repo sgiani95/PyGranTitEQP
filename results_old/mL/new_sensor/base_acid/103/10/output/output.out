@@ -358,5 +358,6 @@ Warning: Low R²=0.872 for zone (0, 4) (k=0.0)
 Schwartz Raw: V_eq = -0.019 mL, R² = 0.8721, k = 0.000, Zone = 0-4
 Schwartz Opt: V_eq = 0.702 mL, R² = 0.9844, k = 0.170, Zone = 0-5
   Trimmed to 5 points → V_eq = 0.702 ± 0.044 (R²=0.9844)
+Threshold volume applied: 4.0 mL (based on earliest 4.40 mL)
 Development summary plot saved: output/development_convergence_volume.png
 Mode 'method_development' complete.

@@ -404,11 +404,16 @@ def plot_development_summary(
     collected: Dict[str, list],
     output_dir: Path,
     full_volume: np.ndarray | None = None,
-    earliest_n: int | None = None
+    earliest_n: int | None = None,
+    reference_veq: float | None = None,
+    r2_min: float = 0.99,
+    unc_max: float = 0.05,
+    veq_tolerance: float = 0.1
 ):
     """
-    Summary plot for method_development mode with volume-based x-axis.
-    Shows earliest acceptable point with its corresponding volume in mL.
+    Summary plot with reversed insets:
+    - Main panels: only data >= threshold (clean zoomed view)
+    - Small insets: full dataset for context
     """
     setup_plot_style()
     output_dir.mkdir(exist_ok=True)
@@ -418,50 +423,75 @@ def plot_development_summary(
     V_eq_unc = np.array(collected['V_eq_unc'])
     R2 = np.array(collected['R2'])
 
-    valid = ~np.isnan(V_eq)
+    # Calculate threshold volume (round down to nearest 0.5 mL)
+    if earliest_n is not None and earliest_n in collected.get('n_points', []):
+        idx = collected['n_points'].index(earliest_n)
+        earliest_volume = collected['max_volume'][idx]
+        threshold_volume = np.floor(earliest_volume * 2) / 2
+        print(f"Threshold volume applied: {threshold_volume:.1f} mL (based on earliest {earliest_volume:.2f} mL)")
+    else:
+        threshold_volume = 0.0
+
+    # Filter for main panels (zoomed / clean view)
+    valid_zoomed = (max_volumes >= threshold_volume) & (~np.isnan(V_eq))
 
     fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
 
-    # Top: V_eq with error bars
-    ax1.errorbar(max_volumes[valid], V_eq[valid], yerr=V_eq_unc[valid],
+    # ====================== MAIN PANELS (ZOOMED / CLEAN) ======================
+    # Top: V_eq
+    ax1.errorbar(max_volumes[valid_zoomed], V_eq[valid_zoomed], yerr=V_eq_unc[valid_zoomed],
                  fmt='o-', capsize=5, color='C0', label='V_eq ± unc', zorder=3)
-    ax1.plot(max_volumes[valid], V_eq[valid], '-', color='C0', alpha=0.5, zorder=2)
+    ax1.plot(max_volumes[valid_zoomed], V_eq[valid_zoomed], '-', color='C0', alpha=0.5)
+
+    if reference_veq is not None:
+        ax1.set_ylim(reference_veq - 3 * veq_tolerance, reference_veq + 3 * veq_tolerance)
     ax1.set_ylabel('V_eq [mL]')
-    ax1.set_title('Development mode: Convergence with increasing volume')
+    ax1.set_title('Development mode: Convergence (relevant region only)')
     ax1.grid(True, alpha=0.3)
     ax1.legend()
 
     # Middle: uncertainty
-    ax2.plot(max_volumes[valid], V_eq_unc[valid], 'o-', color='C1', label='V_eq_unc')
+    ax2.plot(max_volumes[valid_zoomed], V_eq_unc[valid_zoomed], 'o-', color='C1', label='V_eq_unc')
+    ax2.set_ylim(0.0, 3 * unc_max)
     ax2.set_ylabel('Uncertainty [mL]')
     ax2.grid(True, alpha=0.3)
     ax2.legend()
 
     # Bottom: R²
-    ax3.plot(max_volumes[valid], R2[valid], 'o-', color='C2', label='R²')
+    ax3.plot(max_volumes[valid_zoomed], R2[valid_zoomed], 'o-', color='C2', label='R²')
+    ax3.set_ylim(1 - 3 * (1 - r2_min), 1.0)
     ax3.set_xlabel('Maximum titrant volume used [mL]')
     ax3.set_ylabel('R²')
     ax3.grid(True, alpha=0.3)
     ax3.legend()
 
-    # Ghost point: invisible but forces scaling
-    ax3.scatter([0], [1.0], color='white', alpha=0.0, zorder=1)   # transparent ghost point
-
-    # Mark earliest acceptable point with volume in mL
-    if earliest_n is not None and earliest_n in collected['n_points']:
+    # Mark earliest acceptable point
+    if earliest_n is not None and earliest_n in collected.get('n_points', []):
         idx = collected['n_points'].index(earliest_n)
         earliest_volume = collected['max_volume'][idx]
-
         for ax in (ax1, ax2, ax3):
             ax.axvline(earliest_volume, color='red', ls='--', lw=1.8,
-                       label=f'Earliest acceptable (vol = {earliest_volume:.2f} mL)')
-
+                       label=f'EAV (vol = {earliest_volume:.3f} mL)')
         ax1.legend()
 
-    ax1.set_ylim(4.97 , 5.03 )
-    ax2.set_ylim(0.0, 0.02 )
-    ax3.set_ylim(0.9994, 1.0 )
+    # ====================== INSETS (FULL DATASET) ======================
+    # Create small inset in the upper-right of each panel showing the FULL data
+    for ax, data, label, color in [
+        (ax1, V_eq, 'V_eq full', 'C0'),
+        (ax2, V_eq_unc, 'Unc full', 'C1'),
+        (ax3, R2, 'R² full', 'C2')
+    ]:
+        inset = ax.inset_axes([0.125, 0.125, 0.50, 0.75])
+        inset.plot(max_volumes, data, 'o-', color=color, markersize=2, alpha=0.7, label=label)
+        # inset.set_title('Full dataset', fontsize=8)
+        inset.grid(True, alpha=0.3)
+        inset.tick_params(labelsize=10)
 
+        # Light red vertical line in inset too
+        if earliest_n is not None and earliest_n in collected.get('n_points', []):
+            inset.axvline(earliest_volume, color='red', ls='--', lw=1.0, alpha=0.8)
+
+    ax3.scatter([0], [1.0], color='white', alpha=0.0, zorder=1)   # transparent ghost point
     plt.tight_layout()
     filename = output_dir / 'development_convergence_volume.png'
     fig.savefig(filename, dpi=300, bbox_inches='tight')
