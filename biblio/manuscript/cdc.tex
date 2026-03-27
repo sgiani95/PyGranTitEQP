@@ -151,7 +151,7 @@ We encourage the citation of primary research over review articles, where approp
 %%%FOOTNOTES%%%
 
 \footnotetext{\textit{$^{a}$~Universitätsspital Zürich, Rämistrasse 100, 8091 Zürich, Switzerland. E-mail: samuele.giani@usz.ch}}
-\footnotetext{\textit{$^{b}$~Mettler--Toledo GmbH Analytical, Heuwinkelstrasse 3, 8606 Nänikon, Switzerland. E-mail: cosimo.decaro@mt.com}}
+\footnotetext{\textit{$^{b}$~Mettler-Toledo Technologies GmbH, Heuwinkelstrasse 3, 8606 Nänikon, Switzerland. E-mail: cosimo.decaro@mt.com}}
 
 %Please use \dag to cite the ESI in the main text of the article.
 %If you article does not have ESI please remove the the \dag symbol from the title and the footnotetext below.
@@ -166,7 +166,7 @@ We encourage the citation of primary research over review articles, where approp
 
 \sffamily{\textbf{Potentiometric titrations remain a cornerstone of analytical chemistry but require titrant and solvent volumes in excess due to full-curve exploration to locate the equivalence point (EQP), contributing in essence to unnecessary waste and contradicting green chemistry principles. Here, we introduce a sustainable two-step analytical strategy that systematically reduces solvent consumption while maintaining high accuracy in EQP determination.
 An initial conventional titration identifies the pre-equivalence linear region via Gran and Schwartz linearization methods. The central point of this segment serves as the truncation limit for subsequent measurements using smaller fixed increments, enabling precise EQP extrapolation from limited data.
-Applied to the aqueous titration of test case TRIS with \ce{HCl}, this approach yields EQP values with excellent repeatability (standard error comparable to or better than traditional full-titration methods across n=6 replicates each). Solvent consumption is reduced by 20-27\% per analysis (e.g., 1 mL saved relative to reaching the EQP or 1.5 mL vs. full endpoint), directly supporting Principles 1 and 5 of green chemistry.
+Applied to the aqueous titration of test case TRIS with \ce{HCl}, this approach yields EQP values with excellent repeatability (standard error comparable to or better than classical titration procedures across n=6 replicates each). Titrant consumption is reduced by 20-27\% per analysis (e.g., 1 mL saved relative to reaching the EQP or 1.5 mL vs. full endpoint), directly supporting Principles 1 and 5 of green chemistry.
 Implemented in the open-source Python tool \textsf{GranTED} (available at \href{https://github.com/sgiani95/GranTED}{\texttt{https://github.com/sgiani95/GranTED}}), this protocol offers a practical, low-waste alternative for routine and educational potentiometric analyses.}\\%The abstrast goes here instead of the text "The abstract should be..."
 
 %%%END OF ABSTRACT%%%%
@@ -188,7 +188,7 @@ The protocol involves an initial conventional titration, until post-EQP, to iden
 
 \subsection*{Materials and Instrumentation}
 
-Tris(hydroxymethyl)aminomethane (TRIS, 99.97\%, Merck Sigma-Aldrich) was titrated with hydrochloric acid (\ce{HCl}, 0.1 M). Solutions were prepared in deionized water (18.2 M$\Omega$·cm). Potentiometric measurements used a Mettler Toledo T5 autoburette with a glass electrode. All experiments were conducted at room temperature.
+Tris(hydroxymethyl)aminomethane (TRIS, 99.97\%, Merck Sigma-Aldrich) was titrated with hydrochloric acid (\ce{HCl}, 0.1 M, Titripac Merck Millipore). Solutions were prepared in deionized water (18.2 M$\Omega$·cm). Potentiometric measurements have been performed by means of a Mettler-Toledo T5 automated titrator equipped with a combined pH glass electrode. All experiments were conducted at room temperature.
 
 \subsection*{Protocols}
 
@@ -214,13 +214,13 @@ Subsequent validations confirm the strategy's accuracy using fixed smaller incre
 
 \subsection*{Green Chemistry Metrics and Sustainability Assessment}
 
-The truncation yields systematic solvent/titrant savings, quantified as 1 mL vs. the EQP and 1.5 mL vs. the full endpoint per the illustrated analysis (Figure 2; 20\% and 27\% reductions, respectively). For routine labs performing multiple replicates, this accumulates to significant waste minimization, directly embodying Green Chemistry Principle 1 (prevention) by avoiding unnecessary full runs and Principle 5 (safer/less solvents) through reduced \ce{HCl} exposure.\cite{anastas1998green} Compared to traditional methods requiring titrant-in-excess curves,\cite{gran1950determination,gran1952determination,schwartz1987advances} our approach decreases resource use without compromising accuracy and precision (Table 1). Implemented in the open-source Python tool \textsf{GranTED}, this facilitates method development, method validation and validated method automated linear detection and metrics calculation, promoting adoption in educational and monitoring contexts where sustainability is paramount.
+The truncation yields systematic titrant savings, quantified as 1 mL vs. the EQP and 1.5 mL vs. the full endpoint per the illustrated analysis (Figure 2; 20\% and 27\% reductions, respectively). For routine labs performing multiple replicates, this accumulates to significant waste minimization, directly embodying Green Chemistry Principle 1 (prevention) by avoiding unnecessary full runs and Principle 5 (safer/less solvents) through reduced \ce{HCl} exposure.\cite{anastas1998green} Compared to traditional methods requiring titrant-in-excess curves,\cite{gran1950determination,gran1952determination,schwartz1987advances} our approach decreases resource use without compromising accuracy and precision (Table 1). Implemented in the open-source Python tool \textsf{GranTED}, this facilitates method development, method validation and validated method automated linear detection and metrics calculation, promoting adoption in educational and monitoring contexts where sustainability is paramount.
 
 \begin{figure*}[h]
 \centering
   \includegraphics[width=0.45\textwidth]{plots_ab.png}
   \includegraphics[width=0.45\textwidth]{plots_cd.png}
-  \caption{Overview of the green analytical strategy for equivalence point (EQP) determination in potentiometric titrations, demonstrated for TRIS (0.1 M) titrated with \ce{HCl} (0.1 M). Left: (a) Raw pH vs. titrant volume (V) curve from the initial dynamic titration (full run to post-EQP).%, identifying the pre-EQP linear region (shaded) and its central truncation point (arrow).
+  \caption{Overview of the green analytical strategy for equivalence point (EQP) determination in potentiometric titrations, demonstrated for TRIS (0.1 M) titrated with \ce{HCl} (0.1 M). Left: (a) Raw pH vs. titrant volume (V) curve from the initial dynamic titration (full run to post-EQP). %, identifying the pre-EQP linear region (shaded) and its central truncation point (arrow).
   (b) Schwartz-modified Gran plot ($V \times 10^{-pH}$ vs. $V$), showing the straight pre-EQP line extrapolated to the EQP (dashed line; intercept at 5 mL). Right: (c) Truncated validation titration: pH vs. V with fixed smaller increments up to the truncation point. (d) Corresponding Schwartz-modified plot for the truncated data, confirming EQP extrapolation (intercept at 5 mL) with reduced volume range.}
   \label{fig:titrations}
 \end{figure*}
@@ -252,11 +252,11 @@ In conclusion, we have developed a green analytical strategy for potentiometric 
 
 \section*{Author Contributions}
 
-S.G. and C.A.D. conceptualized the study, developed the methodology, performed the investigation and formal analysis, curated the data, visualized the results, and wrote the original draft. S.G. developed the software. C.A.D. carried out the experiments.
+S.G. and C.A.D.C. conceptualized the study, developed the methodology, performed the investigation and formal analysis, curated the data, visualized the results, and wrote the original draft. S.G. developed the software. C.A.D.C. carried out the experiments.
 
 \section*{Conflicts of interest}
 
-S.G. declares no conflicts of interest. C.A.D. is currently working for a manufacturer of laboratory analytical instrumentation (Mettler Toledo GmbH Analytical).
+S.G. declares no conflicts of interest. C.A.D.C. is currently working for a manufacturer of laboratory analytical instrumentation (Mettler-Toledo Technologies GmbH).
 
 \section*{Data availability}
 

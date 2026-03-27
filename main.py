@@ -8,7 +8,7 @@ Full flow: load → preprocess → gran_functions → [analyzer] → visualizer 
 Profiling via PyCallGraph if --profile.
 Dependencies: argparse, sys, json, pathlib + core modules.
 """
-__version__ = "0.9.2" # change manually on each significant update
+__version__ = "0.9.3" # change manually on each significant update
 # pride versioning: X.Y.Z
 # X = proud_version(bump when you are proud of the release)
 # Y = default_version(just normal/okay releases)
@@ -23,10 +23,9 @@ from pathlib import Path
 import data_io
 import preprocess
 from gran_functions import compute_gran_functions
-import analyzer # Optional
+import analyzer  # Optional
 import visualizer
 import reporter
-import numpy as np
 
 def parse_args():
     """Parse CLI arguments."""
@@ -40,7 +39,7 @@ def parse_args():
     parser.add_argument('--skip-analysis', action='store_true', help='Skip analyzer; use raw gran_results for visuals/report')
     parser.add_argument('--profile', action='store_true', help='Generate callgraph.svg')
 
-    # NEW: mode selection
+    # Mode selection
     parser.add_argument(
         '--mode',
         type=str,
@@ -59,7 +58,7 @@ def parse_args():
             # Override args with JSON (CLI takes precedence)
             for key, value in config.items():
                 if hasattr(args, key) and getattr(args, key) is not None:
-                    continue # CLI wins
+                    continue  # CLI wins
                 if key in ['V', 'C_B'] and isinstance(value, (int, float)):
                     setattr(args, key, value)
             if args.verbose:
@@ -68,6 +67,7 @@ def parse_args():
             print(f"Warning: Failed to load config {args.config_file}: {e}")
 
     return args
+
 
 def main():
     """Orchestrate pipeline with error chaining (Quick Win)."""
@@ -128,104 +128,32 @@ def main():
         if not args.skip_analysis:
             if args.verbose:
                 print("Analyzing...")
-            analysis_results = analyzer.analyze_gran(gran_results, params) # Will raise if not implemented
+            analysis_results = analyzer.analyze_gran(gran_results, params)  # Will raise if not implemented
         else:
             if args.verbose:
                 print("Skipping analysis (raw mode).")
-            analysis_results = gran_results # Direct pass; downstream fallbacks handle raw
+            analysis_results = gran_results  # Direct pass; downstream fallbacks handle raw
         if args.verbose:
             print("Analysis complete.")
     except Exception as e:
         print(f"Analyze error: {e} (falling back to raw)")
-        analysis_results = gran_results # Graceful raw fallback
+        analysis_results = gran_results  # Graceful raw fallback
 
-    # Step 5: Orchestrator - mode-dependent visualization
-    mode = args.mode
-    print(f"Generating plots for mode: {mode}")
+    # Step 5: Orchestrator - mode-specific visualization & reporting
+    from modes import run_mode
 
-    if args.mode == 'method_development':
-        # Normal full-data plots
-        visualizer.plot_titration_curve(df, params, output_dir=output_dir)
-        visualizer.plot_gran_schwartz(analysis_results, params, output_dir=output_dir)
+    mode_results = run_mode(
+        mode=args.mode,
+        df=df,
+        params=params,
+        output_dir=output_dir,
+        verbose=args.verbose
+    )
 
-        # Iterative trimming analysis
-        print("Development mode: iterative analysis (first 5 → full)")
-        n_total = len(df)
-        collected = {
-            'n_points': [],
-            'max_volume': [],
-            'V_eq': [],
-            'V_eq_unc': [],
-            'optimal_k': [],
-            'zone_points': [],
-            'R2': []  # added
-        }
-
-        for n in range(6, n_total + 1):
-            df_trim = df.iloc[:n].copy()
-            params_trim = params.copy()
-            params_trim['volume_array'] = df_trim['volume'].values
-            params_trim['potential_array'] = df_trim['potential'].values
-
-            try:
-                results_trim = analyzer.analyze_gran(df_trim, params_trim, verbose=False)
-                opt_zone = results_trim.get('schwartz', {}).get('opt', results_trim.get('gran', {}).get('opt', {}))
-                collected['n_points'].append(n)
-                collected['max_volume'].append(df_trim['volume'].max())
-                collected['V_eq'].append(opt_zone.get('V_eq', np.nan))
-                collected['V_eq_unc'].append(opt_zone.get('V_eq_unc', np.nan))
-                collected['optimal_k'].append(opt_zone.get('k', np.nan))
-                collected['zone_points'].append(
-                    opt_zone.get('zone_end', 0) - opt_zone.get('zone_start', 0) + 1
-                )
-                collected['R2'].append(opt_zone.get('r2', np.nan))
-
-                veq = opt_zone.get('V_eq', np.nan)
-                unc = opt_zone.get('V_eq_unc', np.nan)
-                print(f"  Trimmed to {n} points → V_eq = {veq:.3f} ± {unc:.3f}")
-            except Exception as e:
-                print(f"  Analysis failed for n={n}: {e}")
-                for key in collected:
-                    collected[key].append(np.nan)
-
-        # Generate summary plot
-        visualizer.plot_development_summary(collected, output_dir=output_dir, full_volume=params['volume_array'])
-
-    elif mode == 'method_validation':
-        visualizer.plot_all_combined(df, params, analysis_results, output_dir=output_dir)
-
-    elif mode == 'method_application':
-        visualizer.plot_all_combined(df, params, analysis_results, output_dir=output_dir)
-
-    elif mode == 'method_debug':
-        visualizer.plot_gran_schwartz(analysis_results, params, output_dir=output_dir)
-        visualizer.plot_gran_raw_with_search_diagnostic(analysis_results, params, output_dir=output_dir)
-        visualizer.plot_schwartz_opt_with_search_diagnostic(analysis_results, params, output_dir=output_dir)
-
-    else:
-        print(f"Warning: unknown mode '{mode}', falling back to default plots")
-        visualizer.plot_titration_curve(df, params, output_dir=output_dir)
-        visualizer.plot_gran_schwartz(analysis_results, params, output_dir=output_dir)
-
-    # Step 6: Report (always generated, or make mode-dependent later)
-    try:
-        if args.verbose:
-            print("Generating report...")
-        # Mode-dependent CSV report
-        csv_path = output_dir / "report.csv"
-        if args.mode == 'method_development':
-            reporter.generate_csv_report1(df, params, analysis_results, output_dir)
-        elif args.mode == 'method_validation':
-            reporter.generate_csv_report2(df, params, analysis_results, output_dir)
-        elif args.mode == 'method_application':
-            reporter.generate_csv_report3(df, params, analysis_results, output_dir)
-        elif args.mode == 'method_debug':
-            reporter.generate_csv_report4(df, params, analysis_results, output_dir)
-        else:
-            reporter.generate_csv_report(df, params, analysis_results, output_dir)  # fallback to original
-    except Exception as e:
-        print(f"Report error: {e}")
-        # Non-fatal
+    # Optional: print summary
+    if args.verbose:
+        print(f"Generated plots: {mode_results['generated_plots']}")
+        print(f"Report: {mode_results['csv_report']}")
 
 if __name__ == "__main__":
     from pycallgraph2 import PyCallGraph, Config
