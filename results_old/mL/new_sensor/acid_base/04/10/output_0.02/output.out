@@ -1,0 +1,363 @@
+Starting GranTED pipeline...
+Loading data...
+Loaded 111 points.
+Preprocessing...
+Params: V=25.0, C_B=0.1, type=acid_base
+Computing functions...
+Gran/Schwartz computed.
+Analyzing...
+Schwartz Raw: V_eq = 5.064 mL, R² = 0.9995, k = 0.000, Zone = 56-101
+Schwartz Opt: V_eq = 5.035 mL, R² = 1.0000, k = 0.455, Zone = 47-100
+Analysis complete.
+Executing mode: method_development | trim_forward=False
+Gran analysis complete with separate raw/opt Zones.
+Raw: V_eq=5.064, R²=0.9995, zone 56-101
+Opt: V_eq=5.035, R²=1.0000, k=0.455, zone 47-100
+Diagnostics collected: initial=2881, opt=4029
+Schwartz Raw: V_eq = 5.064 mL, R² = 0.9995, k = 0.000, Zone = 56-101
+Schwartz Opt: V_eq = 5.035 mL, R² = 1.0000, k = 0.455, Zone = 47-100
+Development mode: performing backward trimming analysis...
+Schwartz Raw: V_eq = 5.064 mL, R² = 0.9995, k = 0.000, Zone = 56-101
+Schwartz Opt: V_eq = 5.035 mL, R² = 1.0000, k = 0.455, Zone = 47-100
+  Trimmed to 111 points → V_eq = 5.035 ± 0.001 (R²=1.0000)
+Schwartz Raw: V_eq = 5.062 mL, R² = 0.9995, k = 0.000, Zone = 57-101
+Schwartz Opt: V_eq = 5.034 mL, R² = 1.0000, k = 0.468, Zone = 48-100
+  Trimmed to 110 points → V_eq = 5.034 ± 0.001 (R²=1.0000)
+Schwartz Raw: V_eq = 5.062 mL, R² = 0.9995, k = 0.000, Zone = 57-101
+Schwartz Opt: V_eq = 5.034 mL, R² = 1.0000, k = 0.468, Zone = 48-100
+  Trimmed to 109 points → V_eq = 5.034 ± 0.001 (R²=1.0000)
+Schwartz Raw: V_eq = 5.061 mL, R² = 0.9995, k = 0.000, Zone = 58-101
+Schwartz Opt: V_eq = 5.033 mL, R² = 1.0000, k = 0.479, Zone = 49-100
+  Trimmed to 108 points → V_eq = 5.033 ± 0.001 (R²=1.0000)
+Schwartz Raw: V_eq = 5.061 mL, R² = 0.9995, k = 0.000, Zone = 58-101
+Schwartz Opt: V_eq = 5.033 mL, R² = 1.0000, k = 0.479, Zone = 49-100
+  Trimmed to 107 points → V_eq = 5.033 ± 0.001 (R²=1.0000)
+Schwartz Raw: V_eq = 5.077 mL, R² = 0.9995, k = 0.000, Zone = 55-97
+Schwartz Opt: V_eq = 5.040 mL, R² = 1.0000, k = 0.416, Zone = 48-97
+  Trimmed to 106 points → V_eq = 5.040 ± 0.001 (R²=1.0000)
+Schwartz Raw: V_eq = 5.077 mL, R² = 0.9995, k = 0.000, Zone = 55-97
+Schwartz Opt: V_eq = 5.040 mL, R² = 1.0000, k = 0.416, Zone = 48-97
+  Trimmed to 105 points → V_eq = 5.040 ± 0.001 (R²=1.0000)
+Schwartz Raw: V_eq = 5.080 mL, R² = 0.9996, k = 0.000, Zone = 55-96
+Schwartz Opt: V_eq = 5.042 mL, R² = 1.0000, k = 0.405, Zone = 49-97
+  Trimmed to 104 points → V_eq = 5.042 ± 0.001 (R²=1.0000)
+Schwartz Raw: V_eq = 5.080 mL, R² = 0.9996, k = 0.000, Zone = 55-96
+Schwartz Opt: V_eq = 5.042 mL, R² = 1.0000, k = 0.405, Zone = 49-96
+  Trimmed to 103 points → V_eq = 5.042 ± 0.001 (R²=1.0000)
+Schwartz Raw: V_eq = 5.056 mL, R² = 0.9996, k = 0.000, Zone = 62-102
+Schwartz Opt: V_eq = 5.034 mL, R² = 0.9999, k = 0.522, Zone = 53-102
+  Trimmed to 102 points → V_eq = 5.034 ± 0.001 (R²=0.9999)
+Schwartz Raw: V_eq = 5.079 mL, R² = 0.9996, k = 0.000, Zone = 56-96
+Schwartz Opt: V_eq = 5.040 mL, R² = 1.0000, k = 0.421, Zone = 49-96
+  Trimmed to 101 points → V_eq = 5.040 ± 0.001 (R²=1.0000)
+Schwartz Raw: V_eq = 5.077 mL, R² = 0.9996, k = 0.000, Zone = 57-96
+Schwartz Opt: V_eq = 5.039 mL, R² = 1.0000, k = 0.434, Zone = 52-98
+  Trimmed to 100 points → V_eq = 5.039 ± 0.001 (R²=1.0000)
+Schwartz Raw: V_eq = 5.077 mL, R² = 0.9996, k = 0.000, Zone = 57-96
+Schwartz Opt: V_eq = 5.039 mL, R² = 1.0000, k = 0.434, Zone = 53-99
+  Trimmed to 99 points → V_eq = 5.039 ± 0.001 (R²=1.0000)
+Schwartz Raw: V_eq = 5.069 mL, R² = 0.9996, k = 0.000, Zone = 60-98
+Schwartz Opt: V_eq = 5.037 mL, R² = 1.0000, k = 0.475, Zone = 52-98
+  Trimmed to 98 points → V_eq = 5.037 ± 0.001 (R²=1.0000)
+Schwartz Raw: V_eq = 5.074 mL, R² = 0.9996, k = 0.000, Zone = 59-97
+Schwartz Opt: V_eq = 5.039 mL, R² = 1.0000, k = 0.453, Zone = 52-97
+  Trimmed to 97 points → V_eq = 5.039 ± 0.001 (R²=1.0000)
+Schwartz Raw: V_eq = 5.076 mL, R² = 0.9997, k = 0.000, Zone = 59-96
+Schwartz Opt: V_eq = 5.038 mL, R² = 1.0000, k = 0.452, Zone = 51-96
+  Trimmed to 96 points → V_eq = 5.038 ± 0.002 (R²=1.0000)
+Schwartz Raw: V_eq = 5.081 mL, R² = 0.9996, k = 0.000, Zone = 58-95
+Schwartz Opt: V_eq = 5.038 mL, R² = 1.0000, k = 0.444, Zone = 51-95
+  Trimmed to 95 points → V_eq = 5.038 ± 0.002 (R²=1.0000)
+Schwartz Raw: V_eq = 5.083 mL, R² = 0.9996, k = 0.000, Zone = 58-94
+Schwartz Opt: V_eq = 5.038 mL, R² = 1.0000, k = 0.441, Zone = 49-93
+  Trimmed to 94 points → V_eq = 5.038 ± 0.002 (R²=1.0000)
+Schwartz Raw: V_eq = 5.089 mL, R² = 0.9996, k = 0.000, Zone = 57-93
+Schwartz Opt: V_eq = 5.040 mL, R² = 1.0000, k = 0.422, Zone = 49-92
+  Trimmed to 93 points → V_eq = 5.040 ± 0.002 (R²=1.0000)
+Schwartz Raw: V_eq = 5.092 mL, R² = 0.9997, k = 0.000, Zone = 57-92
+Schwartz Opt: V_eq = 5.041 mL, R² = 1.0000, k = 0.415, Zone = 49-91
+  Trimmed to 92 points → V_eq = 5.041 ± 0.002 (R²=1.0000)
+Schwartz Raw: V_eq = 5.097 mL, R² = 0.9997, k = 0.000, Zone = 56-91
+Schwartz Opt: V_eq = 5.044 mL, R² = 1.0000, k = 0.397, Zone = 49-90
+  Trimmed to 91 points → V_eq = 5.044 ± 0.002 (R²=1.0000)
+Schwartz Raw: V_eq = 5.130 mL, R² = 0.9997, k = 0.000, Zone = 51-85
+Schwartz Opt: V_eq = 5.060 mL, R² = 1.0000, k = 0.305, Zone = 48-88
+  Trimmed to 90 points → V_eq = 5.060 ± 0.002 (R²=1.0000)
+Schwartz Raw: V_eq = 5.106 mL, R² = 0.9997, k = 0.000, Zone = 55-89
+Schwartz Opt: V_eq = 5.048 mL, R² = 1.0000, k = 0.369, Zone = 48-88
+  Trimmed to 89 points → V_eq = 5.048 ± 0.002 (R²=1.0000)
+Schwartz Raw: V_eq = 5.110 mL, R² = 0.9997, k = 0.000, Zone = 55-88
+Schwartz Opt: V_eq = 5.051 mL, R² = 1.0000, k = 0.354, Zone = 48-87
+  Trimmed to 88 points → V_eq = 5.051 ± 0.002 (R²=1.0000)
+Schwartz Raw: V_eq = 5.134 mL, R² = 0.9997, k = 0.000, Zone = 51-84
+Schwartz Opt: V_eq = 5.064 mL, R² = 1.0000, k = 0.295, Zone = 48-86
+  Trimmed to 87 points → V_eq = 5.064 ± 0.002 (R²=1.0000)
+Schwartz Raw: V_eq = 5.138 mL, R² = 0.9997, k = 0.000, Zone = 51-83
+Schwartz Opt: V_eq = 5.067 mL, R² = 1.0000, k = 0.288, Zone = 48-86
+  Trimmed to 86 points → V_eq = 5.067 ± 0.002 (R²=1.0000)
+Schwartz Raw: V_eq = 5.138 mL, R² = 0.9997, k = 0.000, Zone = 51-83
+Schwartz Opt: V_eq = 5.068 mL, R² = 1.0000, k = 0.288, Zone = 48-85
+→ Earliest acceptable point detected at n=88 (V_eq ≈ 5.035, bad streak of 3 started)
+  Trimmed to 85 points → V_eq = 5.068 ± 0.002 (R²=1.0000)
+Schwartz Raw: V_eq = 5.143 mL, R² = 0.9997, k = 0.000, Zone = 51-82
+Schwartz Opt: V_eq = 5.072 mL, R² = 1.0000, k = 0.275, Zone = 48-84
+  Trimmed to 84 points → V_eq = 5.072 ± 0.002 (R²=1.0000)
+Schwartz Raw: V_eq = 5.143 mL, R² = 0.9997, k = 0.000, Zone = 51-82
+Schwartz Opt: V_eq = 5.076 mL, R² = 0.9999, k = 0.275, Zone = 46-82
+  Trimmed to 83 points → V_eq = 5.076 ± 0.003 (R²=0.9999)
+Schwartz Raw: V_eq = 5.146 mL, R² = 0.9997, k = 0.000, Zone = 51-81
+Schwartz Opt: V_eq = 5.077 mL, R² = 0.9999, k = 0.275, Zone = 46-81
+  Trimmed to 82 points → V_eq = 5.077 ± 0.003 (R²=0.9999)
+Schwartz Raw: V_eq = 5.150 mL, R² = 0.9997, k = 0.000, Zone = 51-81
+Schwartz Opt: V_eq = 5.077 mL, R² = 0.9999, k = 0.276, Zone = 46-81
+  Trimmed to 81 points → V_eq = 5.077 ± 0.003 (R²=0.9999)
+Schwartz Raw: V_eq = 5.152 mL, R² = 0.9997, k = 0.000, Zone = 51-80
+Schwartz Opt: V_eq = 5.074 mL, R² = 0.9999, k = 0.289, Zone = 44-79
+  Trimmed to 80 points → V_eq = 5.074 ± 0.003 (R²=0.9999)
+Schwartz Raw: V_eq = 5.160 mL, R² = 0.9997, k = 0.000, Zone = 50-79
+Schwartz Opt: V_eq = 5.070 mL, R² = 0.9999, k = 0.299, Zone = 44-79
+  Trimmed to 79 points → V_eq = 5.070 ± 0.003 (R²=0.9999)
+Schwartz Raw: V_eq = 5.165 mL, R² = 0.9997, k = 0.000, Zone = 50-78
+Schwartz Opt: V_eq = 5.070 mL, R² = 0.9999, k = 0.301, Zone = 44-78
+  Trimmed to 78 points → V_eq = 5.070 ± 0.003 (R²=0.9999)
+Schwartz Raw: V_eq = 5.177 mL, R² = 0.9996, k = 0.000, Zone = 49-77
+Schwartz Opt: V_eq = 5.068 mL, R² = 0.9999, k = 0.314, Zone = 43-77
+  Trimmed to 77 points → V_eq = 5.068 ± 0.003 (R²=0.9999)
+Schwartz Raw: V_eq = 5.181 mL, R² = 0.9996, k = 0.000, Zone = 49-76
+Schwartz Opt: V_eq = 5.062 mL, R² = 0.9999, k = 0.328, Zone = 43-76
+  Trimmed to 76 points → V_eq = 5.062 ± 0.003 (R²=0.9999)
+Schwartz Raw: V_eq = 5.194 mL, R² = 0.9996, k = 0.000, Zone = 48-75
+Schwartz Opt: V_eq = 5.063 mL, R² = 0.9999, k = 0.322, Zone = 42-75
+  Trimmed to 75 points → V_eq = 5.063 ± 0.004 (R²=0.9999)
+Schwartz Raw: V_eq = 5.200 mL, R² = 0.9996, k = 0.000, Zone = 48-74
+Schwartz Opt: V_eq = 5.066 mL, R² = 0.9999, k = 0.317, Zone = 42-74
+  Trimmed to 74 points → V_eq = 5.066 ± 0.004 (R²=0.9999)
+Schwartz Raw: V_eq = 5.218 mL, R² = 0.9993, k = 0.000, Zone = 47-73
+Schwartz Opt: V_eq = 5.027 mL, R² = 0.9999, k = 0.400, Zone = 41-73
+  Trimmed to 73 points → V_eq = 5.027 ± 0.004 (R²=0.9999)
+Schwartz Raw: V_eq = 5.228 mL, R² = 0.9994, k = 0.000, Zone = 47-72
+Schwartz Opt: V_eq = 5.038 mL, R² = 0.9999, k = 0.381, Zone = 41-72
+  Trimmed to 72 points → V_eq = 5.038 ± 0.004 (R²=0.9999)
+Schwartz Raw: V_eq = 5.242 mL, R² = 0.9993, k = 0.000, Zone = 46-71
+Schwartz Opt: V_eq = 5.044 mL, R² = 0.9999, k = 0.362, Zone = 40-71
+  Trimmed to 71 points → V_eq = 5.044 ± 0.005 (R²=0.9999)
+Schwartz Raw: V_eq = 5.250 mL, R² = 0.9993, k = 0.000, Zone = 46-70
+Schwartz Opt: V_eq = 5.038 mL, R² = 0.9999, k = 0.372, Zone = 40-70
+  Trimmed to 70 points → V_eq = 5.038 ± 0.005 (R²=0.9999)
+Schwartz Raw: V_eq = 5.269 mL, R² = 0.9992, k = 0.000, Zone = 45-69
+Schwartz Opt: V_eq = 5.029 mL, R² = 0.9998, k = 0.378, Zone = 39-69
+  Trimmed to 69 points → V_eq = 5.029 ± 0.006 (R²=0.9998)
+Schwartz Raw: V_eq = 5.276 mL, R² = 0.9992, k = 0.000, Zone = 45-68
+Schwartz Opt: V_eq = 5.009 mL, R² = 0.9998, k = 0.399, Zone = 38-68
+  Trimmed to 68 points → V_eq = 5.009 ± 0.007 (R²=0.9998)
+Schwartz Raw: V_eq = 5.293 mL, R² = 0.9991, k = 0.000, Zone = 44-67
+Schwartz Opt: V_eq = 5.008 mL, R² = 0.9998, k = 0.396, Zone = 38-67
+  Trimmed to 67 points → V_eq = 5.008 ± 0.007 (R²=0.9998)
+Schwartz Raw: V_eq = 5.300 mL, R² = 0.9990, k = 0.000, Zone = 44-66
+Schwartz Opt: V_eq = 4.977 mL, R² = 0.9997, k = 0.428, Zone = 37-66
+  Trimmed to 66 points → V_eq = 4.977 ± 0.008 (R²=0.9997)
+Schwartz Raw: V_eq = 5.331 mL, R² = 0.9990, k = 0.000, Zone = 42-64
+Schwartz Opt: V_eq = 5.013 mL, R² = 0.9998, k = 0.365, Zone = 35-63
+  Trimmed to 65 points → V_eq = 5.013 ± 0.008 (R²=0.9998)
+Schwartz Raw: V_eq = 5.514 mL, R² = 0.9991, k = 0.000, Zone = 36-57
+Schwartz Opt: V_eq = 5.169 mL, R² = 0.9998, k = 0.208, Zone = 36-61
+  Trimmed to 64 points → V_eq = 5.169 ± 0.009 (R²=0.9998)
+Schwartz Raw: V_eq = 5.514 mL, R² = 0.9991, k = 0.000, Zone = 36-57
+Schwartz Opt: V_eq = 5.169 mL, R² = 0.9998, k = 0.208, Zone = 36-61
+  Trimmed to 63 points → V_eq = 5.169 ± 0.009 (R²=0.9998)
+Schwartz Raw: V_eq = 5.532 mL, R² = 0.9991, k = 0.000, Zone = 36-56
+Schwartz Opt: V_eq = 5.190 mL, R² = 0.9997, k = 0.193, Zone = 36-60
+  Trimmed to 62 points → V_eq = 5.190 ± 0.010 (R²=0.9997)
+Schwartz Raw: V_eq = 5.532 mL, R² = 0.9991, k = 0.000, Zone = 36-56
+Schwartz Opt: V_eq = 5.194 mL, R² = 0.9997, k = 0.193, Zone = 36-59
+  Trimmed to 61 points → V_eq = 5.194 ± 0.010 (R²=0.9997)
+Schwartz Raw: V_eq = 5.518 mL, R² = 0.9992, k = 0.000, Zone = 37-56
+Schwartz Opt: V_eq = 5.194 mL, R² = 0.9997, k = 0.192, Zone = 36-59
+  Trimmed to 60 points → V_eq = 5.194 ± 0.010 (R²=0.9997)
+Schwartz Raw: V_eq = 5.518 mL, R² = 0.9992, k = 0.000, Zone = 37-56
+Schwartz Opt: V_eq = 5.199 mL, R² = 0.9997, k = 0.192, Zone = 36-58
+  Trimmed to 59 points → V_eq = 5.199 ± 0.011 (R²=0.9997)
+Schwartz Raw: V_eq = 5.534 mL, R² = 0.9992, k = 0.000, Zone = 37-55
+Schwartz Opt: V_eq = 5.224 mL, R² = 0.9997, k = 0.178, Zone = 36-58
+  Trimmed to 58 points → V_eq = 5.224 ± 0.012 (R²=0.9997)
+Schwartz Raw: V_eq = 5.534 mL, R² = 0.9992, k = 0.000, Zone = 37-55
+Schwartz Opt: V_eq = 5.229 mL, R² = 0.9996, k = 0.178, Zone = 36-57
+  Trimmed to 57 points → V_eq = 5.229 ± 0.013 (R²=0.9996)
+Schwartz Raw: V_eq = 5.585 mL, R² = 0.9992, k = 0.000, Zone = 36-53
+Schwartz Opt: V_eq = 5.279 mL, R² = 0.9996, k = 0.148, Zone = 36-56
+  Trimmed to 56 points → V_eq = 5.279 ± 0.014 (R²=0.9996)
+Schwartz Raw: V_eq = 5.585 mL, R² = 0.9992, k = 0.000, Zone = 36-53
+Schwartz Opt: V_eq = 5.304 mL, R² = 0.9994, k = 0.148, Zone = 34-54
+  Trimmed to 55 points → V_eq = 5.304 ± 0.017 (R²=0.9994)
+Schwartz Raw: V_eq = 5.603 mL, R² = 0.9992, k = 0.000, Zone = 36-52
+Schwartz Opt: V_eq = 5.361 mL, R² = 0.9993, k = 0.124, Zone = 34-53
+  Trimmed to 54 points → V_eq = 5.361 ± 0.020 (R²=0.9993)
+Schwartz Raw: V_eq = 5.603 mL, R² = 0.9992, k = 0.000, Zone = 36-52
+Schwartz Opt: V_eq = 5.370 mL, R² = 0.9993, k = 0.124, Zone = 34-52
+  Trimmed to 53 points → V_eq = 5.370 ± 0.021 (R²=0.9993)
+Schwartz Raw: V_eq = 5.613 mL, R² = 0.9991, k = 0.000, Zone = 36-51
+Schwartz Opt: V_eq = 5.371 mL, R² = 0.9991, k = 0.125, Zone = 34-52
+  Trimmed to 52 points → V_eq = 5.371 ± 0.024 (R²=0.9991)
+Schwartz Raw: V_eq = 5.609 mL, R² = 0.9989, k = 0.000, Zone = 36-51
+Schwartz Opt: V_eq = 5.276 mL, R² = 0.9992, k = 0.175, Zone = 33-51
+  Trimmed to 51 points → V_eq = 5.276 ± 0.023 (R²=0.9992)
+Schwartz Raw: V_eq = 5.610 mL, R² = 0.9987, k = 0.000, Zone = 36-50
+Schwartz Opt: V_eq = 5.345 mL, R² = 0.9996, k = 0.229, Zone = 21-40
+  Trimmed to 50 points → V_eq = 5.345 ± 0.019 (R²=0.9996)
+Schwartz Raw: V_eq = 5.715 mL, R² = 0.9974, k = 0.000, Zone = 34-48
+Schwartz Opt: V_eq = 4.835 mL, R² = 0.9995, k = 0.396, Zone = 27-47
+  Trimmed to 49 points → V_eq = 4.835 ± 0.015 (R²=0.9995)
+Schwartz Raw: V_eq = 6.749 mL, R² = 0.9971, k = 0.000, Zone = 26-39
+Schwartz Opt: V_eq = 5.494 mL, R² = 0.9994, k = 0.191, Zone = 23-40
+  Trimmed to 48 points → V_eq = 5.494 ± 0.024 (R²=0.9994)
+Schwartz Raw: V_eq = 5.785 mL, R² = 0.9972, k = 0.000, Zone = 34-47
+Schwartz Opt: V_eq = 4.710 mL, R² = 0.9991, k = 0.455, Zone = 26-47
+  Trimmed to 47 points → V_eq = 4.710 ± 0.021 (R²=0.9991)
+Schwartz Raw: V_eq = 6.514 mL, R² = 0.9975, k = 0.000, Zone = 28-40
+Schwartz Opt: V_eq = 5.348 mL, R² = 0.9996, k = 0.221, Zone = 23-40
+  Trimmed to 46 points → V_eq = 5.348 ± 0.018 (R²=0.9996)
+Schwartz Raw: V_eq = 6.514 mL, R² = 0.9975, k = 0.000, Zone = 28-40
+Schwartz Opt: V_eq = 5.335 mL, R² = 0.9996, k = 0.221, Zone = 24-40
+  Trimmed to 45 points → V_eq = 5.335 ± 0.018 (R²=0.9996)
+Schwartz Raw: V_eq = 6.602 mL, R² = 0.9981, k = 0.000, Zone = 28-39
+Schwartz Opt: V_eq = 5.509 mL, R² = 0.9995, k = 0.180, Zone = 25-40
+  Trimmed to 44 points → V_eq = 5.509 ± 0.024 (R²=0.9995)
+Schwartz Raw: V_eq = 6.602 mL, R² = 0.9981, k = 0.000, Zone = 28-39
+Schwartz Opt: V_eq = 5.487 mL, R² = 0.9996, k = 0.180, Zone = 26-40
+  Trimmed to 43 points → V_eq = 5.487 ± 0.022 (R²=0.9996)
+Schwartz Raw: V_eq = 6.680 mL, R² = 0.9985, k = 0.000, Zone = 28-38
+Schwartz Opt: V_eq = 5.674 mL, R² = 0.9995, k = 0.146, Zone = 26-39
+  Trimmed to 42 points → V_eq = 5.674 ± 0.027 (R²=0.9995)
+Schwartz Raw: V_eq = 6.680 mL, R² = 0.9985, k = 0.000, Zone = 28-38
+Schwartz Opt: V_eq = 5.674 mL, R² = 0.9995, k = 0.146, Zone = 26-39
+  Trimmed to 41 points → V_eq = 5.674 ± 0.027 (R²=0.9995)
+Schwartz Raw: V_eq = 6.624 mL, R² = 0.9985, k = 0.000, Zone = 29-38
+Schwartz Opt: V_eq = 5.747 mL, R² = 0.9994, k = 0.137, Zone = 26-38
+  Trimmed to 40 points → V_eq = 5.747 ± 0.030 (R²=0.9994)
+Schwartz Raw: V_eq = 6.624 mL, R² = 0.9985, k = 0.000, Zone = 29-38
+Schwartz Opt: V_eq = 5.755 mL, R² = 0.9993, k = 0.137, Zone = 26-37
+  Trimmed to 39 points → V_eq = 5.755 ± 0.036 (R²=0.9993)
+Schwartz Raw: V_eq = 6.676 mL, R² = 0.9983, k = 0.000, Zone = 29-37
+Schwartz Opt: V_eq = 5.861 mL, R² = 0.9992, k = 0.120, Zone = 26-37
+  Trimmed to 38 points → V_eq = 5.861 ± 0.038 (R²=0.9992)
+Schwartz Raw: V_eq = 6.751 mL, R² = 0.9978, k = 0.000, Zone = 28-36
+Schwartz Opt: V_eq = 5.415 mL, R² = 0.9992, k = 0.196, Zone = 26-37
+  Trimmed to 37 points → V_eq = 5.415 ± 0.036 (R²=0.9992)
+Schwartz Raw: V_eq = 6.710 mL, R² = 0.9971, k = 0.000, Zone = 28-35
+Schwartz Opt: V_eq = 4.782 mL, R² = 0.9998, k = 0.341, Zone = 20-33
+  Trimmed to 36 points → V_eq = 4.782 ± 0.015 (R²=0.9998)
+Schwartz Raw: V_eq = 6.881 mL, R² = 0.9983, k = 0.000, Zone = 28-35
+Schwartz Opt: V_eq = 5.530 mL, R² = 0.9990, k = 0.190, Zone = 24-34
+  Trimmed to 35 points → V_eq = 5.530 ± 0.043 (R²=0.9990)
+Schwartz Raw: V_eq = 6.827 mL, R² = 0.9975, k = 0.000, Zone = 28-34
+Schwartz Opt: V_eq = 4.499 mL, R² = 0.9997, k = 0.420, Zone = 21-34
+  Trimmed to 34 points → V_eq = 4.499 ± 0.017 (R²=0.9997)
+Schwartz Raw: V_eq = 7.203 mL, R² = 0.9943, k = 0.000, Zone = 26-32
+Schwartz Opt: V_eq = 4.264 mL, R² = 0.9994, k = 0.481, Zone = 19-33
+  Trimmed to 33 points → V_eq = 4.264 ± 0.021 (R²=0.9994)
+Schwartz Raw: V_eq = 7.497 mL, R² = 0.9963, k = 0.000, Zone = 26-31
+Schwartz Opt: V_eq = 4.522 mL, R² = 0.9996, k = 0.405, Zone = 19-31
+  Trimmed to 32 points → V_eq = 4.522 ± 0.020 (R²=0.9996)
+Schwartz Raw: V_eq = 7.773 mL, R² = 0.9973, k = 0.000, Zone = 26-31
+Schwartz Opt: V_eq = 4.584 mL, R² = 0.9995, k = 0.385, Zone = 20-31
+  Trimmed to 31 points → V_eq = 4.584 ± 0.025 (R²=0.9995)
+Warning: Low R²=0.909 for zone (np.int64(0), np.int64(30)) (k=999032980.7938287)
+Schwartz Raw: V_eq = 7.939 mL, R² = 0.9959, k = 0.000, Zone = 26-30
+Schwartz Opt: V_eq = 1.515 mL, R² = 0.9091, k = 999032980.794, Zone = 0-30
+  Trimmed to 30 points → V_eq = 1.515 ± 0.053 (R²=0.9091)
+Warning: Low R²=0.914 for zone (np.int64(0), np.int64(29)) (k=984066883.1922425)
+Schwartz Raw: V_eq = 11.832 mL, R² = 0.9919, k = 0.000, Zone = 23-26
+Schwartz Opt: V_eq = 1.485 mL, R² = 0.9136, k = 984066883.192, Zone = 0-29
+  Trimmed to 29 points → V_eq = 1.485 ± 0.052 (R²=0.9136)
+Warning: Low R²=0.918 for zone (np.int64(0), np.int64(28)) (k=984066883.1922425)
+Schwartz Raw: V_eq = 11.832 mL, R² = 0.9919, k = 0.000, Zone = 23-26
+Schwartz Opt: V_eq = 1.456 mL, R² = 0.9181, k = 984066883.192, Zone = 0-28
+  Trimmed to 28 points → V_eq = 1.456 ± 0.051 (R²=0.9181)
+Warning: Low R²=0.923 for zone (np.int64(0), np.int64(27)) (k=984066883.1922425)
+Schwartz Raw: V_eq = 11.832 mL, R² = 0.9919, k = 0.000, Zone = 23-26
+Schwartz Opt: V_eq = 1.426 mL, R² = 0.9226, k = 984066883.192, Zone = 0-27
+  Trimmed to 27 points → V_eq = 1.426 ± 0.050 (R²=0.9226)
+Schwartz Raw: V_eq = 13.648 mL, R² = 0.9773, k = 0.000, Zone = 21-26
+Schwartz Opt: V_eq = 4.166 mL, R² = 0.9981, k = 0.439, Zone = 16-26
+  Trimmed to 26 points → V_eq = 4.166 ± 0.048 (R²=0.9981)
+Warning: Low R²=0.731 for zone (0, 24) (k=0.0)
+Schwartz Raw: V_eq = -0.263 mL, R² = 0.7311, k = 0.000, Zone = 0-24
+Schwartz Opt: V_eq = nan mL, R² = 0.9950, k = 0.710, Zone = 0-24
+  Trimmed to 25 points → V_eq = nan ± nan (R²=0.9950)
+Warning: Low R²=0.751 for zone (0, 23) (k=0.0)
+Schwartz Raw: V_eq = -0.247 mL, R² = 0.7505, k = 0.000, Zone = 0-23
+Schwartz Opt: V_eq = nan mL, R² = 0.9953, k = 0.722, Zone = 0-23
+  Trimmed to 24 points → V_eq = nan ± nan (R²=0.9953)
+Warning: Low R²=0.769 for zone (0, 22) (k=0.0)
+Schwartz Raw: V_eq = -0.231 mL, R² = 0.7694, k = 0.000, Zone = 0-22
+Schwartz Opt: V_eq = nan mL, R² = 0.9955, k = 0.735, Zone = 0-22
+  Trimmed to 23 points → V_eq = nan ± nan (R²=0.9955)
+Warning: Low R²=0.788 for zone (0, 21) (k=0.0)
+Schwartz Raw: V_eq = -0.215 mL, R² = 0.7880, k = 0.000, Zone = 0-21
+Schwartz Opt: V_eq = nan mL, R² = 0.9956, k = 0.749, Zone = 0-21
+  Trimmed to 22 points → V_eq = nan ± nan (R²=0.9956)
+Warning: Low R²=0.806 for zone (0, 20) (k=0.0)
+Schwartz Raw: V_eq = -0.198 mL, R² = 0.8055, k = 0.000, Zone = 0-20
+Schwartz Opt: V_eq = nan mL, R² = 0.9959, k = 0.765, Zone = 0-20
+  Trimmed to 21 points → V_eq = nan ± nan (R²=0.9959)
+Warning: Low R²=0.822 for zone (0, 19) (k=0.0)
+Schwartz Raw: V_eq = -0.182 mL, R² = 0.8221, k = 0.000, Zone = 0-19
+Schwartz Opt: V_eq = nan mL, R² = 0.9962, k = 0.782, Zone = 0-19
+  Trimmed to 20 points → V_eq = nan ± nan (R²=0.9962)
+Warning: Low R²=0.839 for zone (0, 18) (k=0.0)
+Schwartz Raw: V_eq = -0.165 mL, R² = 0.8394, k = 0.000, Zone = 0-18
+Schwartz Opt: V_eq = nan mL, R² = 0.9962, k = 0.798, Zone = 0-18
+  Trimmed to 19 points → V_eq = nan ± nan (R²=0.9962)
+Warning: Low R²=0.855 for zone (0, 17) (k=0.0)
+Schwartz Raw: V_eq = -0.149 mL, R² = 0.8554, k = 0.000, Zone = 0-17
+Schwartz Opt: V_eq = nan mL, R² = 0.9963, k = 0.818, Zone = 0-17
+  Trimmed to 18 points → V_eq = nan ± nan (R²=0.9963)
+Warning: Low R²=0.870 for zone (0, 16) (k=0.0)
+Schwartz Raw: V_eq = -0.134 mL, R² = 0.8704, k = 0.000, Zone = 0-16
+Schwartz Opt: V_eq = nan mL, R² = 0.9964, k = 0.841, Zone = 0-16
+  Trimmed to 17 points → V_eq = nan ± nan (R²=0.9964)
+Warning: Low R²=0.884 for zone (0, 15) (k=0.0)
+Schwartz Raw: V_eq = -0.119 mL, R² = 0.8835, k = 0.000, Zone = 0-15
+Schwartz Opt: V_eq = nan mL, R² = 0.9969, k = 0.870, Zone = 0-15
+  Trimmed to 16 points → V_eq = nan ± nan (R²=0.9969)
+Warning: Low R²=0.899 for zone (0, 14) (k=0.0)
+Schwartz Raw: V_eq = -0.104 mL, R² = 0.8987, k = 0.000, Zone = 0-14
+Schwartz Opt: V_eq = nan mL, R² = 0.9966, k = 0.892, Zone = 0-14
+  Trimmed to 15 points → V_eq = nan ± nan (R²=0.9966)
+Warning: Low R²=0.911 for zone (0, 13) (k=0.0)
+Schwartz Raw: V_eq = -0.090 mL, R² = 0.9106, k = 0.000, Zone = 0-13
+Schwartz Opt: V_eq = nan mL, R² = 0.9969, k = 0.931, Zone = 0-13
+  Trimmed to 14 points → V_eq = nan ± nan (R²=0.9969)
+Warning: Low R²=0.927 for zone (0, 12) (k=0.0)
+Schwartz Raw: V_eq = -0.077 mL, R² = 0.9272, k = 0.000, Zone = 0-12
+Schwartz Opt: V_eq = nan mL, R² = 0.9962, k = 0.920, Zone = 0-12
+  Trimmed to 13 points → V_eq = nan ± nan (R²=0.9962)
+Warning: Low R²=0.940 for zone (0, 11) (k=0.0)
+Schwartz Raw: V_eq = -0.065 mL, R² = 0.9398, k = 0.000, Zone = 0-11
+Schwartz Opt: V_eq = nan mL, R² = 0.9953, k = 0.944, Zone = 0-11
+  Trimmed to 12 points → V_eq = nan ± nan (R²=0.9953)
+Warning: Low R²=0.946 for zone (0, 10) (k=0.0)
+Schwartz Raw: V_eq = -0.054 mL, R² = 0.9465, k = 0.000, Zone = 0-10
+Schwartz Opt: V_eq = nan mL, R² = 0.9976, k = 1.019, Zone = 0-10
+  Trimmed to 11 points → V_eq = nan ± nan (R²=0.9976)
+Schwartz Raw: V_eq = -0.043 mL, R² = 0.9577, k = 0.000, Zone = 0-9
+Schwartz Opt: V_eq = nan mL, R² = 0.9968, k = 1.045, Zone = 0-9
+  Trimmed to 10 points → V_eq = nan ± nan (R²=0.9968)
+Schwartz Raw: V_eq = -0.034 mL, R² = 0.9671, k = 0.000, Zone = 0-8
+Schwartz Opt: V_eq = nan mL, R² = 0.9960, k = 1.113, Zone = 0-8
+  Trimmed to 9 points → V_eq = nan ± nan (R²=0.9960)
+Schwartz Raw: V_eq = -0.025 mL, R² = 0.9746, k = 0.000, Zone = 0-7
+Schwartz Opt: V_eq = nan mL, R² = 0.9954, k = 1.293, Zone = 0-7
+  Trimmed to 8 points → V_eq = nan ± nan (R²=0.9954)
+Schwartz Raw: V_eq = -0.018 mL, R² = 0.9786, k = 0.000, Zone = 0-6
+Schwartz Opt: V_eq = nan mL, R² = 0.9988, k = 1.589, Zone = 0-6
+  Trimmed to 7 points → V_eq = nan ± nan (R²=0.9988)
+Schwartz Raw: V_eq = -0.012 mL, R² = 0.9869, k = 0.000, Zone = 0-5
+Schwartz Opt: V_eq = nan mL, R² = 0.9982, k = 1.365, Zone = 0-5
+  Trimmed to 6 points → V_eq = nan ± nan (R²=0.9982)
+Schwartz Raw: V_eq = -0.007 mL, R² = 0.9908, k = 0.000, Zone = 0-4
+Schwartz Opt: V_eq = 1.080 mL, R² = 0.9997, k = 2.057, Zone = 0-5
+  Trimmed to 5 points → V_eq = 1.080 ± 0.010 (R²=0.9997)
+Threshold volume applied: 4.0 mL (based on earliest 4.35 mL)
+Development summary plot saved: output/development_convergence_volume.png
+Mode 'method_development' complete.
