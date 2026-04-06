@@ -46,7 +46,7 @@ def parse_args():
     parser.add_argument('--r2-min', type=float, default=0.09995,
                         help='Minimum R² for acceptable fit (default: 0.9995)')
     parser.add_argument('--unc-max', type=float, default=10.01,
-                        help='Maximum allowed uncertainty on V_eq in mL (default: 0.01)')
+                        help='Maximum allowed uncertainty on V_eq in mL (default: 0.02)')
     parser.add_argument('--veq-tolerance', type=float, default=0.01,
                         help='Maximum allowed deviation from final V_eq in mL (default: 0.01)')
     parser.add_argument('--stability-window', type=int, default=3,

@@ -33,6 +33,7 @@
 
 
 \usepackage{epstopdf}%This line makes .eps figures into .pdf - please comment out if not required.
+\usepackage{multirow}
 
 \definecolor{cream}{RGB}{222,217,201}
 \begin{document}
@@ -118,7 +119,7 @@
 \sffamily
 \begin{tabular}{m{4.5cm} p{13.5cm} }
 
-\includegraphics{head_foot/DOI} & \noindent\LARGE{\textbf{A Green, Reagent-Saving Analytical Strategy for Equivalence Point Determination in Potentiometric Titrations via Gran and Schwartz Linearization$^\dag$}} \\%Article title goes here instead of the text "This is the title"
+\includegraphics{head_foot/DOI} & \noindent\LARGE{\textbf{A Green, Reagent-Saving Analytical Strategy for Equivalence Point Determination in Potentiometric Titrations via Gran and Schwartz Linearization$^\dag$}} \\%Article title goes here instead of the text "This is the title
  & \vspace{0.3cm} \\
 
  & \noindent\large{Samuele Giani,$^{\ast}$\textit{$^{a}$} and Cosimo A. De Caro,$^{\ast}$\textit{$^{b}$}} \\%Author names go here instead of "Full name", etc.
@@ -171,7 +172,7 @@ Implemented in the open-source Python tool \textsf{GranTED} (available at \href{
 
 \section*{Introduction}
 
-Titration is a quantitative chemical analysis method for determining the concentration of a substance (the analyte) in solution. A reagent of known concentration (the titrant) is gradually added to the analyte until the reaction is complete. The endpoint is detected using a color indication or instrumental measurements (i.e. potential $E$ or pH). Traditional methods rely on identifying the inflection point in $E$ or pH versus volume ($V$) curves, but these often suffer from low accuracy in systems with small potential breaks, such as weak electrolytes or asymmetric curves. To address this, Gran introduced differential plotting of $\Delta V/\Delta E$ or $\Delta V/\Delta\mathrm{pH}$ versus $V$ in 1950,\cite{Gran1950} yielding near-linear segments intersecting at the equivalence point (EQP). In 1952, Gran refined this with antilogarithmic transformations (e.g., $(V_0 + V) \times 10^{-\mathrm{pH}}$ versus $V$),\cite{Gran1952} producing straight lines for easier extrapolation. Schwartz further advanced Gran methodology in 1987 by incorporating corrections for significant \ce{[H+]} or \ce{[OH-]} perturbing effects, enabling analysis of challenging cases.\cite{Schwartz1987}. A comprehensive study on these evaluation techniques by means of simulations and experimental tests has been presented 2018 by Martin et al.\cite{Martin2018}.
+Titration is a quantitative chemical analysis method for determining the concentration of a substance (the analyte) in solution. A reagent of known concentration (the titrant) is gradually added to the analyte until the reaction is complete. The endpoint is detected using a color indication or instrumental measurements (i.e. potential $E$ or pH). Traditional methods rely on identifying the inflection point in $E$ or pH versus volume ($V$) curves, but these often suffer from low accuracy in systems with small potential breaks, such as weak electrolytes or asymmetric curves. To address this, Gran introduced differential plotting of $\Delta V/\Delta E$ or $\Delta V/\Delta\mathrm{pH}$ versus $V$ in 1950,\cite{Gran1950} yielding near-linear segments intersecting at the equivalence point (EQP). In 1952, Gran refined this with antilogarithmic transformations (e.g., $(V_0 + V) \times 10^{-\mathrm{pH}}$ versus $V$),\cite{Gran1952} producing straight lines for easier extrapolation. Schwartz further advanced Gran methodology in 1987 by incorporating corrections for significant \ce{[H+]} or \ce{[OH-]} perturbing effects, enabling analysis of challenging cases.\cite{Schwartz1987} A comprehensive study on these evaluation techniques by means of simulations and experimental tests has been presented 2018 by Martin et al.\cite{Martin}
 
 Despite these methodological improvements, potentiometric titrations remain resource-intensive, requiring additional curve acquisitions after the EQP that consume excess titrants, generating unnecessary waste contrary to green chemistry principles (waste prevention and safer solvents).\cite{Anastas1998} In this work, we present a sustainable two-stage analytical strategy that minimises solvent use while leveraging Gran and Schwartz linearizations for accurate and precise EQP determination.
 
@@ -201,7 +202,7 @@ Detailed equations, raw data, and algorithm pseudocode are available in the Elec
 
 \section*{Results and Discussion}
 
-\subsection*{Method Development: Optimization of the Earliest Acceptable Point Volume}
+\subsection*{Method Development: Optimization of the Earliest Acceptable Point Volume and Equivalence Point Determination by Gran--Schwartz Linearization}
 
 The sustainable analytical strategy begins with a single conventional titration performed to establish the baseline $pH$--$V$ curve. For the titration of 5\,mL of 0.1\,M \ce{TRIS} (diluted in 60\,mL deionized water) with 0.100\,M \ce{HCl}, the resulting sigmoidal curve (Figure~\ref{fig:titrations}a) showed the expected behaviour of a weak base--strong acid system ($pK_a(\ce{TRIS})\approx 8.1$). Application of the Schwartz-modified Gran transformation, $(V + k) \times 10^{-\mathrm{pH}}$ versus titrant volume (Figure~\ref{fig:titrations}b), successfully linearized the pre-equivalence region. The linear segment (shaded) spans approximately 2.5--5.0\,mL.
 
@@ -214,15 +215,13 @@ The sustainable analytical strategy begins with a single conventional titration 
   \label{fig:titrations}
 \end{figure*}
 
-\subsection*{Equivalence Point Determination by Gran--Schwartz Linearization}
-
 Determination from the pre-EQP linear fit provides the equivalence point without requiring full post-equivalence data. In the initial titration the Schwartz plot (Figure~\ref{fig:titrations}b) intersects the $V$-axis at 5.002\,mL (theoretical EQP), with a standard error of $\pm 0.005$\,mL propagated from linear regression. This aligns with Gran's theory for transforming curved branches into straight lines, enhanced by Schwartz's electroneutrality corrections to account for \ce{[H+]} dominance in the buffer region. The optimal earliest acceptable point volume ensures that only the most reliable pre-EQP data are used for extrapolation.
 
 Automated linear-region identification combined with backward data trimming revealed an \emph{optimal earliest acceptable point volume} of 4.40\,mL (Table~\ref{tab:trimming}). This value satisfied all three user-tunable criteria ($R^2 \ge 0.9995$, standard error of the extrapolated EQP $\le 0.01$\,mL, and agreement with the full-dataset EQP within $\pm 0.01$\,mL) and was adopted as the stopping criterion for all subsequent titrations. The chosen point lies safely before the equivalence point, enabling reliable extrapolation while substantially reducing titrant consumption, enabling reliable extrapolation akin to Gran's functions intersections. This approach substantially reduces titrant consumption compared to conventional full titrations while maintaining the ability to determine the equivalence point through Gran--Schwartz linear extrapolation.
 
 \begin{table}[h]
 \small
-  \caption{Gran--Schwartz results in the vicinity of the optimal earliest acceptable point volume (4.40\,mL, in bold). Full EQP corresponds to 5.007\,mL. The selected volume meets all acceptance criteria with excellent linearity and low uncertainty. Except for $R^2$, all values in\,mL}
+  \caption{Gran--Schwartz results for the \ce{TRIS}/\ce{HCl} system in the vicinity of the optimal earliest acceptable point volume (4.40\,mL, in bold). Full EQP corresponds to 5.007\,mL. The selected volume meets all acceptance criteria (e.g. deviation from full EQP smaller than 0.01\,mL) with excellent linearity and low uncertainty. Except for $R^2$, all values in\,mL}
   \label{tab:trimming}
   \begin{tabular*}{0.48\textwidth}{@{\extracolsep{\fill}}lcccc}
     \hline
@@ -240,22 +239,55 @@ Automated linear-region identification combined with backward data trimming reve
   \end{tabular*}
 \end{table}
 
-\subsection*{Method Validation and Performance: Comparison with Conventional Inflection-Point Method}
+Subsequent titrations performed up to the optimal earliest acceptable point volume (Figure~\ref{fig:titrations}c) confirmed the strategy's accuracy. The corresponding Schwartz plot (Figure~\ref{fig:titrations}d) mirrors the linearisation and extrapolates to an EQP of 5.002\,mL ($\pm 0.005$\,mL), matching the conventional inflection-point value within experimental error.
 
-Subsequent titrations performed up to the optimal earliest acceptable point volume (Figure~\ref{fig:titrations}c) confirmed the strategy's accuracy. The corresponding Schwartz plot (Figure~\ref{fig:titrations}d) mirrors the dynamic linearization and extrapolates to an EQP of 5.002\,mL ($\pm 0.005$\,mL), matching the conventional inflection-point value within experimental error.
+\subsection*{Method Validation and Performance: Comparison with Conventional Inflection Point Method}
 
-Across $n=6$ replicates, repeatability is excellent: the standard deviation for EQPs obtained with the optimised early-stop protocol (0.002\,mL) is even lower than that obtained with conventional full titrations (0.005\,mL): this demonstrates robustness against volume variability. The method yields precise EQPs even in noisy data, validating the practical utility of the tunable early-stop criterion.
+Subsequent titrations performed up to the optimal earliest acceptable point volume confirmed the strategy's accuracy for both systems studied. For the \ce{TRIS}/\ce{HCl} (aq) and \ce{KHP}/\ce{NaOH} (aq) titrations, the corresponding Schwartz-modified Gran plots gives determined EQP values that matched the conventional inflection-point results within threshold for the stopping criterion (Table~\ref{tab:validation}).
+
+Across $n=6$ replicates per method and per system, repeatability was excellent. The standard deviation obtained with the optimised early-stop protocol was consistent with the chosen threshold for stopping, demonstrating robustness against volume variability and validating the practical utility of the tunable early-stop criterion.
+
+\begin{table}[h]
+\small
+  \caption{Comparison of equivalence point (EQP) determination by conventional inflection-point method (post-EQP) and Gran--Schwartz linear extrapolation stopped at the optimal earliest acceptable point volume corresponding to the indicated deviation from full EQP. Results are mean $\pm$ SD ($n=6$ replicates). All values are in\,mL}
+  \label{tab:validation}
+  \begin{tabular*}{0.48\textwidth}{@{\extracolsep{\fill}}lcccc}
+    \hline
+     & & \multicolumn{3}{c}{Gran--Schwartz} \\
+     & post-EQP & \phantom{ $\pm$}0.01\phantom{0} & \phantom{ $\pm$}0.02\phantom{0} & \phantom{ $\pm$}0.05\phantom{0} \\
+    \hline
+    \multirow{2}{3em}{\ce{TRIS}/\ce{HCl}} & \phantom{ $\pm$}5.015 &  \phantom{ $\pm$}4.990 &  \phantom{ $\pm$}5.005 &  \phantom{ $\pm$}4.992 \\
+    & $\pm$ 0.001 & $\pm$ 0.010 & $\pm$ 0.015 & $\pm$ 0.064 \\
+    %\hline
+    \multirow{2}{3em}{\ce{KHP}/\ce{NaOH}} & \phantom{ $\pm$}5.032 & \phantom{ $\pm$}5.045 & \phantom{ $\pm$}5.051 & \phantom{ $\pm$}5.066 \\
+    & $\pm$ 0.001 & $\pm$ 0.003 & $\pm$ 0.015 & $\pm$ 0.041 \\
+    \hline
+  \end{tabular*}
+\end{table}
 
 \subsection*{Green Chemistry Metrics and Sustainability Assessment}
 
-Early termination at the optimal earliest acceptable point volume yields systematic titrant savings, quantified as 1\,mL versus the EQP and 1.5\,mL versus the full illustrative endpoint per analysis (Figure~2; 20\,\% and 27\,\% reductions, respectively). For routine laboratories performing multiple replicates, this translates into substantial waste minimisation. The approach directly embodies Green Chemistry Principle 1 (prevention) by avoiding unnecessary full runs and Principle 5 (safer/less solvents) through reduced \ce{HCl} (or \ce{NaOH} exposure by lowering waste production.\cite{Anastas1998} Compared with traditional methods that require titrant in excess, the protocol decreases resource consumption without compromising accuracy or precision. Implemented in the open-source Python tool \textsf{GranTED}, it automates method development, validation, and routine application, promoting adoption in educational, analytical laboratory and industrial contexts concretizing sustainability.
+Early termination at the optimal earliest acceptable point volume yields systematic titrant savings. As shown in Figure~\ref{fig:volume_savings}, stopping titrations according to the different acceptance criteria (0.01, 0.02 and 0.05\,mL difference from the full-dataset EQP) results in savings of approximately 10\% up to 30\% versus the EQP and approximately 5\% more per case considering the full endpoint of the titration (0.5\,mL post-EQP) per analysis for both the \ce{TRIS}/\ce{HCl} and \ce{KHP}/\ce{NaOH} systems. This corresponds to corresponding to a bare minimum of 12.07\% and 10.80\% reductions respectively. For routine laboratories performing multiple replicates, this translates into substantial waste minimisation.
+
+\begin{figure}[h]
+\centering
+  \includegraphics[width=0.48\textwidth]{deviation_histogram.pdf}
+  \caption{Solvent savings achieved by stopping at the optimal earliest acceptable point volume using different acceptance criteria (0.01, 0.02 and 0.05\,mL difference from the full-dataset EQP). Results are shown for both \ce{TRIS}/\ce{HCl} and \ce{KHP}/\ce{NaOH} systems ($n=6$ replicates each) and compared against the equivalence point and full titration endpoint}
+  \label{fig:volume_savings}
+\end{figure}
+
+The approach directly embodies Green Chemistry Principle 1 (prevention) by avoiding unnecessary full runs and Principle 5 (safer/less solvents) through reduced \ce{HCl} or \ce{NaOH} exposure by lowering waste production.\cite{Anastas1998} Compared with traditional methods that require titrant in excess, the protocol decreases resource consumption without compromising accuracy or precision. Implemented in the open-source Python tool \textsf{GranTED}, it automates method development, validation, and routine application, promoting the adoption of more sustainable practices in educational, analytical laboratory, and industrial contexts.
+
 
 \subsection*{Conclusions}
 
-In conclusion, we have developed a green analytical strategy for potentiometric EQP determination that leverages Gran–Schwartz linearizations to enable truncation at the pre-EQP linear region's central point, systematically reducing solvent/titrant consumption by $\approx$ 20\% savings. Applied to TRIS-\ce{HCl} titrations, it delivers EQPs with repeatability (SD ± 0.002\,mL, n=6) comparable to conventional methods, aligning with green chemistry Principles 1, and 5 through waste prevention and resource efficiency. This protocol, implemented in open-source \textsf{GranTED} software, offers a sustainable alternative for routine lab and educational applications, with potential extensions to complex mixtures, environmental samples, as well as automated high-throughput systems.
+In conclusion, we have developed a green analytical strategy for potentiometric equivalence point (EQP) determination that leverages Gran--Schwartz linearizations to enable titration stopping at the \emph{optimal earliest acceptable point volume}, automatically selected according to user-defined criteria (most critically, deviation from the full-dataset EQP smaller than a chosen threshold). 
 
-These results demonstrate that reliable Gran--Schwartz extrapolation can be achieved using only a fraction of the titrant typically consumed in conventional potentiometric titrations, without compromising analytical accuracy or precision.
+Applied to both \ce{TRIS}/\ce{HCl} and \ce{KHP}/\ce{NaOH} aqueous titrations, the protocol delivers highly repeatable EQPs (SD ranging from $\pm$0.001\,mL to circa $\pm$0.050\,mL, $n=6$, depending on the applied threshold) while systematically reducing solvent and titrant consumption by approximately 10--30\,\%. This approach aligns with Green Chemistry Principles 1 (prevention) and 5 (safer solvents) through substantial waste minimisation without compromising accuracy or precision.
 
+Furthermore, the same tunable criteria open the possibility for an \emph{online, direct forward approach} in which the titration is automatically terminated on-the-fly, during the titration itself, in a sample-driven manner, as soon as the Gran--Schwartz linear fit results satisfy the user-defined thresholds. This real-time adaptive termination would lead to the same solvent-saving benefits while enabling fully dynamic, adaptive titrations.
+
+Implemented in the open-source Python tool \textsf{GranTED}, the analytical strategy offers a practical and sustainable alternative for routine laboratory and educational applications, with straightforward extension to complex mixtures, environmental samples, and automated high-throughput systems. These results demonstrate that reliable Gran--Schwartz extrapolation can be achieved using only a fraction of the titrant typically consumed in conventional potentiometric titrations, without compromising analytical accuracy or precision.
 
 \section*{Author Contributions}
 

@@ -21,7 +21,7 @@ def run_mode(
     verbose: bool = False,
     r2_min: float = 0.9995,
     unc_max: float = 0.01,
-    veq_tolerance: float = 0.01,
+    veq_tolerance: float = 0.02,
     stability_window: int = 3,
     trim_forward: bool = False
 ) -> Dict[str, Any]:
