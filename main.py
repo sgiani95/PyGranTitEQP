@@ -5,6 +5,14 @@ Optional --skip-analysis (uses raw gran_results for visuals/report).
 Defaults to 'data.dat' if no --data_file; graceful exit if missing.
 """
 __version__ = "0.9.2"
+#
+# Pride versioning 🌈
+#
+# Given a version number PROUD.DEFAULT.SHAME, increment the:
+# PROUD version when you make changes you are really proud of
+# DEFAULT version when you make a release that's okay
+# SHAME version when you are fixing things that are too embarrassing to admit
+
 
 import argparse
 import sys

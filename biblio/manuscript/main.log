@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.4.5)  5 APR 2026 08:08
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.4.5)  8 APR 2026 17:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -549,8 +549,7 @@ Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
 \multirow@cntb=\count299
 \multirow@dima=\skip82
 \bigstrutjot=\dimen184
-)
-No file main.aux.
+) (./main.aux)
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 39.
@@ -573,6 +572,7 @@ LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 39.
 LaTeX Font Info:    ... okay on input line 39.
 
 Package chemgreek Info: Activating mapping `default' on line 39.
+
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -644,6 +644,8 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 39.
 LaTeX Info: Redefining \pageref on input line 39.
 LaTeX Info: Redefining \nameref on input line 39.
+
+(./main.out) (./main.out)
 \@outlinefile=\write3
 \openout3 = `main.out'.
 
@@ -767,138 +769,82 @@ LaTeX Font Info:    Trying to load font information for TS1+bch on input line 1
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1bch.fd
 File: ts1bch.fd 2004/10/18 font definitions for TS1/bch.
 )
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 1
-65.
+90.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-
-LaTeX Font Warning: Font shape `T1/cmtt/b/n' undefined
-(Font)              using `T1/cmtt/m/n' instead on input line 165.
-
-
-Package natbib Warning: Citation `Gran1950' on page 1 undefined on input line 1
-75.
+Underfull \hbox (badness 3417) in paragraph at lines 190--194
+\T1/bch/m/n/9 Python toolkit at []\T1/cmtt/m/n/9 https://github.com/sgiani95/Gr
+anTED/[]\T1/bch/m/n/9 ,
+ []
 
 
-Package natbib Warning: Citation `Gran1952' on page 1 undefined on input line 1
-75.
-
-
-Package natbib Warning: Citation `Schwartz1987' on page 1 undefined on input li
-ne 175.
-
-
-Package natbib Warning: Citation `Martin' on page 1 undefined on input line 175
-.
-
-
-Overfull \vbox (0.63976pt too high) has occurred while \output is active []
-
-
-
-Package natbib Warning: Citation `Anastas1998' on page 1 undefined on input lin
-e 177.
+Underfull \vbox (badness 1189) has occurred while \output is active []
 
 
 
 pdfTeX warning: pdflatex (file ./head_foot/LF.pdf): PDF inclusion: found PDF ve
 rsion <1.6>, but at most version <1.5> allowed
-<head_foot/LF.pdf, id=10, 154.53032pt x 8.28976pt>
+<head_foot/LF.pdf, id=16, 154.53032pt x 8.28976pt>
 File: head_foot/LF.pdf Graphic file (type pdf)
 <use head_foot/LF.pdf>
-Package pdftex.def Info: head_foot/LF.pdf  used on input line 180.
+Package pdftex.def Info: head_foot/LF.pdf  used on input line 197.
 (pdftex.def)             Requested size: 167.78156pt x 9.0pt.
-<head_foot/RF.pdf, id=11, 90.45795pt x 7.4679pt>
+<head_foot/RF.pdf, id=17, 90.45795pt x 7.4679pt>
 File: head_foot/RF.pdf Graphic file (type pdf)
 <use head_foot/RF.pdf>
-Package pdftex.def Info: head_foot/RF.pdf  used on input line 180.
+Package pdftex.def Info: head_foot/RF.pdf  used on input line 197.
 (pdftex.def)             Requested size: 90.4577pt x 7.46786pt.
-
-LaTeX Warning: Reference `LastPage' on page 1 undefined on input line 180.
-
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
  <./head_foot/journal_name.pdf> <./head_foot/RSC_LOGO_CMYK.pdf> <./head_foot/he
 ader_bar.pdf> <./head_foot/DOI.pdf> <./head_foot/dates.pdf> <./head_foot/LF.pdf
 > <./head_foot/RF.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 187--188
-\T1/bch/m/n/9 Tris(hydroxymethyl)aminomethane ($[]$, 99.97%, Merck
+Underfull \hbox (badness 3354) in paragraph at lines 202--214
+\T1/bch/m/n/9 Tris(hydroxymethyl)aminomethane ($[]$, [][][][][][] ) and
  []
 
-
-Underfull \hbox (badness 6978) in paragraph at lines 187--188
-\T1/bch/m/n/9 Sigma-Aldrich) and potas-sium hy-dro-gen ph-tha-late ($[]$,
- []
-
-
-Underfull \hbox (badness 1072) in paragraph at lines 187--188
-\T1/bch/m/n/9 0.1 M, Titri-pac Merck Mil-li-pore). Aque-ous so-lu-tions were
- []
-
-
-LaTeX Warning: Reference `fig:titrations' on page 2 undefined on input line 207
-.
-
-
-LaTeX Warning: Reference `fig:titrations' on page 2 undefined on input line 207
-.
-
-<plots_ab.png, id=96, 706.5597pt x 707.2824pt>
-File: plots_ab.png Graphic file (type png)
-<use plots_ab.png>
-Package pdftex.def Info: plots_ab.png  used on input line 211.
-(pdftex.def)             Requested size: 253.88737pt x 254.1466pt.
-<plots_cd.png, id=98, 706.5597pt x 707.2824pt>
-File: plots_cd.png Graphic file (type png)
-<use plots_cd.png>
-Package pdftex.def Info: plots_cd.png  used on input line 212.
-(pdftex.def)             Requested size: 253.88737pt x 254.1466pt.
+<plots_ab.pdf, id=108, 708.72371pt x 707.13373pt>
+File: plots_ab.pdf Graphic file (type pdf)
+<use plots_ab.pdf>
+Package pdftex.def Info: plots_ab.pdf  used on input line 273.
+(pdftex.def)             Requested size: 253.88737pt x 253.31631pt.
+<plots_cd.pdf, id=109, 708.72371pt x 707.13373pt>
+File: plots_cd.pdf Graphic file (type pdf)
+<use plots_cd.pdf>
+Package pdftex.def Info: plots_cd.pdf  used on input line 274.
+(pdftex.def)             Requested size: 253.88737pt x 253.31631pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 214.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 279.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-LaTeX Warning: Reference `fig:titrations' on page 2 undefined on input line 218
-.
+Underfull \hbox (badness 3281) in paragraph at lines 306--307
+[]\T1/bch/m/n/9 This trimming-based op-ti-mi-sa-tion con-sti-tutes the cen-tral
 
-
-LaTeX Warning: Reference `tab:trimming' on page 2 undefined on input line 220.
-
-
-LaTeX Warning: Reference `fig:titrations' on page 2 undefined on input line 242
-.
-
-
-LaTeX Warning: Reference `fig:titrations' on page 2 undefined on input line 242
-.
-
-
-LaTeX Warning: Reference `LastPage' on page 2 undefined on input line 243.
+ []
 
 File: head_foot/RF.pdf Graphic file (type pdf)
 <use head_foot/RF.pdf>
-Package pdftex.def Info: head_foot/RF.pdf  used on input line 243.
+Package pdftex.def Info: head_foot/RF.pdf  used on input line 307.
 (pdftex.def)             Requested size: 90.4577pt x 7.46786pt.
 File: head_foot/LF.pdf Graphic file (type pdf)
 <use head_foot/LF.pdf>
-Package pdftex.def Info: head_foot/LF.pdf  used on input line 243.
+Package pdftex.def Info: head_foot/LF.pdf  used on input line 307.
 (pdftex.def)             Requested size: 167.78156pt x 9.0pt.
 [2]
-
-LaTeX Warning: Reference `tab:validation' on page 3 undefined on input line 246
-.
-
-
-Overfull \hbox (10.04797pt too wide) in paragraph at lines 259--259
+Overfull \hbox (10.04797pt too wide) in paragraph at lines 331--331
 []|$[]$\T1/bch/m/n/8 /$[]$|  
  []
 
 
-Overfull \hbox (16.61595pt too wide) in paragraph at lines 262--262
+Overfull \hbox (16.61595pt too wide) in paragraph at lines 334--334
 []|$[]$\T1/bch/m/n/8 /$[]$|  
  []
 
@@ -906,23 +852,7 @@ Overfull \hbox (16.61595pt too wide) in paragraph at lines 262--262
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-LaTeX Warning: Reference `fig:volume_savings' on page 3 undefined on input line
- 270.
-
-<deviation_histogram.pdf, id=105, 539.98723pt x 404.94423pt>
-File: deviation_histogram.pdf Graphic file (type pdf)
-<use deviation_histogram.pdf>
-Package pdftex.def Info: deviation_histogram.pdf  used on input line 274.
-(pdftex.def)             Requested size: 253.88737pt x 190.39177pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-Package natbib Warning: Citation `Anastas1998' on page 3 undefined on input lin
-e 279.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 1584) has occurred while \output is active []
 
 
 Overfull \hbox (273.71552pt too wide) has occurred while \output is active
@@ -934,43 +864,61 @@ Overfull \vbox (6.00002pt too high) has occurred while \output is active []
 
 File: head_foot/LF.pdf Graphic file (type pdf)
 <use head_foot/LF.pdf>
-Package pdftex.def Info: head_foot/LF.pdf  used on input line 285.
+Package pdftex.def Info: head_foot/LF.pdf  used on input line 352.
 (pdftex.def)             Requested size: 167.78156pt x 9.0pt.
 File: head_foot/RF.pdf Graphic file (type pdf)
 <use head_foot/RF.pdf>
-Package pdftex.def Info: head_foot/RF.pdf  used on input line 285.
+Package pdftex.def Info: head_foot/RF.pdf  used on input line 352.
 (pdftex.def)             Requested size: 90.4577pt x 7.46786pt.
 
+[3 <./plots_ab.pdf> <./plots_cd.pdf>]
+<deviation_histogram.pdf, id=258, 545.55492pt x 404.94423pt>
+File: deviation_histogram.pdf Graphic file (type pdf)
+<use deviation_histogram.pdf>
+Package pdftex.def Info: deviation_histogram.pdf  used on input line 359.
+(pdftex.def)             Requested size: 253.88737pt x 188.45158pt.
 
-LaTeX Warning: Reference `LastPage' on page 3 undefined on input line 285.
-
-[3 <./plots_ab.png> <./plots_cd.png>]
-Underfull \hbox (badness 1527) in paragraph at lines 294--295
+Underfull \hbox (badness 1527) in paragraph at lines 393--395
 \T1/bch/m/n/9 S.G. and C.A.D.C. con-cep-tu-al-ized the study, de-vel-oped the
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \hbox (badness 10000) in paragraph at lines 406--407
+\T1/bch/m/n/9 The datasets sup-port-ing this ar-ti-cle are avail-able at
+ []
 
 
-No file main.bbl.
-
-Package natbib Warning: There were undefined citations.
-
-
-AED: lastpage setting LastPage
-
-LaTeX Warning: Reference `LastPage' on page 4 undefined on input line 328.
+Underfull \hbox (badness 3919) in paragraph at lines 406--407
+[]\T1/cmtt/m/n/9 https://github.com/sgiani95/GranTED/[] \T1/bch/m/n/9 or from t
+he cor-
+ []
 
 File: head_foot/RF.pdf Graphic file (type pdf)
 <use head_foot/RF.pdf>
-Package pdftex.def Info: head_foot/RF.pdf  used on input line 328.
+Package pdftex.def Info: head_foot/RF.pdf  used on input line 407.
 (pdftex.def)             Requested size: 90.4577pt x 7.46786pt.
 File: head_foot/LF.pdf Graphic file (type pdf)
 <use head_foot/LF.pdf>
-Package pdftex.def Info: head_foot/LF.pdf  used on input line 328.
+Package pdftex.def Info: head_foot/LF.pdf  used on input line 407.
 (pdftex.def)             Requested size: 167.78156pt x 9.0pt.
-[4 <./deviation_histogram.pdf>] (./main.aux)
+[4 <./deviation_histogram.pdf>]
+Overfull \hbox (135.6793pt too wide) in paragraph at lines 408--409
+[][][][][][][] 
+ []
+
+(./main.bbl) 
+AED: lastpage setting LastPage
+File: head_foot/LF.pdf Graphic file (type pdf)
+<use head_foot/LF.pdf>
+Package pdftex.def Info: head_foot/LF.pdf  used on input line 419.
+(pdftex.def)             Requested size: 167.78156pt x 9.0pt.
+File: head_foot/RF.pdf Graphic file (type pdf)
+<use head_foot/RF.pdf>
+Package pdftex.def Info: head_foot/RF.pdf  used on input line 419.
+(pdftex.def)             Requested size: 90.4577pt x 7.46786pt.
+[5
+
+] (./main.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.6pt have occurred.
@@ -978,54 +926,37 @@ LaTeX Font Warning: Size substitutions with differences
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  D41D8CD98F00B204E9800998ECF8427E;0.
- )
-(\end occurred inside a group at level 1)
-
-### simple group (level 1) entered at line 159 ({)
-### bottom level 
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
+ ) 
 Here is how much of TeX's memory you used:
- 15386 strings out of 480171
- 257612 string characters out of 5894490
- 596660 words of memory out of 5000000
- 33005 multiletter control sequences out of 15000+600000
- 560815 words of font info for 166 fonts, out of 8000000 for 9000
+ 15429 strings out of 480171
+ 258452 string characters out of 5894490
+ 597773 words of memory out of 5000000
+ 33036 multiletter control sequences out of 15000+600000
+ 557286 words of font info for 162 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 69i,14n,78p,1381b,742s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/sgiani/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/
-ec/ecss0800.600pk> </home/sgiani/.texlive2021/texmf-var/fonts/pk/ljfour/jknappe
-n/ec/ecss0700.600pk>{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}
- </home/sgiani/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss1200.600p
-k> </home/sgiani/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt0900.60
-0pk> </home/sgiani/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0900.
-600pk> </home/sgiani/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss100
-0.600pk> </home/sgiani/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1
-440.600pk></usr/share/texlive/texmf-dist/fonts/type1/bitstrea/charter/bchb8a.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/bitstrea/charter/bchr8a.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/bitstrea/charter/bchri8a.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/t
-imes/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pf
-b>
-Output written on main.pdf (4 pages, 921438 bytes).
+ 69i,14n,78p,852b,674s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/sgiani/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.60
+0pk>{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc} </home/sgiani/.
+texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0700.600pk> </home/sgiani
+/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt0900.600pk> </home/sgia
+ni/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss1200.600pk> </home/sg
+iani/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0900.600pk> </home/
+sgiani/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss1000.600pk> </hom
+e/sgiani/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1440.600pk></us
+r/share/texlive/texmf-dist/fonts/type1/bitstrea/charter/bchb8a.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/bitstrea/charter/bchr8a.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/bitstrea/charter/bchri8a.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
+/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (5 pages, 464716 bytes).
 PDF statistics:
- 463 PDF objects out of 1000 (max. 8388607)
- 118 compressed objects within 2 object streams
- 9 named destinations out of 1000 (max. 500000)
+ 619 PDF objects out of 1000 (max. 8388607)
+ 156 compressed objects within 2 object streams
+ 17 named destinations out of 1000 (max. 500000)
  51 words of extra memory for PDF output out of 10000 (max. 10000000)
 
