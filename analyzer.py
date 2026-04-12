@@ -1,7 +1,7 @@
 """
 analyzer.py: Validated equivalence point detection via Gran/Schwartz linearization.
 Algorithm preserved: Smoothing → deriv → candidates → rank/eval → shrink (raw) → opt k → re-shrink (opt).
-Outputs nested metrics for downstream (gran/schwartz raw/opt with V_eq, r2, k, zones).
+Outputs nested metrics for downstream (gran/schwartz raw/opt with V_eq, r2, k, zones). 
 """
 
 import numpy as np
