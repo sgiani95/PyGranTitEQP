@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "GranTED: Gran/Schwartz Titration Analysis Tool"
+authors:
+  - family-names: "Giani"
+    given-names: "Samuele"
+    orcid: "0000-0002-4711-3761"
+version: "0.9.2"
+date-released: "2026-03-30"
+url: "https://github.com/sgiani95/GranTED"
+repository-code: "https://github.com/sgiani95/GranTED"
+license: "Apache-2.0"
+keywords:
+  - titration
+  - gran method
+  - schwartz method
+  - potentiometric titration
+  - equivalence point
+  - analytical chemistry
+  - green chemistry
+  - uncertainty estimation
+abstract: >
+  GranTED is an open-source Python package for automated analysis of potentiometric titration data using the Gran and Schwartz methods. 
+  It provides robust linear region detection, equivalence point calculation with uncertainty estimation, 
+  and advanced diagnostic tools particularly useful for method development and validation in analytical chemistry.
