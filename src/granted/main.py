@@ -21,12 +21,14 @@ from pathlib import Path
 import numpy as np
 
 # Core imports
-import data_io
-import preprocess
-from gran_functions import compute_gran_functions
-import analyzer
-import visualizer
-import reporter
+from granted import data_io
+from granted import preprocess
+from granted.gran_functions import compute_gran_functions
+from granted import analyzer
+from granted import visualizer
+from granted import reporter
+from granted.modes import run_mode
+
 
 def parse_args():
     """Parse CLI arguments."""
@@ -152,7 +154,6 @@ def main():
         analysis_results = gran_results
 
     # Step 5: Mode orchestration
-    from modes import run_mode
 
     mode_results = run_mode(
         mode=args.mode,

@@ -1,0 +1,3 @@
+[console_scripts]
+granted = granted.main:main
+

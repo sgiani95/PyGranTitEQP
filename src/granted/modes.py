@@ -8,9 +8,9 @@ from typing import Dict, Any, List, Tuple
 import numpy as np
 import pandas as pd
 
-import visualizer
-import reporter
-import analyzer
+from granted import visualizer
+from granted import reporter
+from granted import analyzer
 
 
 def run_mode(

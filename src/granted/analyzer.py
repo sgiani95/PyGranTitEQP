@@ -9,7 +9,7 @@ import pandas as pd
 from scipy.stats import linregress, t
 from scipy.signal import savgol_filter
 from scipy.optimize import minimize_scalar
-from gran_functions import compute_gran_functions
+from granted.gran_functions import compute_gran_functions
 from typing import Tuple, Dict, Any, Callable
 
 
