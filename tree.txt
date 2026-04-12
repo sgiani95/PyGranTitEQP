@@ -1,0 +1,39 @@
+GranTED/
+├── README.md                  # Main landing page (installation, usage, citation, badges)
+├── LICENSE                    # Apache License 2.0
+├── CITATION.cff               # Academic citation file (Zenodo/RSC compatible)
+├── pyproject.toml             # Modern packaging configuration (no setup.py needed)
+├── requirements.txt           # Runtime dependencies
+├── .gitignore
+├── Makefile                   # Optional: common commands (test, build, clean)
+│
+├── src/
+│   └── granted/              # Actual Python package
+│       ├── __init__.py
+│       ├── main.py
+│       ├── modes.py
+│       ├── analyzer.py
+│       ├── visualizer.py
+│       ├── reporter.py
+│       ├── gran_functions.py
+│       ├── preprocess.py
+│       ├── data_io.py
+│       └── version.py         # Central __version__
+│
+├── notebooks/                 # Future Jupyter notebooks
+│   ├── 01_basic_analysis.ipynb
+│   ├── 02_method_development.ipynb
+│   └── 03_validation_example.ipynb
+│
+├── tests/                     # Future unit tests
+│   ├── __init__.py
+│   ├── test_analyzer.py
+│   ├── test_visualizer.py
+│   └── conftest.py
+│
+├── data/                      # Small example datasets (or .gitignore large files)
+├── output/                    # .gitignore (generated plots & reports)
+├── docs/                      # Optional future documentation (Sphinx)
+└── papers/                    # Manuscripts-related files (figures, supplementary)
+└── TMP/                       # Temporary files
+
