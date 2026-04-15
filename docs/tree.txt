@@ -35,5 +35,3 @@ GranTED/
 ├── output/                    # .gitignore (generated plots & reports)
 ├── docs/                      # Optional future documentation (Sphinx)
 └── papers/                    # Manuscripts-related files (figures, supplementary)
-└── TMP/                       # Temporary files
-
