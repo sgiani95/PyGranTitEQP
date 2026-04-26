@@ -13,6 +13,7 @@ import numpy as np
 from typing import Dict, Any
 from granted import main
 
+
 def generate_pdf_report(results: Dict[str, Any], df: pd.DataFrame, params: Dict[str, Any], output_dir: Path) -> str:
     """
     Generate PDF report with title and metrics table.
@@ -134,6 +135,7 @@ def generate_pdf_report(results: Dict[str, Any], df: pd.DataFrame, params: Dict[
     doc.build(story)
     return str(pdf_filename)
 
+
 def generate_csv_report1(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path) -> str:
     """
     Generate simple CSV report with the requested format:
@@ -181,6 +183,7 @@ def generate_csv_report1(df: pd.DataFrame, params: Dict[str, Any], results: Dict
         writer.writerows(csv_data)
 
     return str(csv_filename)
+
 
 def generate_csv_report2(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path) -> str:
     """
@@ -230,6 +233,7 @@ def generate_csv_report2(df: pd.DataFrame, params: Dict[str, Any], results: Dict
 
     return str(csv_filename)
 
+
 def generate_csv_report3(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path) -> str:
     """
     Generate simple CSV report with the requested format:
@@ -277,6 +281,7 @@ def generate_csv_report3(df: pd.DataFrame, params: Dict[str, Any], results: Dict
         writer.writerows(csv_data)
 
     return str(csv_filename)
+
 
 def generate_csv_report4(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path) -> str:
     """

@@ -25,11 +25,14 @@ GranTED/
 │   ├── 02_method_development.ipynb
 │   └── 03_validation_example.ipynb
 │
-├── tests/                     # Future unit tests
+├── tests/
 │   ├── __init__.py
-│   ├── test_analyzer.py
+│   ├── test_analyzer.py          # Core tests
 │   ├── test_visualizer.py
-│   └── conftest.py
+│   ├── test_modes.py
+│   ├── test_gran_functions.py
+│   └── conftest.py               # Shared fixtures (optional)
+├── pytest.ini                    # Configuration
 │
 ├── data/                      # Small example datasets (or .gitignore large files)
 ├── output/                    # .gitignore (generated plots & reports)

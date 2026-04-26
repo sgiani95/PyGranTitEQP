@@ -7,7 +7,7 @@ setup(
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     author="sgiani95",
-    author_email="samuele.giani@gmail.com",        # ← change this
+    author_email="samuele.giani@gmail.com",
     url="https://github.com/sgiani95/GranTED",
     license="Apache-2.0",
     

@@ -1,6 +1,6 @@
 {
   "V": 50.0,
-  "C_B": 0.1,
+  "C": 0.1,
   "titration_type": "weak_acid",
   "strength": "weak",
   "r2_threshold": 0.95,

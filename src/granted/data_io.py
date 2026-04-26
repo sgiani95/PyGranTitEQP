@@ -11,31 +11,9 @@ Dependencies: pandas, pathlib.
 import pandas as pd
 from pathlib import Path
 from typing import Optional
+import numpy as np
 
 SUPPORTED_FORMATS = ['.dat', '.txt', '.csv', '.xlsx']
-
-
-"""
-data_io.py: Procedural module for loading and validating titration data files.
-Supports single file loading with automatic header detection.
-No classes, pure functions.
-"""
-
-import pandas as pd
-from pathlib import Path
-import numpy as np
-
-
-"""
-data_io.py: Procedural module for loading and validating titration data files.
-Supports single file loading with automatic header detection.
-No classes, pure functions.
-Keeps original validation rules exactly as provided.
-"""
-
-import pandas as pd
-from pathlib import Path
-import numpy as np
 
 
 def load_single_file(path: str | Path) -> pd.DataFrame | None:

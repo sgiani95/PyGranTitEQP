@@ -18,7 +18,6 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from typing import Dict, Any, Optional
-from scipy.signal import savgol_filter
 
 
 def setup_plot_style():
@@ -40,6 +39,7 @@ def setup_plot_style():
     # Grid style
     plt.rc('grid', alpha=0.3, linewidth=0.8)
 
+
 def _get_labels(titration_type: str = 'weak_acid') -> Dict[str, str]:
     """
     Returns the same title and ylabel for all cases (no type-specific differences).
@@ -53,8 +53,8 @@ def _get_labels(titration_type: str = 'weak_acid') -> Dict[str, str]:
 def plot_titration_curve(
     df: pd.DataFrame,
     params: Dict[str, Any],
-    output_dir: Path = Path('output'),
-    potential_original: np.ndarray | None = None
+    output_dir: Path=Path('output'),
+    potential_original: np.ndarray | None=None
 ):
     """
     Plot simple titration curve: pH vs volume (black line with points).
@@ -77,6 +77,7 @@ def plot_titration_curve(
     filename = output_dir / 'titration_curve.png'
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
+
 
 def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_dir: Path = Path('output')):
     """
@@ -166,11 +167,12 @@ def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_d
     ax3.legend()
     ax3.grid(True, alpha=0.3)
 
-    fig.suptitle('Gran/Schwartz Analysis', fontsize=14)
+    fig.suptitle('Gran-Schwartz Analysis', fontsize=14)
     fig.tight_layout()
     filename = output_dir / 'gran_schwartz.png'
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
+
 
 def plot_all_combined(
     df: pd.DataFrame,
@@ -240,6 +242,7 @@ def plot_all_combined(
     ###
     plt.close(fig)
 
+
 def plot_r2_vs_upper_bound(r2_vs_upper: list[tuple[float, float]], output_dir: Path = Path('output')):
     """
     Plot R2 at every trial step as function of the upper bound volume (raw Gran scouting).
@@ -262,6 +265,7 @@ def plot_r2_vs_upper_bound(r2_vs_upper: list[tuple[float, float]], output_dir: P
     filename = output_dir / 'r2_vs_upper_bound.png'
     plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close()
+
 
 def plot_gran_raw_with_search_diagnostic(results: Dict[str, Any], params: Dict[str, Any], output_dir: Path = Path('output')):
     """
@@ -330,6 +334,7 @@ def plot_gran_raw_with_search_diagnostic(results: Dict[str, Any], params: Dict[s
     filename = output_dir / 'gran_raw_with_search_diagnostic.png'
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
+
 
 def plot_schwartz_opt_with_search_diagnostic(
     results: Dict[str, Any],
@@ -408,6 +413,7 @@ def plot_schwartz_opt_with_search_diagnostic(
     filename = output_dir / 'schwartz_opt_with_search_diagnostic.png'
     fig.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close(fig)
+
 
 def plot_development_summary(
     collected: Dict[str, list],

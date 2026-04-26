@@ -18,10 +18,10 @@ def run_mode(
     df: pd.DataFrame,
     params: Dict[str, Any],
     output_dir: Path,
-    verbose: bool = False,
-    r2_min: float = 0.9995,
-    unc_max: float = 0.01,
-    veq_tolerance: float = 0.02,
+    verbose: bool=False,
+    r2_min: float=0.99,
+    unc_max: float=0.100,
+    veq_tolerance: float = 0.010,
     stability_window: int = 3,
     trim_forward: bool = False
 ) -> Dict[str, Any]:
@@ -33,7 +33,7 @@ def run_mode(
 
     df_work = df.copy()
 
-    # Run core analysis on full data first (to get reference V_eq)
+    # Run core analysis on full data first (to get reference EQP*)
     results = analyzer.analyze_gran(df_work, params, verbose=verbose)
 
     generated_files = []
@@ -111,6 +111,7 @@ def run_mode(
         'earliest_acceptable_n': earliest_n if mode == 'method_development' else None
     }
 
+
 def _trimming_analysis(
     df: pd.DataFrame,
     params: Dict[str, Any],
@@ -138,7 +139,7 @@ def _trimming_analysis(
     if trim_forward:
         range_iter = range(5, n_total + 1)
     else:
-        range_iter = range(n_total, 4, -1)   # backward: full → 5
+        range_iter = range(n_total, 4, -1)   # backward: full, 5
 
     for n in range_iter:
         df_trim = df.iloc[:n].copy()
@@ -186,7 +187,7 @@ def _trimming_analysis(
                 if consecutive_bad >= stability_window and earliest_n is None:
                     earliest_n = n + stability_window  # last good point before the bad streak
                     if verbose:
-                        print(f"→ Earliest acceptable point detected at n={earliest_n} "
+                        print(f" Earliest acceptable point detected at n={earliest_n} "
                               f"(V_eq ≈ {reference_veq:.3f}, bad streak of {stability_window} started)")
 
             if verbose:

@@ -21,24 +21,24 @@ def compute_gran_functions(df: pd.DataFrame, params: Dict[str, Any]) -> Dict[str
     volume = params['volume_array']
     potential = params['potential_array']  # Use preprocessed (flipped if base) array
     
-    # Nernst pH conversion (25°C, 59.16 mV/pH)
+    # Nernst pH conversion (25 °C, 59.16 mV/pH)
     pH = 7.0 - potential / 59.16
 
     # Initial volume (used in some formulas)
-    V0 = params.get('V', 25.0)
+    V_0 = params.get('V', 25.0)
 
     match titration_type:
         case 'acid_base':
-            # Weak-acid Gran/Schwartz (current implementation)
+            # Weak-acid Gran-Schwartz (current implementation)
             k = 0.0  # Fixed for Gran
 
-            # Gran: fixed g1 = v * 10^(-pH)
+            # Gran: fixed g1 = V * 10^(-pH)
             gran_func = lambda v, ph, k: v * np.power(10, -ph)
-            g1 = gran_func(volume, pH, k)
+            g1 = gran_func(volume, pH, k) # computed with k=0
 
-            # Schwartz: tunable gs = (v + k) * 10^(-pH)
+            # Schwartz: tunable gs = (V + k) * 10^(-pH)
             schwartz_func = lambda v, ph, k: (v + k) * np.power(10, -ph)
-            gs = schwartz_func(volume, pH, k)  # computed with k=0
+            gs = schwartz_func(volume, pH, k)
 
         case 'complexometric':
             raise NotImplementedError("Complexometric titration formulas not yet implemented")
@@ -75,7 +75,7 @@ if __name__ == "__main__":
         'potential': np.linspace(0, -200, 10)  # Simulated acid drop
     })
     test_params = {
-        'V': 25.0,
+        'V_0': 25.0,
         'volume_array': test_df['volume'].values,
         'potential_array': test_df['potential'].values,
         'titration_type': 'acid_base'
