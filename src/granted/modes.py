@@ -41,10 +41,9 @@ def run_mode(
     if mode == 'method_development':
         # Normal full-data plots
         visualizer.plot_titration_curve(df, params, output_dir=output_dir)
-        generated_files.append(output_dir / 'titration_curve.png')
-
+        generated_files.append(output_dir / 'titration_curve.pdf')
         visualizer.plot_gran_schwartz(results, params, output_dir=output_dir)
-        generated_files.append(output_dir / 'gran_schwartz.png')
+        generated_files.append(output_dir / 'gran_schwartz.pdf')
 
         # Iterative trimming + detection
         print("Development mode: performing backward trimming analysis...")
@@ -63,12 +62,12 @@ def run_mode(
             output_dir=output_dir, 
             full_volume=params['volume_array'],
             earliest_n=earliest_n,
-            reference_veq=reference_veq,      # now properly passed
+            reference_veq=reference_veq,
             r2_min=r2_min,
             unc_max=unc_max,
             veq_tolerance=veq_tolerance
         )
-        generated_files.append(output_dir / 'development_convergence_volume.png')
+        generated_files.append(output_dir / 'development_summary.pdf')
 
     elif mode == 'method_validation':
         visualizer.plot_all_combined(df_work, params, results, output_dir=output_dir)
@@ -79,12 +78,49 @@ def run_mode(
         generated_files.append(output_dir / 'all_combined.png')
 
     elif mode == 'method_debug':
+        # Use df for plots that need raw data, results for analysis plots
+        visualizer.plot_titration_curve(df, params, output_dir=output_dir)
+        generated_files.append(output_dir / 'titration_curve.pdf')
+
         visualizer.plot_gran_schwartz(results, params, output_dir=output_dir)
-        generated_files.append(output_dir / 'gran_schwartz.png')
+        generated_files.append(output_dir / 'gran_schwartz.pdf')
+
+        visualizer.plot_all_combined(df, params, results, output_dir=output_dir)
+        generated_files.append(output_dir / 'all_combined.pdf')
+
+        r2_history = results.get('initial_gran_diagnostics', {}).get('r2_vs_upper', [])
+        visualizer.plot_r2_vs_upper_bound(r2_history, output_dir=output_dir)
+        generated_files.append(output_dir / 'r2_vs_upper_bound.pdf')
+
         visualizer.plot_gran_raw_with_search_diagnostic(results, params, output_dir=output_dir)
-        generated_files.append(output_dir / 'gran_raw_search_diagnostic.png')
+        generated_files.append(output_dir / 'gran_raw_with_search_diagnostic.pdf')
+
         visualizer.plot_schwartz_opt_with_search_diagnostic(results, params, output_dir=output_dir)
-        generated_files.append(output_dir / 'schwartz_opt_search_diagnostic.png')
+        generated_files.append(output_dir / 'schwartz_opt_with_search_diagnostic.pdf')
+
+        # Iterative trimming + detection
+        print("Development mode: performing backward trimming analysis...")
+        collected, earliest_n, reference_veq = _trimming_analysis(
+            df, params,
+            r2_min=r2_min,
+            unc_max=unc_max,
+            veq_tolerance=veq_tolerance,
+            stability_window=stability_window,
+            trim_forward=trim_forward,
+            verbose=verbose
+        )
+
+        visualizer.plot_development_summary(
+            collected,
+            output_dir=output_dir,
+            full_volume=params['volume_array'],
+            earliest_n=earliest_n,
+            reference_veq=reference_veq,
+            r2_min=r2_min,
+            unc_max=unc_max,
+            veq_tolerance=veq_tolerance
+        )
+        generated_files.append(output_dir / 'development_summary.pdf')
 
     else:
         print(f"Warning: unknown mode '{mode}', falling back to default")
@@ -94,7 +130,8 @@ def run_mode(
     # Report selection
     csv_path = output_dir / 'report.csv'
     if mode == 'method_development':
-        reporter.generate_csv_report1(df_work, params, results, output_dir)
+        reporter.generate_csv_report_development(
+            df_work, params, results, collected, earliest_n, reference_veq, output_dir)
     elif mode == 'method_validation':
         reporter.generate_csv_report2(df_work, params, results, output_dir)
     elif mode == 'method_application':
@@ -164,6 +201,10 @@ def _trimming_analysis(
             collected['optimal_k'].append(k)
             collected['zone_points'].append(zone_n)
             collected['R2'].append(r2)
+
+            # Store zone boundaries for report
+            collected.setdefault('zone_start', []).append(opt_zone.get('zone_start', None))
+            collected.setdefault('zone_end', []).append(opt_zone.get('zone_end', None))
 
             # Set reference from full dataset
             if reference_veq is None and not np.isnan(veq):

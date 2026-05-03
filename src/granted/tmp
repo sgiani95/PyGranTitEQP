@@ -1,0 +1,9 @@
+def setup_plot_style():
+def _get_labels(titration_type: str = 'weak_acid') -> Dict[str, str]:
+def plot_titration_curve(
+def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_dir: Path = Path('output')):
+def plot_all_combined(
+def plot_r2_vs_upper_bound(r2_vs_upper: list[tuple[float, float]], output_dir: Path = Path('output')):
+def plot_gran_raw_with_search_diagnostic(results: Dict[str, Any], params: Dict[str, Any], output_dir: Path = Path('output')):
+def plot_schwartz_opt_with_search_diagnostic(
+def plot_development_summary(
