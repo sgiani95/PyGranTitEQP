@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
-title: "GranTED: Gran/Schwartz Titration Analysis Tool"
+title: "GranTED: Gran-Schwartz Titration Analysis Tool"
 authors:
   - family-names: "Giani"
     given-names: "Samuele"
