@@ -14,9 +14,9 @@ from typing import Dict, Any, Tuple, Optional
 
 
 def get_config_from_cli_or_file_or_prompt(
-    config_file: Optional[str] = None,
-    args: Optional[Dict[str, Any]] = None,
-    interactive: bool = True
+    config_file: Optional[str]=None,
+    args: Optional[Dict[str, Any]]=None,
+    interactive: bool=True
 ) -> Dict[str, Any]:
     """
     Load and validate configuration parameters with fallback chain:
@@ -26,8 +26,8 @@ def get_config_from_cli_or_file_or_prompt(
     Placeholder fallback to acid_base.
     """
     config = {
-        'V': 50.0,  # Initial volume (mL)
-        'C_B': 0.1,  # Titrant concentration (M)
+        'V_0': 50.0,  # Initial volume (mL)
+        'C': 0.1,     # Titrant concentration (M)
         'titration_type': 'acid_base',  # Default
         'r2_threshold': 0.95
     }
@@ -50,24 +50,24 @@ def get_config_from_cli_or_file_or_prompt(
         for key, value in args.items():
             if key in config:
                 try:
-                    config[key] = float(value) if key in ['V', 'C_B', 'r2_threshold'] else str(value)
+                    config[key] = float(value) if key in ['V_0', 'C', 'r2_threshold'] else str(value)
                 except ValueError:
-                    raise ValueError(f"Invalid value '{value}' for '{key}': Must be numeric for V/C_B/r2_threshold.")
+                    raise ValueError(f"Invalid value '{value}' for '{key}': Must be numeric for V_0/C/r2_threshold.")
 
     # Interactive prompts for missing/override
-    required_keys = ['V', 'C_B', 'titration_type']
+    required_keys = ['V_0', 'C', 'titration_type']
     for key in required_keys:
         if key not in config or config[key] is None:
             if interactive:
                 prompt = {
-                    'V': "Enter initial volume V (mL, default 25): ",
-                    'C_B': "Enter titrant concentration C_B (M, default 0.1): ",
+                    'V_0': "Enter initial volume V_0 (mL, default 25): ",
+                    'C': "Enter titrant concentration C (M, default 0.1): ",
                     'titration_type': "Enter titration type (acid_base/complexometric/precipitation/redox, default acid_base): "
                 }
                 user_input = input(prompt.get(key, f"Enter {key} (default {config.get(key, 'N/A')}): "))
                 if user_input.strip():
                     try:
-                        config[key] = float(user_input) if key in ['V', 'C_B'] else user_input.strip()
+                        config[key] = float(user_input) if key in ['V_0', 'C'] else user_input.strip()
                     except ValueError:
                         print(f"Warning: Invalid input '{user_input}' for {key}. Using default.")
             else:
@@ -88,9 +88,9 @@ def get_config_from_cli_or_file_or_prompt(
 
 def preprocess_pipeline(
     df: pd.DataFrame,
-    config_overrides: Optional[Dict[str, Any]] = None,
-    config_file: Optional[str] = None,
-    interactive: bool = True
+    config_overrides: Optional[Dict[str, Any]]=None,
+    config_file: Optional[str]=None,
+    interactive: bool=True
 ) -> Tuple[pd.DataFrame, Dict[str, Any]]:
     """
     Orchestrate preprocessing: Load config, extract arrays, auto-detect acid/base for acid_base type.
@@ -115,10 +115,11 @@ def preprocess_pipeline(
 
         # Linear interpolation: slope from linregress
         slope, intercept, r_value, _, _ = linregress(volume, potential)
-        if slope >= 0:  # Increasing potential → base titration
+        if slope >= 0:  # Increasing potential, base-acid titration
             df['potential'] = -df['potential']  # Safe assignment
-            params['potential_array'] = -params['potential_array']  # Safe assignment            params['is_base'] = True
-        else:  # Decreasing potential → acid titration
+            params['potential_array'] = -params['potential_array']  # Safe assignment
+            params['is_base'] = True
+        else:  # Decreasing potential, acid-base titration
             params['is_base'] = False
 
     else:

@@ -4,7 +4,8 @@ Supports --verbose for tracing; merges CLI > JSON > defaults for config.
 Optional --skip-analysis (uses raw gran_results for visuals/report).
 Defaults to 'data.dat' if no --data_file; graceful exit if missing.
 """
-__version__ = "0.9.2"
+
+__version__ = "2.0.22"
 #
 # Pride versioning 🌈
 #
@@ -32,12 +33,12 @@ from granted.modes import run_mode
 
 def parse_args():
     """Parse CLI arguments."""
-    parser = argparse.ArgumentParser(description='GranTED: Gran/Schwartz Titration Analysis')
+    parser = argparse.ArgumentParser(description='GranTED: Gran-Schwartz Titration Analysis')
     
     parser.add_argument('--data_file', default='data.dat', help='Path to titration data file (default: data.dat)')
-    parser.add_argument('--V', type=float, default=25.0, help='Initial volume (mL)')
-    parser.add_argument('--C_B', type=float, default=0.1, help='Titrant concentration (M)')
-    parser.add_argument('--output_dir', default='./output', help='Output directory')
+    parser.add_argument('--V_0', type=float, default=25.0, help='Initial volume (mL)')
+    parser.add_argument('--C', type=float, default=0.1, help='Titrant concentration (M)')
+    parser.add_argument('--output_dir', default='./output', help='Output directory (default: ./output)')
     parser.add_argument('--config_file', help='Optional JSON config file')
     parser.add_argument('--verbose', action='store_true', help='Enable verbose tracing')
     parser.add_argument('--skip-analysis', action='store_true', help='Skip analyzer; use raw gran_results for visuals/report')
@@ -46,19 +47,19 @@ def parse_args():
     # Mode selection
     parser.add_argument(
         '--mode',
-        type=str,
-        choices=['method_development', 'method_validation', 'method_application', 'method_debug'],
-        default='method_development',
-        help='Operation mode'
+        type = str,
+        choices = ['method_development', 'method_validation', 'method_application', 'method_debug'],
+        default = 'method_development',
+        help = 'Operation mode: method_development, method_validation, method_application, method_debug (default: method_development)' 
     )
 
-    # Thresholds for earliest acceptable point detection
-    parser.add_argument('--r2-min', type=float, default=0.09995,
-                        help='Minimum R² for acceptable fit (default: 0.9995)')
-    parser.add_argument('--unc-max', type=float, default=10.01,
-                        help='Maximum allowed uncertainty on V_eq in mL (default: 0.02)')
-    parser.add_argument('--veq-tolerance', type=float, default=0.01,
-                        help='Maximum allowed deviation from final V_eq in mL (default: 0.01)')
+    # Thresholds for earliest optimized volume detection
+    parser.add_argument('--r2-min', type=float, default=0.99,
+                        help='Minimum R² for acceptable fit (default: 0.99)')
+    parser.add_argument('--unc-max', type=float, default=0.100,
+                        help='Maximum allowed uncertainty on EQP (mL) (default: 0.100)')
+    parser.add_argument('--veq-tolerance', type=float, default=0.010,
+                        help='Maximum allowed deviation from final EQP (mL) (default: 0.010)')
     parser.add_argument('--stability-window', type=int, default=3,
                         help='Number of consecutive points that must satisfy criteria (default: 3)')
     parser.add_argument('--trim-forward', action='store_true',
@@ -74,7 +75,7 @@ def parse_args():
             for key, value in config.items():
                 if hasattr(args, key) and getattr(args, key) is not None:
                     continue
-                if key in ['V', 'C_B'] and isinstance(value, (int, float)):
+                if key in ['V_0', 'C'] and isinstance(value, (int, float)):
                     setattr(args, key, value)
             if args.verbose:
                 print(f"Merged config from {args.config_file}")
@@ -121,18 +122,18 @@ def main():
             print("Preprocessing...")
         _, params = preprocess.preprocess_pipeline(df, config_overrides=vars(args), interactive=False)
         if args.verbose:
-            print(f"Params: V={params.get('V')}, C_B={params.get('C_B')}, type={params.get('titration_type')}")
+            print(f"Params: V_0 = {params.get('V_0')}, C = {params.get('C')}, type={params.get('titration_type')}")
     except Exception as e:
         print(f"Preprocess error: {e}")
         sys.exit(1)
 
-    # Step 3: Compute Gran/Schwartz
+    # Step 3: Compute Gran-Schwartz
     try:
         if args.verbose:
             print("Computing functions...")
         gran_results = compute_gran_functions(df, params)
         if args.verbose:
-            print("Gran/Schwartz computed.")
+            print("Gran-Schwartz computed.")
     except Exception as e:
         print(f"Compute error: {e}")
         sys.exit(1)
@@ -171,12 +172,13 @@ def main():
     if args.verbose:
         print(f"Mode '{args.mode}' complete.")
 
+
 if __name__ == "__main__":
     from pycallgraph2 import PyCallGraph, Config
     from pycallgraph2.output import GraphvizOutput
     args = parse_args()
     if args.profile:
-        output = GraphvizOutput(output_file=str(Path(args.output_dir) / 'callgraph.svg'))
+        output = GraphvizOutput(output_file = str(Path(args.output_dir) / 'callgraph.svg'))
         with PyCallGraph(output=output):
             main()
     else:

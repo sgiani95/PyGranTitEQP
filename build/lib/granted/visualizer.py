@@ -18,7 +18,6 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from typing import Dict, Any, Optional
-from scipy.signal import savgol_filter
 
 
 def setup_plot_style():
@@ -40,6 +39,7 @@ def setup_plot_style():
     # Grid style
     plt.rc('grid', alpha=0.3, linewidth=0.8)
 
+
 def _get_labels(titration_type: str = 'weak_acid') -> Dict[str, str]:
     """
     Returns the same title and ylabel for all cases (no type-specific differences).
@@ -53,8 +53,8 @@ def _get_labels(titration_type: str = 'weak_acid') -> Dict[str, str]:
 def plot_titration_curve(
     df: pd.DataFrame,
     params: Dict[str, Any],
-    output_dir: Path = Path('output'),
-    potential_original: np.ndarray | None = None
+    output_dir: Path=Path('output'),
+    potential_original: np.ndarray | None=None
 ):
     """
     Plot simple titration curve: pH vs volume (black line with points).
@@ -74,9 +74,10 @@ def plot_titration_curve(
     ax.grid(True, alpha=0.3)
     ax.legend()
     plt.tight_layout()
-    filename = output_dir / 'titration_curve.png'
-    fig.savefig(filename, dpi=300, bbox_inches='tight')
+    filename = output_dir / 'titration_curve.pdf'
+    fig.savefig(filename, bbox_inches='tight')
     plt.close(fig)
+
 
 def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_dir: Path = Path('output')):
     """
@@ -166,11 +167,12 @@ def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_d
     ax3.legend()
     ax3.grid(True, alpha=0.3)
 
-    fig.suptitle('Gran/Schwartz Analysis', fontsize=14)
+    fig.suptitle('Gran-Schwartz Analysis', fontsize=14)
     fig.tight_layout()
-    filename = output_dir / 'gran_schwartz.png'
-    fig.savefig(filename, dpi=300, bbox_inches='tight')
+    filename = output_dir / 'gran_schwartz.pdf'
+    fig.savefig(filename, bbox_inches='tight')
     plt.close(fig)
+
 
 def plot_all_combined(
     df: pd.DataFrame,
@@ -232,13 +234,10 @@ def plot_all_combined(
 
     fig.suptitle('GranTED Analysis Overview', fontsize=16)
     fig.tight_layout()
-    filename = output_dir / 'plots.png'
-    fig.savefig(filename, dpi=300, bbox_inches='tight')
-    ###
-    base_name = output_dir / 'plots'
-    fig.savefig(base_name.with_suffix('.pdf'), bbox_inches='tight')   # Best for LaTeX
-    ###
+    filename = output_dir / 'plots.pdf'
+    fig.savefig(filename, bbox_inches='tight')
     plt.close(fig)
+
 
 def plot_r2_vs_upper_bound(r2_vs_upper: list[tuple[float, float]], output_dir: Path = Path('output')):
     """
@@ -262,6 +261,7 @@ def plot_r2_vs_upper_bound(r2_vs_upper: list[tuple[float, float]], output_dir: P
     filename = output_dir / 'r2_vs_upper_bound.png'
     plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close()
+
 
 def plot_gran_raw_with_search_diagnostic(results: Dict[str, Any], params: Dict[str, Any], output_dir: Path = Path('output')):
     """
@@ -327,9 +327,10 @@ def plot_gran_raw_with_search_diagnostic(results: Dict[str, Any], params: Dict[s
 
     fig.suptitle('Gran Analysis + Linear Region Search', fontsize=14)
     fig.tight_layout()
-    filename = output_dir / 'gran_raw_with_search_diagnostic.png'
-    fig.savefig(filename, dpi=300, bbox_inches='tight')
+    filename = output_dir / 'gran_raw_with_search_diagnostic.pdf'
+    fig.savefig(filename, bbox_inches='tight')
     plt.close(fig)
+
 
 def plot_schwartz_opt_with_search_diagnostic(
     results: Dict[str, Any],
@@ -405,9 +406,10 @@ def plot_schwartz_opt_with_search_diagnostic(
     fig.suptitle('Schwartz Optimized + Linear Region Search Diagnostic', fontsize=14)
     fig.tight_layout()
 
-    filename = output_dir / 'schwartz_opt_with_search_diagnostic.png'
-    fig.savefig(filename, dpi=300, bbox_inches='tight')
+    filename = output_dir / 'schwartz_opt_with_search_diagnostic.pdf'
+    fig.savefig(filename, bbox_inches='tight')
     plt.close(fig)
+
 
 def plot_development_summary(
     collected: Dict[str, list],
@@ -502,7 +504,7 @@ def plot_development_summary(
 
     ax3.scatter([0], [1.0], color='white', alpha=0.0, zorder=1)   # transparent ghost point
     plt.tight_layout()
-    filename = output_dir / 'development_convergence_volume.png'
-    fig.savefig(filename, dpi=300, bbox_inches='tight')
+    filename = output_dir / 'development_convergence_volume.pdf'
+    fig.savefig(filename, bbox_inches='tight')
     plt.close(fig)
     print(f"Development summary plot saved: {filename}")

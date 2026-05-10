@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="GranTED",
-    version="2.0.21",
+    name="granted",
+    version="2.0.22",
     description="GranTED: Gran-Schwartz Titration Analysis Tool",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",

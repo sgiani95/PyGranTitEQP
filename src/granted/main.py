@@ -5,7 +5,7 @@ Optional --skip-analysis (uses raw gran_results for visuals/report).
 Defaults to 'data.dat' if no --data_file; graceful exit if missing.
 """
 
-__version__ = "2.0.21"
+__version__ = "2.0.22"
 #
 # Pride versioning 🌈
 #

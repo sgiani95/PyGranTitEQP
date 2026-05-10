@@ -1,6 +1,6 @@
 """
 analyzer.py: Validated equivalence point detection via Gran/Schwartz linearization.
-Algorithm preserved: Smoothing → deriv → candidates → rank/eval → shrink (raw) → opt k → re-shrink (opt).
+Algorithm: (Smoothing) → deriv → candidates → rank/eval → shrink (raw) → opt k → re-shrink (opt).
 Outputs nested metrics for downstream (gran/schwartz raw/opt with V_eq, r2, k, zones). 
 """
 
@@ -19,6 +19,7 @@ def _compute_r2(g1_smooth: np.ndarray, volume: np.ndarray, start: int, end: int)
         return 0.0, 0.0, 0.0
     slope, intercept, r_value, _, _ = linregress(volume[start:end+1], g1_smooth[start:end+1])
     return r_value**2, slope, intercept
+
 
 def identify_linear_interval(
     g1: np.ndarray,
@@ -109,6 +110,7 @@ def identify_linear_interval(
 
     return start_idx, end_idx, best_r2, diagnostics
 
+
 def _compute_fit(
     df: pd.DataFrame,
     start: int,
@@ -150,6 +152,7 @@ def _compute_fit(
         'veq': veq,
         'V_eq_unc': V_eq_unc
     }
+
 
 def _optimize_single_zone(df: pd.DataFrame, start: int, end: int, gran_func: Callable, k_bounds: Tuple[float, float] = (0, 999999999), pH_full: np.ndarray = None) -> Dict[str, Any]:
     """Optimize k for a fixed zone using gran_func callable."""
@@ -198,6 +201,7 @@ def shrink_zone(
         iter_count += 1
     return (start, end)
 
+
 def get_metrics(
     fit: Any,
     zone: Tuple[int, int],
@@ -224,6 +228,7 @@ def get_metrics(
         'fit': fit.get('fit', (np.nan, np.nan)),
         'V_eq_unc': fit.get('V_eq_unc', np.nan)   # ← ADD ONLY THIS LINE
 }   
+
 
 def analyze_gran_original(
     df: pd.DataFrame,
@@ -298,6 +303,7 @@ def analyze_gran_original(
 
     return results
 
+
 def _identify_linear_original(g1: np.ndarray, volume: np.ndarray, min_points: int = 5, window_size: int = 5) -> Tuple[int, int, float]:
     """Original non-segmented interval identification (fallback; preserved)."""
     dg1_raw = np.gradient(g1, volume)
@@ -330,6 +336,7 @@ def _identify_linear_original(g1: np.ndarray, volume: np.ndarray, min_points: in
                 best_end = test_end
 
     return best_start, best_end, best_r2
+
 
 def analyze_gran(gran_results: Dict[str, Any], params: Dict[str, Any], verbose: bool = False) -> Dict[str, Any]:
     """Compatibility wrapper: Run original analyze_gran_original, nest original output for visualizer/reporter."""

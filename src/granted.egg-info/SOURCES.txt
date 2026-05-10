@@ -1,14 +1,6 @@
-.gitignore
-CITATION.cff
 LICENSE
-Makefile
 README.md
-data.dat
-logo.png
-modules.md
-requirements.txt
 setup.py
-docs/tree.txt
 src/granted/GUI.py
 src/granted/__init__.py
 src/granted/analyzer.py
