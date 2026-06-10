@@ -151,7 +151,7 @@ def generate_csv_report_development(
     Path(output_dir).mkdir(exist_ok=True)
     csv_filename = output_dir / 'report.csv'
 
-    # Full data results
+    # Full dataset results
     gran_raw = results.get('gran', {}).get('raw', {})
     sch_opt = results.get('schwartz', {}).get('opt', {})
 
@@ -211,104 +211,121 @@ def generate_csv_report_development(
         writer = csv.writer(f)
         writer.writerows(csv_data)
 
+    print(f"Development report saved: {csv_filename}")
     return str(csv_filename)
 
 
-def generate_csv_report2(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path) -> str:
+def generate_csv_report_validation(
+    df: pd.DataFrame,
+    params: Dict[str, Any],
+    results_full: Dict[str, Any],
+    results_vopt: Dict[str, Any],
+    vopt_volume: float,
+    output_dir: Path
+) -> str:
     """
-    Generate simple CSV report with the requested format:
-    Method,V_eq [mL],R²,Zones (start-end)
-    Gran Raw,4.096,0.9995,15-30
-    Schwartz Optimized,4.086,0.9999,12-27
+    Dedicated report for method_validation mode.
     """
     Path(output_dir).mkdir(exist_ok=True)
-    csv_filename = output_dir / 'report.csv'
+    csv_filename = output_dir / 'validation_report.csv'
 
-    gran_raw = results.get('gran', {}).get('raw', {})
-    sch_opt = results.get('schwartz', {}).get('opt', {})
+    # Full dataset results
+    gran_full = results_full.get('gran', {}).get('raw', {})
+    sch_full = results_full.get('schwartz', {}).get('opt', {})
 
-    # Format zones as start-end
-    raw_zone = f"{gran_raw.get('zone_start', 'N/A')}-{gran_raw.get('zone_end', 'N/A')}"
-    opt_zone = f"{sch_opt.get('zone_start', 'N/A')}-{sch_opt.get('zone_end', 'N/A')}"
+    # Vopt (trimmed) results
+    gran_vopt = results_vopt.get('gran', {}).get('raw', {})
+    sch_vopt = results_vopt.get('schwartz', {}).get('opt', {})
 
-    # Safe formatting function
-    def safe_float(value, decimals):
-        if isinstance(value, (int, float)):
+    def safe_float(value, decimals=3):
+        if isinstance(value, (int, float)) and not np.isnan(value):
             return f"{value:.{decimals}f}"
-        return str(value)  # 'N/A' or other string
+        return "nan"
 
     csv_data = [
-    ['Method', 'V_eq [mL]', 'V_eq_unc [mL]', 'R²', 'Zones (start-end)'],
-    [
-        'Gran Raw',
-        safe_float(gran_raw.get('V_eq'), 3),
-        safe_float(gran_raw.get('V_eq_unc'), 3),
-        safe_float(gran_raw.get('r2'), 4),
-        raw_zone
-    ],
-    [
-        'Schwartz Optimized',
-        safe_float(sch_opt.get('V_eq'), 3),
-        safe_float(sch_opt.get('V_eq_unc'), 3),
-        safe_float(sch_opt.get('r2'), 4),
-        opt_zone
+        ['Method', 'V_eq [mL]', 'V_eq_unc [mL]', 'R²', 'Zones (start-end)', 'Notes'],
+        [
+            'Gran Raw (full validation)',
+            safe_float(gran_full.get('V_eq')),
+            safe_float(gran_full.get('V_eq_unc')),
+            safe_float(gran_full.get('r2'), 4),
+            f"{gran_full.get('zone_start', 'N/A')}-{gran_full.get('zone_end', 'N/A')}",
+            'EQP* on full validation dataset'
+        ],
+        [
+            'Schwartz Optimized (full validation)',
+            safe_float(sch_full.get('V_eq')),
+            safe_float(sch_full.get('V_eq_unc')),
+            safe_float(sch_full.get('r2'), 4),
+            f"{sch_full.get('zone_start', 'N/A')}-{sch_full.get('zone_end', 'N/A')}",
+            'EQP* on full validation dataset'
+        ],
+        [
+            'Vopt Result (validation)',
+            safe_float(sch_vopt.get('V_eq')),
+            safe_float(sch_vopt.get('V_eq_unc')),
+            safe_float(sch_vopt.get('r2'), 4),
+            f"{sch_vopt.get('zone_start', 'N/A')}-{sch_vopt.get('zone_end', 'N/A')}",
+            f'Trimmed to V_opt = {vopt_volume:.3f} mL'
+        ]
     ]
-]
 
     import csv
     with open(csv_filename, 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         writer.writerows(csv_data)
 
+    print(f"Validation report saved: {csv_filename}")
     return str(csv_filename)
 
 
-def generate_csv_report3(df: pd.DataFrame, params: Dict[str, Any], results: Dict[str, Any], output_dir: Path) -> str:
+def generate_csv_report_application(
+    df: pd.DataFrame,
+    params: Dict[str, Any],
+    results: Dict[str, Any],
+    output_dir: Path
+) -> str:
     """
-    Generate simple CSV report with the requested format:
-    Method,V_eq [mL],R²,Zones (start-end)
-    Gran Raw,4.096,0.9995,15-30
-    Schwartz Optimized,4.086,0.9999,12-27
+    Simple report for method_application mode.
+    Data is already trimmed to V_opt.
     """
     Path(output_dir).mkdir(exist_ok=True)
-    csv_filename = output_dir / 'report.csv'
+    csv_filename = output_dir / 'application_report.csv'
 
     gran_raw = results.get('gran', {}).get('raw', {})
     sch_opt = results.get('schwartz', {}).get('opt', {})
 
-    # Format zones as start-end
-    raw_zone = f"{gran_raw.get('zone_start', 'N/A')}-{gran_raw.get('zone_end', 'N/A')}"
-    opt_zone = f"{sch_opt.get('zone_start', 'N/A')}-{sch_opt.get('zone_end', 'N/A')}"
-
-    # Safe formatting function
-    def safe_float(value, decimals):
-        if isinstance(value, (int, float)):
+    def safe_float(value, decimals=3):
+        if isinstance(value, (int, float)) and not np.isnan(value):
             return f"{value:.{decimals}f}"
-        return str(value)  # 'N/A' or other string
+        return "nan"
 
     csv_data = [
-    ['Method', 'V_eq [mL]', 'V_eq_unc [mL]', 'R²', 'Zones (start-end)'],
-    [
-        'Gran Raw',
-        safe_float(gran_raw.get('V_eq'), 3),
-        safe_float(gran_raw.get('V_eq_unc'), 3),
-        safe_float(gran_raw.get('r2'), 4),
-        raw_zone
-    ],
-    [
-        'Schwartz Optimized',
-        safe_float(sch_opt.get('V_eq'), 3),
-        safe_float(sch_opt.get('V_eq_unc'), 3),
-        safe_float(sch_opt.get('r2'), 4),
-        opt_zone
+        ['Method', 'V_eq [mL]', 'V_eq_unc [mL]', 'R²', 'Zones (start-end)', 'Notes'],
+        [
+            'Gran Raw',
+            safe_float(gran_raw.get('V_eq')),
+            safe_float(gran_raw.get('V_eq_unc')),
+            safe_float(gran_raw.get('r2'), 4),
+            f"{gran_raw.get('zone_start', 'N/A')}-{gran_raw.get('zone_end', 'N/A')}",
+            'EQP on data trimmed to V_opt'
+        ],
+        [
+            'Schwartz Optimized',
+            safe_float(sch_opt.get('V_eq')),
+            safe_float(sch_opt.get('V_eq_unc')),
+            safe_float(sch_opt.get('r2'), 4),
+            f"{sch_opt.get('zone_start', 'N/A')}-{sch_opt.get('zone_end', 'N/A')}",
+            'EQP on data trimmed to V_opt'
+        ]
     ]
-]
 
     import csv
     with open(csv_filename, 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         writer.writerows(csv_data)
 
+    print(f"Application report saved: {csv_filename}")
     return str(csv_filename)
 
 

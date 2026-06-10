@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Dict, Any, List, Tuple
 import numpy as np
 import pandas as pd
+import sys
 
 from granted import visualizer
 from granted import reporter
@@ -18,22 +19,24 @@ def run_mode(
     df: pd.DataFrame,
     params: Dict[str, Any],
     output_dir: Path,
-    verbose: bool=False,
-    r2_min: float=0.99,
-    unc_max: float=0.100,
-    veq_tolerance: float = 0.010,
+    verbose: bool = False,
+    r2_min: float = 0.99,
+    unc_max: float = 0.05,
+    veq_tolerance: float = 0.1,
     stability_window: int = 3,
-    trim_forward: bool = False
+    trim_forward: bool = False,
+    vopt: float | None = None   # New: for method_validation
 ) -> Dict[str, Any]:
     """
     Main orchestrator for mode-specific execution.
+    Single if-elif structure for clarity.
     """
     if verbose:
-        print(f"Executing mode: {mode} | trim_forward={trim_forward}")
+        print(f"Executing mode: {mode}")
 
     df_work = df.copy()
 
-    # Run core analysis on full data first (to get reference EQP*)
+    # Run core analysis on full data (common to most modes)
     results = analyzer.analyze_gran(df_work, params, verbose=verbose)
 
     generated_files = []
@@ -42,10 +45,11 @@ def run_mode(
         # Normal full-data plots
         visualizer.plot_titration_curve(df, params, output_dir=output_dir)
         generated_files.append(output_dir / 'titration_curve.pdf')
+
         visualizer.plot_gran_schwartz(results, params, output_dir=output_dir)
         generated_files.append(output_dir / 'gran_schwartz.pdf')
 
-        # Iterative trimming + detection
+        # Backward trimming analysis (Gran + Schwartz on every trim - as per your revert)
         print("Development mode: performing backward trimming analysis...")
         collected, earliest_n, reference_veq = _trimming_analysis(
             df, params,
@@ -57,9 +61,9 @@ def run_mode(
             verbose=verbose
         )
 
+        # Development summary plot
         visualizer.plot_development_summary(
-            collected, 
-            output_dir=output_dir, 
+            collected, output_dir=output_dir, 
             full_volume=params['volume_array'],
             earliest_n=earliest_n,
             reference_veq=reference_veq,
@@ -67,85 +71,72 @@ def run_mode(
             unc_max=unc_max,
             veq_tolerance=veq_tolerance
         )
-        generated_files.append(output_dir / 'development_summary.pdf')
+        generated_files.append(output_dir / 'development_convergence_volume.pdf')
+
+        # Special report
+        reporter.generate_csv_report_development(
+            df_work, params, results, collected, earliest_n, reference_veq, output_dir
+        )
 
     elif mode == 'method_validation':
-        visualizer.plot_all_combined(df_work, params, results, output_dir=output_dir)
-        generated_files.append(output_dir / 'all_combined.png')
+        if vopt is None:
+            print("Error: --vopt is required for method_validation mode.")
+            sys.exit(1)
+
+        print(f"Method Validation: Using V_opt = {vopt:.3f} mL")
+
+        # Full analysis on new dataset
+        results_full = analyzer.analyze_gran(df_work, params, verbose=verbose)
+
+        # Trimmed analysis to V_opt
+        df_trim = df[df['volume'] <= vopt].copy()
+        params_trim = params.copy()
+        params_trim['volume_array'] = df_trim['volume'].values
+        params_trim['potential_array'] = df_trim['potential'].values
+
+        results_vopt = analyzer.analyze_gran(df_trim, params_trim, verbose=verbose)
+
+        # Generate validation report
+        reporter.generate_csv_report_validation(
+            df_work, params, results_full, results_vopt, vopt, output_dir
+        )
 
     elif mode == 'method_application':
-        visualizer.plot_all_combined(df_work, params, results, output_dir=output_dir)
-        generated_files.append(output_dir / 'all_combined.png')
+        print("Method Application: Analyzing already trimmed data up to V_opt")
 
-    elif mode == 'method_debug':
-        # Use df for plots that need raw data, results for analysis plots
+        # Single Gran + Schwartz analysis on the provided (trimmed) dataset
         visualizer.plot_titration_curve(df, params, output_dir=output_dir)
         generated_files.append(output_dir / 'titration_curve.pdf')
 
         visualizer.plot_gran_schwartz(results, params, output_dir=output_dir)
         generated_files.append(output_dir / 'gran_schwartz.pdf')
 
+        # Standard report (no special Vopt handling)
+        reporter.generate_csv_report_application(df_work, params, results, output_dir)
+
+    elif mode == 'method_debug':
+        visualizer.plot_titration_curve(df, params, output_dir=output_dir)
+        generated_files.append(output_dir / 'titration_curve.pdf')
+        visualizer.plot_gran_schwartz(results, params, output_dir=output_dir)
+        generated_files.append(output_dir / 'gran_schwartz.pdf')
         visualizer.plot_all_combined(df, params, results, output_dir=output_dir)
         generated_files.append(output_dir / 'all_combined.pdf')
 
-        r2_history = results.get('initial_gran_diagnostics', {}).get('r2_vs_upper', [])
-        visualizer.plot_r2_vs_upper_bound(r2_history, output_dir=output_dir)
-        generated_files.append(output_dir / 'r2_vs_upper_bound.pdf')
-
-        visualizer.plot_gran_raw_with_search_diagnostic(results, params, output_dir=output_dir)
-        generated_files.append(output_dir / 'gran_raw_with_search_diagnostic.pdf')
-
-        visualizer.plot_schwartz_opt_with_search_diagnostic(results, params, output_dir=output_dir)
-        generated_files.append(output_dir / 'schwartz_opt_with_search_diagnostic.pdf')
-
-        # Iterative trimming + detection
-        print("Development mode: performing backward trimming analysis...")
-        collected, earliest_n, reference_veq = _trimming_analysis(
-            df, params,
-            r2_min=r2_min,
-            unc_max=unc_max,
-            veq_tolerance=veq_tolerance,
-            stability_window=stability_window,
-            trim_forward=trim_forward,
-            verbose=verbose
-        )
-
-        visualizer.plot_development_summary(
-            collected,
-            output_dir=output_dir,
-            full_volume=params['volume_array'],
-            earliest_n=earliest_n,
-            reference_veq=reference_veq,
-            r2_min=r2_min,
-            unc_max=unc_max,
-            veq_tolerance=veq_tolerance
-        )
-        generated_files.append(output_dir / 'development_summary.pdf')
-
-    else:
-        print(f"Warning: unknown mode '{mode}', falling back to default")
-        visualizer.plot_titration_curve(df_work, params, output_dir=output_dir)
-        generated_files.append(output_dir / 'titration_curve.png')
-
-    # Report selection
-    csv_path = output_dir / 'report.csv'
-    if mode == 'method_development':
-        reporter.generate_csv_report_development(
-            df_work, params, results, collected, earliest_n, reference_veq, output_dir)
-    elif mode == 'method_validation':
-        reporter.generate_csv_report2(df_work, params, results, output_dir)
-    elif mode == 'method_application':
-        reporter.generate_csv_report3(df_work, params, results, output_dir)
-    elif mode == 'method_debug':
+        # Add more debug plots as needed
         reporter.generate_csv_report4(df_work, params, results, output_dir)
+
     else:
-        reporter.generate_csv_report(results, csv_path)
+        print(f"Warning: unknown mode '{mode}', falling back to development")
+        # fallback to development behavior
+        visualizer.plot_titration_curve(df, params, output_dir=output_dir)
+        generated_files.append(output_dir / 'titration_curve.pdf')
+        visualizer.plot_gran_schwartz(results, params, output_dir=output_dir)
+        generated_files.append(output_dir / 'gran_schwartz.pdf')
 
     return {
         'results': results,
         'generated_plots': generated_files,
-        'csv_report': csv_path,
-        'earliest_acceptable_n': earliest_n if mode == 'method_development' else None
+        'csv_report': output_dir / 'report.csv'
     }
 
 

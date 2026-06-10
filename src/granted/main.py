@@ -43,6 +43,8 @@ def parse_args():
     parser.add_argument('--verbose', action='store_true', help='Enable verbose tracing')
     parser.add_argument('--skip-analysis', action='store_true', help='Skip analyzer; use raw gran_results for visuals/report')
     parser.add_argument('--profile', action='store_true', help='Generate callgraph.svg')
+    parser.add_argument('--vopt', type=float, default=None,
+                        help='V_opt value from previous method_development (used in method_validation)')
 
     # Mode selection
     parser.add_argument(
@@ -166,7 +168,8 @@ def main():
         unc_max=args.unc_max,
         veq_tolerance=args.veq_tolerance,
         stability_window=args.stability_window,
-        trim_forward=args.trim_forward
+        trim_forward=args.trim_forward,
+        vopt=args.vopt
     )
 
     if args.verbose:
