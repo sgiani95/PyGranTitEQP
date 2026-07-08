@@ -79,80 +79,82 @@ def plot_titration_curve(
     plt.close(fig)
 
 
-def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_dir: Path = Path('output')):
+def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_dir: Path):
     """
     3-panel plot with line-point style:
-    1. Gran raw g1 ('b-o') + raw fit dashed line + raw zone shade
-    2. Schwartz optimized gs ('g-o') + opt fit dashed line + opt zone shade
-    3. Negative derivative from raw g1 with **RAW zone** shaded (changed from opt)
+    1. Gran raw g1 + raw fit + raw zone shade
+    2. Schwartz optimized gs + opt fit + opt zone shade
+    3. Negative derivative from raw g1 with RAW zone shaded
     """
     setup_plot_style()
     output_dir.mkdir(exist_ok=True)
 
-    volume = params.get('volume_array', np.arange(41))  # Fallback
+    volume = np.asarray(params.get('volume_array', np.arange(41)))
+    g1_raw = results.get('g1', np.zeros(len(volume)))
+    g1_opt = results.get('g1_opt', np.zeros(len(volume)))
 
-    # Safe extraction from nested results
+    # Safe zone extraction
     gran_raw = results.get('gran', {}).get('raw', {})
-    gran_opt = results.get('gran', {}).get('opt', {})
     sch_opt = results.get('schwartz', {}).get('opt', {})
 
-    g1_raw = results.get('g1', np.zeros(len(volume)))
-    gs_opt = results.get('g1_opt', np.zeros(len(volume)))  # gs_opt
-
-    # Zones
     raw_zone_start = gran_raw.get('zone_start', 0)
     raw_zone_end = gran_raw.get('zone_end', len(volume) - 1)
     opt_zone_start = sch_opt.get('zone_start', raw_zone_start)
     opt_zone_end = sch_opt.get('zone_end', raw_zone_end)
 
-    # Fits and r2
+    # Clamp indices to avoid IndexError
+    raw_zone_start = max(0, min(raw_zone_start, len(volume) - 1))
+    raw_zone_end = max(raw_zone_start, min(raw_zone_end, len(volume) - 1))
+    opt_zone_start = max(0, min(opt_zone_start, len(volume) - 1))
+    opt_zone_end = max(opt_zone_start, min(opt_zone_end, len(volume) - 1))
+
     raw_fit = gran_raw.get('fit', None)
-    raw_r2 = gran_raw.get('r2', 'N/A')
+    raw_r2 = gran_raw.get('r2', 0.0)
     opt_fit = sch_opt.get('fit', None)
-    opt_r2 = sch_opt.get('r2', 'N/A')
-    opt_k5 = sch_opt.get('k5', 0.0)
+    opt_r2 = sch_opt.get('r2', 0.0)
+    opt_k = sch_opt.get('k', 0.0)
 
     fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
 
-    # Panel 1: Gran raw g1 + fit + zone
-    #ax1.plot(volume, g1_raw, 'b-o', linewidth=1.5, markersize=4, label='Gran raw g1')
-    #ax1.axvspan(volume[raw_zone_start], volume[raw_zone_end], alpha=0.25, color='red', label='Raw Zone')
-    ax1.plot(volume, g1_raw, color='C0', marker='o', linewidth=1.5, markersize=4, label='Gran raw g1')
+    # Panel 1: Gran raw
+    ax1.plot(volume, g1_raw, 'b-o', linewidth=1.5, markersize=4, label='Gran raw g1')
     ax1.axvspan(volume[raw_zone_start], volume[raw_zone_end], alpha=0.25, color='C0', label='Raw Zone')
+
     if raw_fit:
         slope, intercept = raw_fit
-        x_fit = np.linspace(volume.min(), volume.max(), 100)
+        x_fit = np.linspace(volume.min(), volume.max(), 200)
         y_fit = slope * x_fit + intercept
         ax1.plot(x_fit, y_fit, 'k--', label=f'Raw fit (R²={raw_r2:.4f})')
+
     ax1.set_ylabel('Gran g1 (raw)')
-    ax1.set_title(f'Gran Raw – V_eq = {gran_raw.get("V_eq", "N/A"):.3f} mL')
+    ax1.set_title(f'Gran Raw – V_eq = {gran_raw.get("V_eq", np.nan):.3f} mL')
     ax1.legend()
     ax1.grid(True, alpha=0.3)
 
-    # Panel 2: Schwartz optimized gs + fit + zone
-    #     ax2.plot(volume, gs_opt, color='C1', marker='s', linewidth=2.5, markersize=7, markerfacecolor='white', markeredgecolor='C1', label='Schwartz opt gs')
-    ax2.plot(volume, gs_opt, color='C1', marker='o', linewidth=1.5, markersize=4, label='Schwartz opt gs')
+    # Panel 2: Schwartz optimized
+    ax2.plot(volume, g1_opt, 'g-o', linewidth=1.5, markersize=4, label='Schwartz opt gs')
     ax2.axvspan(volume[opt_zone_start], volume[opt_zone_end], alpha=0.25, color='C1', label='Opt Zone')
+
     if opt_fit:
         slope, intercept = opt_fit
+        x_fit = np.linspace(volume.min(), volume.max(), 200)
         y_fit = slope * x_fit + intercept
         ax2.plot(x_fit, y_fit, 'k--', label=f'Opt fit (R²={opt_r2:.4f})')
+
     ax2.set_ylabel('Schwartz gs (opt)')
-    opt_k = sch_opt.get('k', 0.0)
-    ax2.set_title(f'Schwartz Optimized – V_eq = {sch_opt.get("V_eq", "N/A"):.3f} mL, k = {opt_k:.3f}')
+    ax2.set_title(f'Schwartz Optimized – V_eq = {sch_opt.get("V_eq", np.nan):.3f} mL, k = {opt_k:.3f}')
     ax2.legend()
     ax2.grid(True, alpha=0.3)
 
-    # Panel 3: Negative derivative (from raw g1) with **RAW zone** shaded
+    # Panel 3: Negative derivative with RAW zone shaded
     deriv = np.gradient(g1_raw, volume)
     neg_mask = deriv < 0
-
     if np.any(neg_mask):
         neg_vol = volume[neg_mask]
         neg_deriv = deriv[neg_mask]
         ax3.plot(neg_vol, neg_deriv, 'C4', linewidth=1.5, label='Negative d g1 / dv')
 
-        # Shade **RAW zone** on negative deriv (changed from opt)
+        # Shade RAW zone on negative derivative
         zone_neg_mask = (neg_vol >= volume[raw_zone_start]) & (neg_vol <= volume[raw_zone_end])
         if np.any(zone_neg_mask):
             neg_vol_zone = neg_vol[zone_neg_mask]
@@ -169,10 +171,11 @@ def plot_gran_schwartz(results: Dict[str, Any], params: Dict[str, Any], output_d
 
     fig.suptitle('Gran-Schwartz Analysis', fontsize=14)
     fig.tight_layout()
+
     filename = output_dir / 'gran_schwartz.pdf'
     fig.savefig(filename, bbox_inches='tight')
     plt.close(fig)
-
+    print(f"Gran/Schwartz plot saved: {filename}")
 
 def plot_all_combined(
     df: pd.DataFrame,
