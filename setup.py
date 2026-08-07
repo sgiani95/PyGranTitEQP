@@ -20,6 +20,7 @@ setup(
         "scipy>=1.7",
         "matplotlib>=3.5",
         "seaborn>=0.11",
+        "reportlab>=4.0",
     ],
     
     entry_points={
