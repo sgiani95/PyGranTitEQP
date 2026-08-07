@@ -1,0 +1,27 @@
+body {
+    font-family: "DejaVu Sans Mono", monospace;
+    font-size: 11pt;
+}
+
+pre {
+    font-family: "DejaVu Sans Mono", monospace !important;
+    font-size: 11pt !important;
+    line-height: 1.35 !important;
+
+    white-space: pre-wrap !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+}
+
+td.linenos {
+    font-size: 11pt !important;
+    color: #666;
+}
+
+td.code {
+    font-size: 11pt !important;
+}
+
+table {
+    width: 100%;
+}
