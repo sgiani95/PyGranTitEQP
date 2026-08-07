@@ -1,0 +1,4 @@
+Method,V_eq [mL],V_eq_unc [mL],R²,Zones (start-end),Max Volume Used [mL],Notes
+Gran Raw (full data),5.017,0.003,0.9998,51-100,5.500,EQP* on full dataset
+Schwartz Optimized (full data),5.005,0.003,0.9998,46-100,5.500,EQP* on full dataset
+Vopt Result,5.002,0.005,0.9997,46-89,4.400,Earliest acceptable point (n=89)

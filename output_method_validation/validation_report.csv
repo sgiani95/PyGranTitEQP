@@ -1,0 +1,4 @@
+Method,V_eq [mL],V_eq_unc [mL],R²,Zones (start-end),Notes
+Gran Raw (full validation),5.017,0.003,0.9998,51-100,EQP* on full validation dataset
+Schwartz Optimized (full validation),5.005,0.003,0.9998,46-100,EQP* on full validation dataset
+Vopt Result (validation),5.002,0.005,0.9997,46-89,Trimmed to V_opt = 4.400 mL
