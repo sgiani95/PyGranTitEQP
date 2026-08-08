@@ -1,12 +1,12 @@
 LICENSE
 README.md
-setup.py
-src/granted/GUI.py
+pyproject.toml
 src/granted/__init__.py
 src/granted/analyzer.py
 src/granted/data_io.py
 src/granted/generate_report.py
 src/granted/gran_functions.py
+src/granted/gui.py
 src/granted/main.py
 src/granted/modes.py
 src/granted/preprocess.py
@@ -18,3 +18,10 @@ src/granted.egg-info/dependency_links.txt
 src/granted.egg-info/entry_points.txt
 src/granted.egg-info/requires.txt
 src/granted.egg-info/top_level.txt
+tests/test_analyzer.py
+tests/test_gran_functions.py
+tests/test_modes.py
+tests/test_report_application.py
+tests/test_report_development.py
+tests/test_report_validation.py
+tests/test_visualizer.py

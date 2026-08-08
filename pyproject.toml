@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "granted"
+version = "2.0.23"
+description = "GranTED: Gran-Schwartz Titration Analysis Tool"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "sgiani95", email = "samuele.giani@gmail.com" }
+]
+keywords = ["titration", "gran", "schwartz", "chemistry", "analytical"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Chemistry",
+]
+dependencies = [
+    "numpy>=1.21",
+    "pandas>=1.3",
+    "scipy>=1.7",
+    "matplotlib>=3.5",
+    "seaborn>=0.11",
+    "reportlab>=4.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/sgiani95/GranTED"
+Repository = "https://github.com/sgiani95/GranTED"
+
+[project.scripts]
+granted = "granted.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -16,10 +16,7 @@ from tkinter import ttk, filedialog, messagebox, scrolledtext
 # Make the package importable when running the file directly
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-try:
-    from granted import __version__
-except ImportError:
-    __version__ = "0.0.666"
+from granted import __version__
 
 
 class GranTEDApp(tk.Tk):
@@ -175,7 +172,7 @@ class GranTEDApp(tk.Tk):
         about_text = f"""GranTED – Gran/Schwartz Titration Equivalence-point Determination
 
 Version: {__version__}
-Author: Samuele Giani
+Author: sgiani95
 License: Apache-2.0
 
 An open-source tool for automated potentiometric titration analysis

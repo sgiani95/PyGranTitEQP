@@ -3,12 +3,22 @@ GranTED — Gran/Schwartz Titration Analysis Tool
 An open-source package for automated potentiometric titration analysis.
 """
 
-__version__ = "2.0.22"
-__author__ = "Samuele Giani"
-__license__ = "Apache-2.0"
-__description__ = "Automated Gran and Schwartz titration equivalence point determination with uncertainty and diagnostics."
+from importlib.metadata import PackageNotFoundError, version
 
-# Expose the most useful functions for users (clean API)
+try:
+    __version__ = version("granted")
+except PackageNotFoundError:
+    # Fallback when the package is not installed (e.g. running sources directly)
+    __version__ = "0.3.14"
+
+__author__ = "sgiani95"
+__license__ = "Apache-2.0"
+__description__ = (
+    "Automated Gran and Schwartz titration equivalence point determination "
+    "with uncertainty and diagnostics."
+)
+
+# Public API
 from .main import main
 from .analyzer import analyze_gran
 from .visualizer import (
@@ -25,6 +35,8 @@ from .reporter import (
 __all__ = [
     "__version__",
     "__author__",
+    "__license__",
+    "__description__",
     "main",
     "analyze_gran",
     "plot_titration_curve",
