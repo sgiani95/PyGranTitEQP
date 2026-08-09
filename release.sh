@@ -102,8 +102,8 @@ rm -rf dist/ build/ *.egg-info src/*.egg-info src/granted.egg-info 2>/dev/null |
 
 # Build fresh package from current pyproject.toml
 echo "Building package..."
-python -m pip install --upgrade build twine >/dev/null
-python -m build
+python3 -m pip install --upgrade build twine >/dev/null
+python3 -m build
 
 echo "Built files:"
 ls -l dist/
