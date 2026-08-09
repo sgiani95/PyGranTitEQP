@@ -1,6 +1,6 @@
 # GranTED
 
-[![GitHub](https://img.shields.io/badge/GitHub-sgiani95%2FGranTED-blue)](https://github.com/sgiani95/GranTED) [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://opensource.org/licenses/Apache-2.0) [![PyPi](https://img.shields.io/badge/pypi-V.2.0.22-orange)](https://pypi.org/project/GranTED/) [![CI Tests](https://github.com/sgiani95/GranTED/actions/workflows/tests.yml/badge.svg)](https://github.com/sgiani95/GranTED/actions/workflows/tests.yml)
+[![GitHub](https://img.shields.io/badge/GitHub-sgiani95%2FGranTED-blue)](https://github.com/sgiani95/GranTED) [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://opensource.org/licenses/Apache-2.0) [![PyPI version](https://img.shields.io/pypi/v/granted.svg)](https://pypi.org/project/granted/) [![CI Tests](https://github.com/sgiani95/GranTED/actions/workflows/tests.yml/badge.svg)](https://github.com/sgiani95/GranTED/actions/workflows/tests.yml)
 
 ff
 
