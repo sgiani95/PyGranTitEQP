@@ -118,7 +118,7 @@ fi
 
 # Upload to PyPI from this script
 echo "Uploading to PyPI..."
-python -m twine upload dist/*
+python3 -m twine upload dist/*
 
 # Push code + tag to GitHub
 echo "Pushing main and tag to GitHub..."
