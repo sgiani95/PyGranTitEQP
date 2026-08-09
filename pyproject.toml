@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "granted"
-version = "2.0.255556"
+version = "2.0.2555567"
 description = "GranTED: Gran-Schwartz Titration Analysis Tool"
 readme = "README.md"
 requires-python = ">=3.8"
