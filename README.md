@@ -2,6 +2,8 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-sgiani95%2FGranTED-blue)](https://github.com/sgiani95/GranTED) [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://opensource.org/licenses/Apache-2.0) [![PyPi](https://img.shields.io/badge/pypi-V.2.0.22-orange)](https://pypi.org/project/GranTED/) [![CI Tests](https://github.com/sgiani95/GranTED/actions/workflows/tests.yml/badge.svg)](https://github.com/sgiani95/GranTED/actions/workflows/tests.yml)
 
+check12
+
 **GranTED** (Gran-Schwartz Titration Equivalence point Determination) is an open-source Python package for automated and robust analysis of potentiometric titration data using the Gran and Schwartz methods.
 
 Designed with analytical and green chemistry in mind, GranTED provides reliable equivalence point detection, uncertainty estimation, and advanced diagnostic tools — particularly useful for method development, optimization, and validation of titration procedures.
