@@ -46,15 +46,23 @@ echo
 read -r -p "Choose [1/2]: " CHOICE
 echo
 
-# Commit anything pending
-if [[ -n "$(git status --porcelain)" ]]; then
-  echo "Committing current changes..."
-  git add -A
-  git commit -m "Release ${VERSION}" || true
-fi
-
 case "$CHOICE" in
   1)
+    if [[ -n "$(git status --porcelain)" ]]; then
+      echo "Uncommitted changes detected:"
+      git status --short
+      echo
+      read -r -p "Commit message: " COMMIT_MSG
+      if [[ -z "$COMMIT_MSG" ]]; then
+        echo "ERROR: commit message cannot be empty"
+        exit 1
+      fi
+      git add -A
+      git commit -m "$COMMIT_MSG"
+    else
+      echo "No local changes to commit."
+    fi
+
     echo "Pushing main..."
     git push origin main
     echo
@@ -63,6 +71,18 @@ case "$CHOICE" in
     ;;
 
   2)
+    if [[ -n "$(git status --porcelain)" ]]; then
+      echo "Uncommitted changes detected:"
+      git status --short
+      echo
+      read -r -p "Commit message [${VERSION} release]: " COMMIT_MSG
+      COMMIT_MSG=${COMMIT_MSG:-"${VERSION} release"}
+      git add -A
+      git commit -m "$COMMIT_MSG"
+    else
+      echo "No local changes to commit."
+    fi
+
     if git rev-parse "$TAG" >/dev/null 2>&1; then
       echo "ERROR: tag $TAG already exists locally."
       echo "Bump the version in pyproject.toml and try again."
